@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d95f1f7-e67f-4082-bf1b-c65d4e95c71d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../codeforces/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../codeforces/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+    <list default="true" id="53fded75-f273-4618-baaa-54b69a5ff8a6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../aisinei/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/atlas_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/atlas_info.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/check_download/Goddes头条女神" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/check_download/Goddes头条女神" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/check_download/UGirls尤果圈" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/check_download/UGirls尤果圈" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/check_download/theme" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/check_download/theme" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/checkproxy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/download_atlas.py" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/download_atlas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../aisinei/teding.py" beforeDir="false" afterPath="$PROJECT_DIR$/../aisinei/teding.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../aisinei_a/108TV酱/108TV酱VR2016-09-01刘珊做你的清纯女友1V343M" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../aisinei_a/108TV酱/108TV酱VR2016-09-01林美辰长腿女神的神秘国度1V300M" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../aisinei_a/108TV酱/108TV酱VR2016-09-01金雨佳完美身材废墟求生1V879M" beforeDir="false" />
@@ -11004,10 +10995,6 @@
       <change beforePath="$PROJECT_DIR$/../aisinei_a/颜女神/颜女神No.00822+1P159M" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../aisinei_a/颜女神/颜女神No.00947+1P203M" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../lagou_crawler" beforeDir="false" afterPath="$PROJECT_DIR$/../lagou_crawler" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manhua/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../manhua/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jimu/down_the_page_img.py" beforeDir="false" afterPath="$PROJECT_DIR$/jimu/down_the_page_img.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jimu/etc.py" beforeDir="false" afterPath="$PROJECT_DIR$/jimu/etc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jimu/get_page_url_info.py" beforeDir="false" afterPath="$PROJECT_DIR$/jimu/get_page_url_info.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11016,40 +11003,36 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/manhua1_1$down_the_page_img.coverage" NAME="down_the_page_img Coverage Results" MODIFIED="1542228694857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jimu" />
-    <SUITE FILE_PATH="coverage/manhua1_1$main.coverage" NAME="main Coverage Results" MODIFIED="1542228287035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/jimu" />
+    <SUITE FILE_PATH="coverage/codeforces$test.coverage" NAME="test Coverage Results" MODIFIED="1541869736630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
-    <session id="-2105123635">
+    <session id="-1871554617">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="log" value="1" />
-          <entry key="py" value="3" />
+          <entry key="py" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="3" />
+          <entry key="Python" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="2251" />
+          <entry key="py" value="680" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="2251" />
+          <entry key="Python" value="680" />
         </counts>
       </usages-collector>
     </session>
@@ -11057,46 +11040,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jimu/down_the_page_img.py">
+        <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jimu/get_page_url_info.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
-              <folding>
-                <element signature="e#13#22#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jimu/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-              <folding>
-                <element signature="e#13#48#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jimu/etc.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+            <state relative-caret-position="360">
+              <caret line="24" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -11110,21 +11057,13 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>manhua_json_path</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jimu/main.py" />
-        <option value="$PROJECT_DIR$/jimu/etc.py" />
-        <option value="$PROJECT_DIR$/jimu/get_page_url_info.py" />
-        <option value="$PROJECT_DIR$/jimu/down_the_page_img.py" />
+        <option value="$PROJECT_DIR$/test.py" />
       </list>
     </option>
   </component>
@@ -11134,11 +11073,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="207" />
-    <option name="y" value="86" />
-    <option name="width" value="1684" />
-    <option name="height" value="877" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="755" />
+    <option name="y" value="266" />
+    <option name="width" value="865" />
+    <option name="height" value="708" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -11146,28 +11085,25 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="manhua1.1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="manhua1.1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="manhua1.1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="manhua1.1" type="462c0819:PsiDirectoryNode" />
-              <item name="jimu" type="462c0819:PsiDirectoryNode" />
+              <item name="codeforces" type="b2602c69:ProjectViewProjectNode" />
+              <item name="codeforces" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../manhua" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../aisinei" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -11182,21 +11118,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.down_the_page_img">
-    <configuration name="down_the_page_img" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="manhua1.1" />
+  <component name="RunManager">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="codeforces" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/jimu" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/jimu/down_the_page_img.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -11205,60 +11141,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="etc" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="manhua1.1" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/jimu" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/jimu/etc.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="manhua1.1" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/jimu" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/jimu/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.down_the_page_img" />
-      <item itemvalue="Python.etc" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.down_the_page_img" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.etc" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -11267,39 +11152,38 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3d95f1f7-e67f-4082-bf1b-c65d4e95c71d" name="Default Changelist" comment="" />
-      <created>1541235248173</created>
+      <changelist id="53fded75-f273-4618-baaa-54b69a5ff8a6" name="Default Changelist" comment="" />
+      <created>1541867946097</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1541235248173</updated>
+      <updated>1541867946097</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
+    <frame x="755" y="266" width="865" height="708" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2520684" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25516403" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.35900104" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32991454" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="SciView" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -11309,51 +11193,10 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jimu/ghostdriver.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jimu/test.py" />
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/selenium/webdriver/phantomjs/webdriver.py">
+    <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jimu/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
-          <folding>
-            <element signature="e#13#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jimu/etc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jimu/get_page_url_info.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
-          <folding>
-            <element signature="e#13#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jimu/down_the_page_img.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="360">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
         </state>
       </provider>
     </entry>

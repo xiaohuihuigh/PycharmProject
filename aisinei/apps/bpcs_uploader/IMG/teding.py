@@ -2,8 +2,9 @@
 import json
 from download_atlas import *
 import os
-
-
+import re
+main_path = 'theme_all_url_info'
+# print listdir(main_path)
 def listdir(path):  #传入存储的list
     list_name = []
     if os.path.exists(path):
@@ -21,6 +22,7 @@ def check_down(check_path,fod):
     check_file(check_path)
     with open(check_path,'r') as f:
         t = json.load(f)
+        print t
         if unicode(fod,"utf8") in t and t[unicode(fod,"utf8")] == '1':
             return True
     return False
@@ -38,26 +40,23 @@ def get_atlas_url(atlas_url_path):
     with open(atlas_url_path,'r')as f:
         js = json.load(f)
         return js['url']
-main_path = 'theme_all_url_info'
 theme_list = listdir(main_path)
 check_main = 'check_download'
-
-com = "Kelagirls"
+com = "UGirl"
 for theme in theme_list:
-    if theme.find(com) == -1:
+    # print theme
+    if  theme.find(com) == -1:
         continue
     if check_down(os.path.join(check_main,'theme'),theme):
-        print "check had down the theme",theme
         continue
-    print "check not down the theme",theme
     atlas_list = listdir(theme)
     # print atlas_list
     for atlas in atlas_list:
         # print atlas
         if check_down(os.path.join(check_main, theme), atlas):
-            print "check_had_down the atlas",atlas
+            print "check_had_down"
             continue
-        print "check not down",atlas
+        print "check not down"
         atlas_url_path = os.path.join(theme,atlas)
         print atlas_url_path
         url = get_atlas_url(atlas_url_path)

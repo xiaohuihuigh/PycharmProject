@@ -21,10 +21,15 @@ phantomjs_path = etc.phantomjs_path
 driver = webdriver.PhantomJS(executable_path=phantomjs_path,desired_capabilities=dcap)
 zhang_check_path = os.path.join(data_path,etc.zhang_check_path)
 def get_page_source(driver,url):
-    driver.get(url)
-    pagesource = driver.page_source
-    soup = bf(pagesource,'html.parser')
-    return soup
+    try:
+        driver.get(url)
+    except Exception as e:
+        print e
+        return get_page_source(driver,url)
+    else:
+        pagesource = driver.page_source
+        soup = bf(pagesource,'html.parser')
+        return soup
 
 def get_zhangjie(soup):
     text = soup.select_one('.BarTit').text
@@ -79,6 +84,7 @@ def get_zhang_info(url):
         # check_down_img(str(i))
         page_url = url+'?p='+str(i)
         print page_url
+        check_file(img_path+'_img_url_json')
         with open(img_path+'_img_url_json')as f:
             i_dict = json.load(f)
         if i in i_dict:

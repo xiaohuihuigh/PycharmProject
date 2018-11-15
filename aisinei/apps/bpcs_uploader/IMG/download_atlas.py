@@ -38,14 +38,13 @@ def save_img(dir,name,url):
     text = requests.get(url).content
     with open(unicode(path.encode("utf8"), "utf8"), 'wb') as f:
         f.write(text)
-data_dir = '/home/zyh/Data'
+
 def download_img(url):
     source = get_html_source_text(url)
     # print source.text
     soup = bf(source.text,'html.parser')
     # bf(res.text, 'html.parser')
     dir_name = get_mig_dir(soup)
-    dir_name = os.path.join(data_dir,dir_name)
     img_info_list = get_img_info(soup)
     for img_info in img_info_list:
         img_url = img_info['url']
