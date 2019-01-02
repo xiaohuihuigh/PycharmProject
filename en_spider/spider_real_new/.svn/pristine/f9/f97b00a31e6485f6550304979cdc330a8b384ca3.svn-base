@@ -1,0 +1,78 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import logging
+import sys
+import os
+from settings import CON, TBB, PAGE_TABLE, PAGE_TABLE_NEW
+
+
+logger = logging.getLogger("norm")
+
+
+def pipelines(lists, ignore=True):
+    """ 数据插入 executemany need ignore and lists.length < 5000 """
+    # CUR.connect_cursor()
+    sql = u"INSERT IGNORE" if ignore else u"REPLACE"
+    sql += u" INTO " + TBB + u"(sid, nid, url, title, abstract, content, " \
+           u"stocks, sectors, timestamp, score, weight, counts, source, status) " \
+           u"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    '''
+    num = 0
+    for item in lists:
+        if item.get_status():
+            CUR.execute(sql, item.gets())
+            num += 1
+    logger.debug("pipe data count: %s" %num)
+    '''
+    CUR = CON.cursor()
+    CUR.executemany(sql, [item.gets() for item in lists if item.get_status()])
+    CUR.close()
+
+
+def pipeline(table, rows, keys, lists, ignore=True):
+    """ 数据插入 executemany need ignore and lists.length < 5000 """
+    # CUR.connect_cursor()
+    CUR = CON.cursor()
+    insert = u"INSERT IGNORE" if ignore else u"REPLACE"
+    header = ','.join(rows)
+    values = ','.join(['%s']*len(rows))
+    strsql = "{insert} {table}({header}) VALUES({values})".format(insert=insert, table=table, header=header, values=values)
+    CUR.executemany(strsql, [item.gets(keys=rows) for item in lists if item.get_status(keys=keys)])
+    CUR.close()
+
+
+def page_pipelines(lists, ignore=False):
+    """ 数据插入 executemany need ignore and lists.length < 5000 """
+    # CUR.connect_cursor()
+    sql = u"INSERT IGNORE" if ignore else u"REPLACE"
+    sql += u" INTO " + PAGE_TABLE + u"(id, site_id, news_url, status, source, site, " \
+           u"news_title, news_count, news_time, used, content) " \
+           u"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    '''
+    num = 0
+    for item in lists:
+        if item.get_status():
+            CUR.execute(sql, item.gets())
+            num += 1
+    logger.debug("pipe data count: %s" %num)
+    '''
+    CUR = CON.cursor()
+    # print sql
+    # print len([item.gets() for item in lists if item.is_need_save()][0])
+    CUR.executemany(sql, [item.gets() for item in lists if item.is_need_save()])
+    CUR.close()
+
+
+def page_pipelines_new(lists, ignore=True):
+    """ 数据插入 executemany need ignore and lists.length < 5000
+     'news_id', 'news_title', 'news', 'url', 'news_time', 'site', 'status'
+     """
+    # CUR.connect_cursor()
+    sql = u"INSERT IGNORE" if ignore else u"REPLACE"
+    sql += u" INTO " + PAGE_TABLE_NEW + u"(news_id, news_title, news, url, news_time, site, status, news_count, used) " \
+           u"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    CUR = CON.cursor()
+    # print len([item.gets() for item in lists if item.is_need_save()][0])
+    CUR.executemany(sql, [item.gets() for item in lists if item.is_need_save()])
+    CUR.close()

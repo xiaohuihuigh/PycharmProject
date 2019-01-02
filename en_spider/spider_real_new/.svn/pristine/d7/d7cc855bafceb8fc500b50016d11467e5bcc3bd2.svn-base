@@ -1,0 +1,198 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import time
+import re
+import json
+import os
+
+re_full_date = re.compile(ur'.*(?P<year>\d{4})[/\-年](?P<month>\d{1,2})[/\-月](?P<day>\d{1,2})')
+re_brief_date = re.compile(ur'.*(?P<month>\d{1,2})[/\-月](?P<day>\d{1,2})')
+re_full_time = re.compile(ur'.*(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})')
+re_brief_time = re.compile(ur'.*(?P<hour>\d{2}):(?P<minute>\d{2})')
+
+def _get_date(str_datetime=""):
+    """supported_format:
+     - 2016-06-07
+     - 06-08
+     - 2016年06月16日
+     - 06月16日
+    """
+    tm_time = time.localtime()
+    tm_year, tm_month, tm_day = tm_time.tm_year, tm_time.tm_mon, tm_time.tm_mday
+    date_match = re_full_date.match(str_datetime)
+    if date_match:
+        tm_year, tm_month, tm_day = int(date_match.group('year')), int(date_match.group('month')), int(date_match.group('day'))
+    date_match = re_brief_date.match(str_datetime)
+    if date_match:
+        tm_month, tm_day = int(date_match.group('month')), int(date_match.group('day'))
+        if tm_month<tm_time.tm_mon or (tm_month==tm_time.tm_mon and tm_day<tm_time.tm_mday):
+            tm_year -= 1
+    return tm_year, tm_month, tm_day
+
+
+def _get_time(str_datetime=""):
+    """  supported_format:
+        - 09:34:20
+        - 09:34 """
+    time_match = re_full_time.match(str_datetime)
+    if time_match:
+        return int(time_match.group('hour')), int(time_match.group('minute')), int(time_match.group('second'))
+    time_match = re_brief_time.match(str_datetime)
+    if time_match:
+        return int(time_match.group('hour')), int(time_match.group('minute')), 0
+    return None
+
+
+def get_timestamp(str_datetime):
+    """  supported_format:
+     - 2016-06-07
+     - 06-08
+     - 2016年06月16日
+     - 06月16日
+     - 09:34:20
+     - 09:34 """
+
+    find_date = _get_date(str_datetime)
+    find_time = _get_time(str_datetime)
+    if find_time:
+        return int(time.mktime((find_date[0], find_date[1], find_date[2],
+                                find_time[0], find_time[1], find_time[2], 0, 0, 0)))
+    else:
+        return 0
+
+
+def download_html(url="", json_url="", file_name=""):
+    if len(json_url) > 0:
+        os.system("wget -O %s \"%s\" " % (file_name, json_url))
+    else:
+        os.system("wget -O %s \"%s\" " % (file_name, url))
+
+
+# "http://news.10jqka.com.cn/cjkx_list/index_6.shtml"
+def get_html_file_name(url="", json_url="", prefix=""):
+    if len(json_url) > 0:
+        file_name = re.sub(r"https?://", "", json_url)
+    else:
+        file_name = re.sub(r"https?://", "", url)
+    file_name = re.sub(r"\.|/|&|\?|=", "_", file_name)
+    file_name += ".html"
+    file_name = prefix+file_name
+    if not os.path.exists(file_name):
+        download_html(file_name=file_name, url=url, json_url=json_url)
+    return file_name
+
+
+def get_coding(raw_html):
+    mat = re.match(r".*?charset=\"?(utf|gb).*", raw_html, re.S)
+    if mat:
+        coding = mat.group(1)
+        if coding == 'utf':
+            return "utf8"
+        else:
+            return "gbk"
+    return "utf8"
+
+
+def test_title(url="", json_url="", sid=0, title_parse=None, timestamp=0,
+               call_back=None,prefix=""):
+    file_name = get_html_file_name(url=url, json_url=json_url,prefix=prefix)
+    with open(file_name, 'rb') as rf:
+        raw_html = rf.read()
+        coding = get_coding(raw_html)
+        raw_html = raw_html.decode(coding)
+        parse = title_parse()
+        ans = parse.run(raw_html=raw_html, sid=sid, url=url, timestamp=timestamp)
+        call_back(ans)
+
+
+def test_content(url="", content_parse=None, call_back=None,prefix=""):
+    file_name = get_html_file_name(url=url,prefix=prefix)
+    with open(file_name, "rb") as rf:
+        raw_html = rf.read()
+        parse = content_parse()
+        coding = get_coding(raw_html)
+        raw_html = raw_html.decode(coding)
+        ans = parse.run(raw_html=raw_html)
+        call_back(ans)
+
+
+# str1="""zxc ( [ {"a":123,"b":456},{"c":"789"},{"d":"111"}] )"""
+def get_json_data(raw_jquery=""):
+    """[ dict, dict, ]"""
+    data = re.findall("\((.*)\)", raw_jquery)
+    return json.loads(data[0])
+
+
+def get_special_json_data(raw_jquery=""):
+    raw_jquery = raw_jquery.replace("\n", " ")
+    mat = re.match(r".*?(\[.*\]).*", raw_jquery)
+    if mat:
+        raw_jquery = mat.group(1)
+    else:
+        raw_jquery = "[]"
+    addedSingleQuoteJsonStr = re.sub(r"(,|\{)(?<!\")(\w+?)(?!\")\s*?:", r"\1'\2':", raw_jquery)
+    doubleQuotedJsonStr = addedSingleQuoteJsonStr.replace("'", "\"")
+    removedLastCommaInList = re.sub(r",\s*?]", "]", doubleQuotedJsonStr)
+    return json.loads(removedLastCommaInList)
+
+
+def is_json_data(raw_html=""):
+    my_match = re.match(r".*</html>\s*", raw_html, re.S)
+    if not my_match:
+        return True
+    return False
+
+
+def in_url_groups(url, urls):
+    url = url.strip(" \t\n/")
+    for sub_url in urls:
+        sub_url = sub_url.strip(" \t\n/")
+        if url == sub_url:
+            return True
+    return False
+
+
+def split_title_content(raw_content):
+    raw_content = raw_content.strip()
+    title_match = re.match(ur".*【(.*)】(.*)", raw_content)
+    if title_match:
+        my_title = title_match.group(1)
+        my_content = title_match.group(2)
+    else:
+        my_title = raw_content
+        my_content = raw_content
+    return my_title, my_content
+
+
+def get_sid_dict(init_id=0, file_name=""):
+    with open(file_name, 'rb') as url_lists:
+        sid_dict = {}
+        sid_no = init_id
+        for url in url_lists:
+            url = url.strip()
+            if not sid_dict.get(url):
+                sid_dict[url] = sid_no
+                sid_no += 1
+        return sid_dict
+
+
+def strip_file(filename=""):
+    import fileinput
+    for line in fileinput.input(filename, inplace=True):
+        line = line.strip()
+        if line:
+            print line
+    fileinput.close()
+
+
+def get_hash_nid(url=""):
+    hash_nid = hash(url)
+    if hash_nid < 0:
+        hash_nid *= -1
+    return hash_nid
+
+
+if __name__ == "__main__":
+    print get_html_file_name("http://news.10jqka.com.cn/cjkx_list/index_6.shtml")
+    pass

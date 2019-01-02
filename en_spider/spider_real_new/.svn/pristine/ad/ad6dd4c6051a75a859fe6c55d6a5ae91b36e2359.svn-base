@@ -1,0 +1,91 @@
+# -*- coding:utf-8 -*-
+# 用途： 页面解析
+# 创建日期: 18-8-25 下午6:45
+
+import time
+import logging
+from lxml.etree import HTML
+from xpath_pool import XpathBox
+
+
+logger = logging.getLogger("parse")
+
+xpath_box = XpathBox()
+
+
+# 解析标记
+success = 0
+parse_failed = 1
+parse_less = 2
+get_failed = -1
+parse_error = -2
+
+
+def content_parse(sid, raw_html, item, xpath_dic=xpath_box):
+    """ 内容解析统一入口 """
+    xpath_text = xpath_dic[sid]
+    if xpath_text is not None:
+        root = HTML(raw_html.text)
+        parse_func(xpath_text, root, item)
+    else:
+        logger.warning("The html of {} has no parse xpath".format(sid))
+        print "The html of {} has no parse xpath".format(sid)
+
+
+def parse_func_mini(xpath_text, root, item):
+    """简易解析"""
+    try:
+        content = "".join(root.xpath(xpath_text))
+        content = content.strip()
+        if content:
+            if len(content) > 50:
+                item.set('news_count', success)
+            else:
+                item.set('news_count', parse_less)
+            item.set('content', content)
+        else:
+            item.set('news_count', parse_failed)
+    except Exception as e:
+        print e
+        print "error: ", xpath_text, item.get('article_id')
+        item.set('news_count', parse_error)
+
+
+def parse_func(xpath_text, root, item):
+    """解析函数"""
+    if root is None:
+        item.set('news_count', get_failed)
+        content = ""
+        item.set('content', content)
+        return
+
+    if isinstance(xpath_text, str):
+        return parse_func_mini(xpath_text, root, item)
+
+    try:
+        for xpath_t in xpath_text:
+            content = "".join(root.xpath(xpath_t))
+            content = content.strip()
+            if content:
+                if len(content) > 50:
+                    item.set('news_count', success)
+                else:
+                    item.set('news_count', parse_less)
+                item.set('content', content)
+                break
+        else:
+            logging.warning("The html of {} parse failed".format(item.get("article_id")))
+            item.set('news_count', parse_failed)
+
+    except Exception as e:
+        print e
+        print "error: ", xpath_text, item.get('article_id')
+        item.set('news_count', parse_error)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

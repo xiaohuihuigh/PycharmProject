@@ -1,0 +1,45 @@
+"""
+        1:"http://stock.jrj.com.cn/hotstock/gnjj.shtml",
+        2:"http://www.cailianpress.com/reference",
+        3:"http://www.cailianpress.com/subject.html",
+      * 4:"http://live.wallstreetcn.com/?cid[]=2",
+        5:"http://kuaixun.stcn.com/finance/internal/",
+      * 6:"http://www.cailianpress.com/",
+        7:"http://www.cs.com.cn/sylm/cstop10/",
+        8:"http://news.cnstock.com/industry/sid_rdjj/",
+        9:"http://www.ccstock.cn/stock/redian/index.html",
+      * 10:"http://news.cnstock.com/bwsd/",
+        11:"http://stock.eastmoney.com/news/cbkjj.html",
+      * 12:"http://live.sina.com.cn/zt/f/v/finance/globalnews1?tag=2",
+      * 13:"http://news.10jqka.com.cn/realtimenews.html",
+        14:"http://aastocks.com/sc/stocks/analysis/china-hot-topic.aspx?catg=1",
+        15:"http://yuanchuang.10jqka.com.cn/jhqb_list/",
+        16:"http://stock.stockstar.com/list/sectors.htm",
+      * 17:"http://kuaixun.eastmoney.com/",
+        18:"http://www.cs.com.cn/ssgs/hyzx/",
+        19:"http://stock.laoqianzhuang.com/redianticai/",
+        20:"http://news.10jqka.com.cn/cjkx_list/index.shtml",
+      * 21:"http://m.yicai.com/brief/",
+        22:"http://news.cnstock.com/industry/sid_cyqb",
+        23:"http://stock.qq.com/l/stock/bk/list2015042315658.htm",
+        24:"http://finance.ifeng.com/stock/zqyw/index.shtml",
+        25:"http://stock.hexun.com/shikuang/",
+        26:"http://kuaixun.stcn.com/index.shtml",
+        27:"http://money.163.com/special/stock20160617/",
+        28:"http://money.163.com/special/00251LJV/hyyj.html",
+        29:"http://www.p5w.net/stock/market/gng/",
+        30:"http://stock.xinhua08.com/hydt/",
+        31:"http://stock.jfinfo.com/tzfxb/",
+        32:"http://sc.stock.cnfol.com/shichangjuejin/",
+        33:"http://stock.10jqka.com.cn/tzjh_list/",
+        34:"http://kuaixun.stcn.com/finance/tzjh/",
+      * 35:"http://industry.cfi.cn/BCA0A4127A4128A4144.html",
+        36:"http://www.microbell.com/microns_2.html",
+        37:"http://finance.china.com.cn/stock/bkjj/index.shtml",
+        38:"https://xuangubao.cn/zhutiku"
+        39:"https://www.cailianpress.com/theme"
+        40:"http://news.cnstock.com/theme/index.html"
+        41:"http://yuanchuang.10jqka.com.cn/qingbao/"
+        42:"https://xuangubao.cn/"
+"""
+

@@ -1,0 +1,21 @@
+# -*- coding:utf-8 -*-
+# 用途： 重置数据库脚本
+# 创建日期: 18-9-4 下午3:08
+
+import time
+from settings import CON
+
+
+def set_new_used():
+    """将数据库的used字段重新设定"""
+    cursor = CON.cursor()
+    cursor.execute("update `news_url_content` set `used` = 1")
+    cursor.close()
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    set_new_used()
+
+    print("use time: %s" % (time.time() - start_t))

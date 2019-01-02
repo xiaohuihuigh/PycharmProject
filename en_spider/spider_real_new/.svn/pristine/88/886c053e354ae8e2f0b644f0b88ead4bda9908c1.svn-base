@@ -1,0 +1,42 @@
+# -*- coding:utf-8 -*-
+# 用途：sql云存储
+# 创建日期: 18-8-29 下午8:39
+
+import time
+import os
+
+
+def upload_oos(fullfile, ossfilename):
+    access_key_id = os.getenv('OSS_TEST_ACCESS_KEY_ID', 'LTAISGixuLvYYv82')
+    access_key_secret = os.getenv('OSS_TEST_ACCESS_KEY_SECRET', 'iHp4fTpsyQAB4Lod42clh97Z0Ru8k3')
+    bucket_name = os.getenv('OSS_TEST_BUCKET', 'afajr')
+    endpoint = os.getenv('OSS_TEST_ENDPOINT', 'http://oss-cn-hangzhou-internal.aliyuncs.com')
+
+    import oss2
+    bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+    bucket.put_object_from_file("htmls/crawl/" + ossfilename, fullfile)
+    return "http://afajr.oss-cn-hangzhou.aliyuncs.com/htmls/crawl/" + ossfilename
+
+
+def get_files():
+    files = os.listdir(os.getcwd())
+    use_files = ["news_content.sql"]
+    return use_files
+
+
+def upload_files():
+    use_files = get_files()
+    for fi in use_files:
+        fullfile = fi
+        ossfilename = str(os.getpid()) + "_" + fi
+        print upload_oos(fullfile, ossfilename)
+        time.sleep(1)
+        # os.system("rm {}".format(fi))
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    upload_files()
+
+    print("use time: %s" % (time.time() - start_t))

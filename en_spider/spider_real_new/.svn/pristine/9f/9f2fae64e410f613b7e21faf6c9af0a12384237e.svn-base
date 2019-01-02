@@ -1,0 +1,537 @@
+# -*- coding:utf-8 -*-
+# 用途： xpath库
+# 创建日期: 18-8-25 下午6:45
+
+import time
+
+# {"sid": ""}
+
+XPATH_DIC = {
+    1: "//div[@id='art_body']/p",
+    2: "//div[@id='art_body']/p",
+    3: "//div[@id='art_body']/p",
+    4: "//div[@id='art_body']/p",
+    5: "//div[@id='art_body']/span/p",
+    6: "//div[@id='art_body']/p",
+    7: "",  # 没有网站
+    8: "",  # 没有网站
+    9: "",  # 页面无法加载完毕
+    10: "//div[@id='text1']/p",
+    11: "//div[@id='articlebody']//p/",
+    12: "//div[@id='articlebody']/",
+    13: "//div[@class='cpnn-con-zhenwen']/p",
+    14: "",  # 无法访问
+    15: "//div[@class='at-text']/p",  # 没有网站
+    16: "//div[@id='ctrlfscont']/p",
+    17: "//div[@id='ctrlfscont']/p",
+    18: "//div[@id='ctrlfscont']/p",
+    19: ["//div[@id='content']/p", "//section[@class='textblock']/"],
+    20: "//div[@id='ctrlfscont']/p",
+    21: "//div[@id='ctrlfscont']/p",
+    22: "//span[@id='contentlabels']/p",
+    23: "",  # 无法访问
+    24: "//table/tbody/tr[5]/td",
+    25: "//div[@class='cnal-details-con']/p",
+    26: "//div[@id='informationArticle_04']/p",
+    27: "//div[@class='news-main']/p",
+    28: ["//div[@id='article']/p", "//div[@id='article']/"],
+    29: ["//div[@id='content']/p", "//div[@id='article']/p/"],
+    30: ["//div[@class='content']/p", "//div[@id='i_art_main']/content/p"],
+    31: "//div[@id='newsContent']/div/",
+    32: "//div[@id='newsContent']",
+    33: "//div[@id='content']/p",
+    34: "//div[@id='content']/p",
+    35: "//div[@id='content']/p",
+    36: "//td[@class='cc']",
+    37: ["//div[@class='newliIn_Zti']/p", "//div[@class='newliIn_Zti']/"],
+    38: "//div[@class='article-con']/p",
+    39: "//div[@class='content_text mgb10']/p",
+    40: "//div[@class='details']/p",
+    41: "",  # 没有网站
+    42: "//div[@id='endText']/p",
+    43: "//div[@id='contentText']/p",
+    44: "//div[@class='news_content_view']/p",
+    45: "//div[@class='news_content_view']/p",
+    46: "//div[@id='showall233']/p",
+    47: "",  # 没有网站
+    48: "//div[@id='TRS_AUTOADD']/p",
+    49: "//div[@id='TRS_AUTOADD']/",
+    50: "",  # 暂时被拦截
+    51: "//div[@id='article']/p",
+    52: ["//div[@class='newList f_left']/p", "//div[contains(@class, 'newsLeft')]/div[contains(@class, 'conT')]/p"],
+    53: "//div[@class='TRS_Editor']/p",
+    54: "//div[@class='wenZi_02']/p",
+    55: "//div[@class='news']/div//",
+    56: "//div[@class='news']/div//",
+    57: "//div[@id='ArticleCnt']/p",
+    58: "//div[@class='tip2']/div[2]/div",
+    59: "//div[@class='thetext']/",
+    60: "//div[@id='newstext']/p",
+    61: "//div[@id='clickeye_content']/p",
+    62: "//div[@id='content']/p/",
+    63: "//div[@class='newsContent']",
+    64: "",  # 页面不存在
+    65: ["//div[@id='article']/p", "//div[@id='article']/"],
+    66: ["//div[@id='arc-info']/p", "//div[@id='arc-info']/"],
+    67: "",  # 页面内容奇怪
+    68: "",  # 页面打不开
+    69: "//table/tbody/tr[6]/td",
+    70: "//div[@id='NewsContent']//p",
+    71: "//div[@id='NewsContent']/p",
+    72: "//div[@id='NewsContent']/p",
+    73: "//div[@class='content']/table/tbody/tr/td",
+    74: "//div[@id='content']/p",
+    75: "//div[@class='bd']/p",
+    76: "//div[@id='showcontent']/div[1]/p",
+    77: ["//div[@class='bd']/p", "//div[@id='showcontent']/div[1]/p"],
+    78: "//div[@id='showcontent']/div[1]/p",
+    79: "//div[@id='showcontent']/div[1]/p",
+    80: "//div[@id='showcontent']/div[1]/p",
+    81: "//div[@id='showcontent']/div[1]/p",
+    82: "//div[@id='showcontent']/div[1]/p",
+    83: "",  # 没有网站
+    84: "",  # 没有网站
+    85: "",  # 页面不存在
+    86: "",  # 页面不存在
+    87: "//div[@class='subleft']/p",
+    88: "//div[@class='subleft']/p",
+    89: "",  # 没有网站
+    90: "",  # 没有网站
+    91: "",  # 没有网站
+    92: "//div[@class='TRS_Editor']/p[@class='MsoNormal']",
+    93: "//div[@class='TRS_Editor']/",
+    94: "",  # 页面不存在
+    95: "",  # 页面不存在
+    96: "",  # 页面不存在
+    97: "",  # 没有网站
+    98: "",  # 没有网站
+    # 99: "//div[@class='ws_det_p3']/p",  # 暂时被屏蔽,屏蔽太厉害,放弃采集
+    99: "",
+    100: "//div[@id='zoom']/p",
+    101: "",  # 内容有点怪
+    102: "",  # 页面失效
+    103: "//div[@id='zoom']/p",
+    104: "//div[@class='articleContent']/p",
+    105: "//div[@class='articleContent']/p",
+    106: ["//div[@id='fontzoom']/p", "//div[@id='fontzoom']/"],
+    107: "//div[@id='txtcont']/p",
+    108: "//div[@class='newsinfo_cont']/p",
+    110: "",  # 页面不存在
+    111: ["//div[@class='detail-box']/p", "//div[@class='detail-box']//p", "//div[@class='detail-box']/"],
+    112: "//div[contains(@class, 'newsinfo_cont')]/p",
+    113: "//div[@class='newsinfo_cont']/p",
+    114: "//div[@class='newsinfo_cont']/p",
+    115: "",  # 页面失效
+    116: "//div[@class='newsinfo_cont']/p",
+    117: "//div[@class='news-detail-content shadow clears']/p",
+    118: "//div[@class='news-detail-content shadow clears']/p",
+    119: "//div[@class='news-detail-content shadow clears']/p",
+    120: "//div[@id='newscontent']/p",
+    121: "//div[@class='article-body']/p",
+    122: "//div[@class='article-body']/p",
+    123: "//div[@class='article-body']/p",
+    124: "//div[@class='detail-text line25 font14px']/div/p",
+    125: "//div[@class='detail-text line25 font14px']/div",
+    126: ["//div[@class='article-content c-mb-20']/p", "//div[@class='article-content c-mb-20']/"],
+    127: "//div[@id='zoom']/p",
+    128: "//div[@id='newsContent']/",
+    129: "//div[@id='newsContent']/",
+    130: "//div[@id='newsContent']/",
+    131: "//div[@class='detail-text line25 font14px']/div/p",
+    132: "//div[@id='artical']/p",
+    133: "//div[@id='article']/p",
+    134: "",  # 暂时打不开
+    135: "",  # 页面不存在
+    136: "//div[@id='Cnt-Main-Article-QQ']/p",
+    137: "//div[@id='Cnt-Main-Article-QQ']/p",
+    138: "//div[@id='Cnt-Main-Article-QQ']/p",
+    139: "//div[@id='Cnt-Main-Article-QQ']/p",
+    140: "//div[@id='endText']/p",
+    141: "",  # 维护中
+    142: "//div[@id='main_content']/p",
+    143: "",  # 维护中
+    144: "",  # 维护中
+    145: "//div[@id='main_content']/p",
+    146: "//div[@id='main_content']/p",
+    147: "",  # 维护中
+    148: "//div[@id='main_content']/p",
+    149: "",  # 维护中
+    150: "//div[@id='content']/p",
+    151: ["//p[@class='newtext']/", "//div[@class='clearfix contdiv']/p", "//div[@class='clearfix cmsDiv']/"],
+    152: "//div[@class='m-article']/p/",  # 页面不存在
+    153: "",  # 无法访问
+    154: "",  # 无法访问
+    155: "",  # 无法访问
+    156: "",  # 无法访问
+    157: "",  # 无法访问
+    158: "",  # 没有网站
+    159: "",  # 没有网站
+    160: "",  # 没有网站
+    161: "",  # 没有网站
+    162: "",  # 没有网站
+    163: "//div[@id='ctrlfscont']/p",
+    164: "//div[@class='article-content']/p",
+    165: "//div[@id='ctrlfscont']/p",  # 这里可能会存在问题,都是新华社
+    166: "//div[@id='ctrlfscont']/p",
+    167: "//div[@id='tdcontent']/",
+    168: "//div[@id='tdcontent']/",
+    366: "//div[@id='tdcontent']/",  # 页面失效
+    169: "",  # 没有网站
+    170: "//div[@class='g-articl-text']/p",
+    171: "//div[@class='g-articl-text']/p",
+    172: "//div[@class='g-articl-text']/p",
+    173: "//div[@class='g-articl-text']/p",
+    174: "//div[@class='g-articl-text']/p",
+    175: "//div[@class='g-articl-text']/p",
+    176: "//div[@id='Main_Content_Val']/p",
+    177: "",  # 没有网站
+    178: "//div[@class='article-con']/p",
+    179: "",  # 页面失效
+    180: "//div[@class='stockcodec']",
+    181: "//div[@class='tpk_text clearfix']/p",  # 没有网站
+    182: "",  # 暂时打不开
+    183: ["//div[@id='content']/p", "//div[@id='fontzoom']/p"],
+    184: "//div[@class='cnt_bd']/p",
+    185: "//div[@class='g-articl-text']/p",
+    186: "",  # 无法访问
+    187: "",  # 页面失效
+    188: "",  # 页面站点多样
+    189: "",  # 页面失效
+    190: "",  # 页面站点多样
+    191: "",  # 页面失效
+    192: "",  # 页面无法解析
+    193: "//div[@class='WBA_content']/p",
+    194: "",  # 页面无法解析
+    195: "",  # 页面无法解析
+    196: "",  # 页面不存在
+    197: "",  # 页面不存在
+    198: "",  # 页面不存在
+    199: "",  # 页面不存在
+    200: "",  # 页面不存在
+    201: "//section[@class='textblock']/p[@class='fr-tag']/",
+    202: "//div[@class='Custom_UnionStyle']/p",
+    203: "//div[@class='TRS_Editor']//p",
+    204: "//div[@class='TRS_Editor']//p",
+    205: "//div[@class='TRS_Editor']//p",
+    206: "//div[@class='TRS_Editor']//p",
+    207: "//div[@class='TRS_Editor']//p",
+    208: "//div[@class='TRS_Editor']//p",
+    209: "//div[@class='TRS_Editor']//p",
+    210: "//div[@class='TRS_Editor']//p",
+    211: "//div[@class='TRS_Editor']//p",
+    212: ["//div[@class='content_01 m_t_30 detasbmo']/p/", "//div[@class='content_01 m_t_30 detasbmo']/"],  # 页面不存在
+    213: ["//div[@class='content_01 m_t_30 detasbmo']/p/", "//div[@class='content_01 m_t_30 detasbmo']/"],  # 页面不存在
+    214: "",  # 页面不存在
+    215: ["//div[@class='content_01 m_t_30 detasbmo']/p/", "//div[@class='content_01 m_t_30 detasbmo']/"],  # 页面不存在
+    216: "//div[@class='new_cont']/p",
+    217: "//div[@class='new_cont']/p",
+    218: "",  # 页面失效
+    219: "//div[@class='article-con']/p",
+    220: "",  # 页面不存在
+    221: "",  # 页面不存在
+    222: "//div[@class='solb_content']/p",
+    223: "//div[@id='authonly']/p",
+    224: "//div[@id='clickeye_content']/p",
+    225: "//div[@id='clickeye_content']/p",
+    226: "//div[@id='clickeye_content']/p",
+    227: "//div[@id='clickeye_content']/p",
+    109: "//div[@class='articleBox']/div[@id='text']/p[contains(@style, 'text-indent')]",  # 页面打不开
+    228: "//div[@class='articleBox']/div[@id='text']/p[contains(@style, 'text-indent')]",  # 无法访问
+    229: "//div[@class='content medium']/p",
+    230: "//div[@id='Cnt-Main-Article-QQ']/p",  # 内容站点多样,暂时过滤
+    231: "//div[@class='node-article-content']/p",
+    232: "//div[contains(@id, 'article_content')]/p",
+    233: "",  # 暂时打不开
+    234: "",  # 暂时打不开
+    235: "",  # 页面不存在
+    236: "",  # 页面不存在
+    237: "",  # 页面不存在
+    238: "",  # 页面不存在
+    239: "",  # 页面不存在
+    240: "",  # 页面不存在
+    241: "",  # 页面不存在
+    242: "",  # 页面不存在
+    243: "",  # 页面不存在
+    244: "",  # 没有网站
+    245: "",  # 没有网站
+    246: "",  # 页面失效
+    247: "",  # 没有网站
+    248: "",  # 没有网站
+    249: "",  # 没有网站
+    250: "",  # 没有网站
+    251: "//div[@class='contenttext auto']/p",
+    252: "//div[@id='article_content']/p",
+    253: "//div[@id='Article']/p",
+    254: "//div[@class='article-content fontSizeSmall BSHARE_POP']/p",
+    255: "//div[@class='article-content fontSizeSmall BSHARE_POP']/p",
+    256: "",  # 页面失效172
+    257: "//div[@id='main_content']/p",
+    # 258: "//div[@class='textmain tmf14 jrj-clear']//p",
+    258: "//div[@class='texttit_m1']/p",
+    259: "//div[@class='texttit_m1']/p",
+    260: "//div[@class='texttit_m1']/p",
+    261: "//div[@class='texttit_m1']/p",
+    262: "//div[@class='texttit_m1']/p",
+    263: "//div[@class='texttit_m1']/p",
+    264: "//div[@class='texttit_m1']/p",
+    265: "//div[@class='texttit_m1']/p",
+    266: "//div[@class='texttit_m1']/p",
+    267: "//div[@class='texttit_m1']/p",
+    268: "//div[@class='texttit_m1']/p",
+    269: "",  # 页面失效
+    270: "",  # 页面失效
+    271: "",  # 页面失效
+    272: "",  # 页面失效
+    273: ["//div[@id='contentText']/div/", "//div[@id='content']/article/p", "//div[@class='text']/article[@id='mp-editor']/"],
+    274: "//div[@id='ContentBody']/p",
+    275: "//div[@id='ContentBody']/p",
+    276: "//div[@id='ContentBody']/p",
+    277: "//div[@id='ContentBody']/p",
+    278: "//div[@id='ContentBody']/p",
+    279: "//div[@id='ContentBody']/p",
+    280: "//div[@id='ContentBody']/p",
+    281: "//div[@id='ContentBody']/p",
+    282: "//div[@id='ContentBody']/p",
+    283: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    284: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    285: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    286: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    287: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    288: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    289: ["//div[@id='p_content']/p", "//div[@class='box_con']/p"],
+    290: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    291: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    292: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    293: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    294: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    295: ["//div[@id='Content']", "//div[@id='Content']/p", "//div[@id='__content']/", "//div[@class='Article']/"],
+    296: "//div[@class='content-article']//p",
+    297: "",  # 页面不存在
+    298: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],
+    299: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],  # 这个site存在跳转性
+    300: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],
+    301: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],
+    302: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],
+    303: ["//div[@class='main-text atc-content']/p", "//div[@class='main-text']//p", "//div[@class='art_main']/p"],
+    304: ["//div[@id='artibody']/p", "//div[@id='article']/"],
+    305: "//div[@id='artibody']/p",
+    306: "//div[@id='artibody']/p",
+    307: "",  # 没有网站
+    308: "//div[@id='artibody']/p",
+    309: "//div[@id='artibody']/p",
+    310: ["//div[@id='artibody']/p", "//div[@id='article']/"],
+    311: "//div[@id='ctrlfscont']/",
+    312: "//div[@class='article-t hidden']/",
+    313: "",  # 页面找不到
+    314: "//div[@class='article-t hidden']/",
+    315: "",  # 页面找不到
+    316: "//div[@class='article-t hidden']/",
+    317: "//div[@class='article-t hidden']/",
+    318: "//div[@class='article-t hidden']/",
+    319: "//div[@class='article-t hidden']/",
+    320: "//div[@id='qmt_content_div']/p",
+    321: "",  # 页面不可访问
+    322: ["//div[@id='text']/p", "//div[@class='conText']/div[@id='text']//p"],
+    323: "",  # 页面不存在
+    324: "",  # 页面不存在
+    325: "",  # 页面不存在
+    326: "",  # 页面不存在
+    327: "",  # 页面不存在
+    328: "",  # 页面不存在
+    329: "",  # 页面不存在
+    330: "//div[@class='Custom_UnionStyle']//p/",
+    331: "//div[@class='article__bd__detail']/",
+    332: ["//div[@class='article']/p/", "//div[@id='p-detail']/"],
+    333: "//div[@class='t-context f16 picture']/p",
+    334: "//div[@class='infoMain']/p",
+    335: "//div[@class='infoMain']/p",
+    336: "//div[@class='infoMain']/p",
+    337: "//div[@class='infoMain']/p",
+    338: "//div[@id='zoom']/p",
+    339: "",  # 无法访问
+    340: "",  # 无法访问
+    341: "",  # 无法访问
+    342: "",  # 没有网站
+    343: "//div[@class='stockcodec']/p",
+    # 344: "//div[@id='firstpostcontent']/",
+    344: "//td[@class='l17']/p",
+    345: "//div[@id='zoom']/",
+    346: "",  # 无法访问
+    347: ["//td[@class='l17']/p", "//td[@class='l17']/font/p/"],
+    348: "",  # 无法访问
+    349: "",  # 没有网站
+    350: ["//div[@class='left_zw']/p", "//div[@class='t3']"],
+    351: ["//div[@class='left_zw']/p", "//div[@class='t3']"],
+    352: ["//div[@class='left_zw']/p", "//div[@class='t3']"],
+    353: "//div[@class='TRS_Editor']/p",
+    354: "//div[@class='article-content fontSizeSmall BSHARE_POP']/p/",
+    355: "",  # 没有网站
+    356: "",  # 没有网站
+    357: "//td[@class='p14']/",
+    358: ["//td[@class='newsContent']/div", "//div[@class='info']/"],
+    359: "//dd/div[@id='fontzoom']/p",  # 存在无法访问风险
+    360: "",  # 没有网站
+    361: "",  # 没有网站
+    362: "",  # 没有网站
+    363: "",  # 没有网站
+    364: "",  # 没有网站
+    365: "//div[@class='content-article']/p/",
+    367: "",  # 页面不存在
+    368: "",  # 页面不存在
+    369: "",  # 页面不存在
+    370: "",  # 页面不存在
+    371: "",  # 页面不存在
+    372: "",  # 页面不存在
+    373: "",  # 页面失效
+    374: "//tr[2]/td[@class='cc']/",
+    375: "//tr[2]/td[@class='cc']/",
+    376: "//tr[2]/td[@class='cc']/",
+    377: "//div[@id='content']/p",
+    378: "//div[@id='content']/p",
+    379: "//div[@class='nnr_nr']/p[@class='MsoNormal']",
+    380: "//div[@class='nnr_nr']/p[@class='MsoNormal']",
+    381: "//div[@class='nnr_nr']/p[@class='MsoNormal']",
+    382: "",  # 页面不存在
+    383: "//div[@class='detail']/p",
+    384: "//div[@class='detail']/p",
+    385: "//div[@class='detail']/p",
+    386: "//div[@class='content']/p",
+    387: "//div[@class='content']/p",
+    388: "//div[@class='content']/p",
+    389: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    390: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    391: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    392: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    393: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    394: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    395: ["//div[@class='main']/p", "//div[@class='main']/div/"],
+    396: "//div[@id='NewsContentLabel']/p",
+    397: "//div[@id='NewsContentLabel']/p",
+    398: "//div[@id='NewsContentLabel']/p",
+    399: "",  # 没有网站
+    400: ["//div[@class='newsinfo_cont big']/p", "//div[@class='newsinfo_cont']/p"],
+    401: ["//div[@class='newsinfo_cont big']/p", "//div[@class='newsinfo_cont']/p"],
+    402: "",  # 页面不存在
+    403: "",  # 页面不存在
+    404: "",  # 页面不存在
+    405: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],  # 页面可能失效
+    406: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],  # 页面可能失效
+    407: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],  # 页面可能失效
+    408: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],  # 页面可能失效
+    409: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],  # 页面可能失效
+    410: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    411: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    412: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    413: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    414: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    415: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    416: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    417: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    418: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    419: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    420: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    421: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    422: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    423: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    424: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    425: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    426: ["//div[@id='tdcontent']", "//div[@id='tdcontent']/"],
+    428: "//div[@id='endText']/p",
+    429: "//div[@id='endText']/p",
+    430: "//div[@class='content-article']/p[@class='one-p']",
+    431: "//div[@id='main_content']/p",
+    432: "",  # 无法访问
+    433: "//div[@id='ctrlfscont']/p",
+    434: "//div[@id='ctrlfscont']/p",
+    435: "",  # 无法解析
+    436: "//div[@id='ContentBody']/p",
+    437: "//div[@id='ContentBody']/p",
+    438: "//div[@id='ContentBody']/p",
+    439: "//div[@id='ContentBody']/p",
+    440: "",  # 无法访问
+    441: "//div[@id='content']/p",
+    442: "",  # 页面失效
+    427: ["//div[@id='artibody']/p", "//div[@id='artibody']/", "//div[@class='art_contextBox']/"],
+    443: ["//div[@id='artibody']/p", "//div[@id='artibody']/", "//div[@class='art_contextBox']/"],
+    444: ["//div[@id='artibody']/p", "//div[@id='artibody']/", "//div[@class='art_contextBox']/"],
+    445: ["//div[@id='artibody']/p", "//div[@id='artibody']/", "//div[@class='art_contextBox']/"],
+    446: ["//div[@id='artibody']/p", "//div[@id='artibody']/", "//div[@class='art_contextBox']/"],
+    447: "//div[@id='Content']/",
+    448: "//div[@id='Content']/",
+    449: "",  # 无法访问
+    450: "",  # 无法访问
+    451: "",  # 页面不存在
+    452: "//div[@class='newsDetail']/p",
+    453: "",  # 没有网站
+    454: "//div[@class='TRS_Editor']/p",
+    455: "",  # 页面失效
+    456: "//div[@id='dvContent']/p",
+    457: "",  # 这是目前的最后一条
+    458: "",
+    459: "",
+    460: "",
+    461: "",
+    462: "",
+    463: "",
+    464: "",
+    465: "",
+    466: "",
+    467: "",
+    468: "",
+    469: "",
+    470: "",
+    471: "",
+    472: "",
+    473: "",
+    474: "",
+    475: "",
+    476: "",
+    477: "",
+    478: "",
+    479: "",
+    480: "",
+    481: "",
+    482: "",
+    483: "",
+    484: "",
+    485: "",
+    486: "",
+    487: "",
+    488: "",
+    489: "",
+    490: "",
+    491: "",
+    492: "",
+    493: "",
+    494: "",
+    495: "",
+    496: "",
+    497: "",
+    498: "",
+    499: "",
+}
+
+
+class XpathBox(dict):
+
+    def __init__(self, xpath_dic=XPATH_DIC):
+        self.xpath_dic = xpath_dic
+        super(XpathBox, self).__init__()
+
+    def __getitem__(self, item):
+        try:
+            value = self.xpath_dic[item]
+            if isinstance(value, list):
+                return [i + "/text()" for i in value]
+            return value + "/text()"
+        except KeyError:
+            return None
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    a = XpathBox({"1": "87"})
+    print a['1']
+
+    print("use time: %s" % (time.time() - start_t))

@@ -1,0 +1,152 @@
+# -*- coding:utf-8 -*-
+# 用途： 人民网解析
+# 创建日期: 18-8-21 下午7:47
+
+import time
+import logging
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class People1(BaseParse):
+    """http://finance.people.com.cn/GB/70846/index1.html"""
+
+    def _parse(self, raw_html):
+        base_url = "http://finance.people.com.cn/GB/70846/index1.html"
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='ej_left']//ul/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            url = urljoin(base_url, url)
+            # print url
+            nid_match = re.match(r".*/.*-(\d{5,30})\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./text()"))
+            # time_text = "".join(li.xpath("./font/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+class People2(BaseParse):
+    """http://politics.people.com.cn/GB/1024/index.html"""
+
+    @staticmethod
+    def get_base_url():
+        return "http://politics.people.com.cn/GB/1024/index.html"
+
+    def _parse(self, raw_html):
+        base_url = self.get_base_url()
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'ej_list_box')]//ul/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            url = urljoin(base_url, url)
+            # print url
+            nid_match = re.match(r".*/.*-(\d{5,30})\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./text()"))
+            # time_text = "".join(li.xpath("./font/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+class People3(People2):
+    """http://military.people.com.cn/GB/172467/index.html"""
+
+    @staticmethod
+    def get_base_url():
+        return "http://military.people.com.cn/GB/172467/index.html"
+
+
+class People4(People2):
+    """http://scitech.people.com.cn/GB/1057/index.html"""
+
+    @staticmethod
+    def get_base_url():
+        return "http://scitech.people.com.cn/GB/1057/index.html"
+
+
+class People5(People2):
+    """http://it.people.com.cn/GB/243510/index.html"""
+
+    @staticmethod
+    def get_base_url():
+        return "http://it.people.com.cn/GB/243510/index.html"
+
+    def _parse(self, raw_html):
+        base_url = self.get_base_url()
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'ej_list')]//ul/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            url = urljoin(base_url, url)
+            # print url
+            nid_match = re.match(r".*/.*-(\d{5,30})\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./text()"))
+            # time_text = "".join(li.xpath("./font/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

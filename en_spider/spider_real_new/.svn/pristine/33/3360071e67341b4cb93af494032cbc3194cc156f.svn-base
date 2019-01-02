@@ -1,0 +1,66 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import logging
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class Qq1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'mod newslist')]/ul/li")
+        for li in lines:
+            item =Item()
+            item.set('url', "".join(li.xpath("./a/@href")))
+            item.set('status', 1)
+            # http://news.cnstock.com/news/sns_bwkx/201606/3817181.htm
+            nid_match = re.match(r".*/(\d+)/(\d+)\.htm$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            item.set('title', "".join(li.xpath("./a/text()")))
+            times = "".join(li.xpath("./span[@class='pub_time']/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+class Qq2(BaseParse):
+    """http://roll.finance.qq.com/
+    没有完成,这是个动态页面
+    """
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        # print raw_html
+        lines = root.xpath("//div[@class='list c']/ul/li")
+        # print "lines", lines
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./div[1]/a/@href"))
+            url = urljoin(self.url, url)
+            # print url
+            nid_match = re.match(r".*/(\d{5,30})\.htm", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./div[1]/a/text()"))
+            # print title
+            abstract = "".join(li.xpath("./div[2]/text()"))
+            time_text = "".join(li.xpath("./div[1]/i/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)

@@ -1,0 +1,215 @@
+# -*- coding:utf-8 -*-
+# 用于国债/外汇数据更新(采集自英为才情) 运行频率,每天运行一次
+
+from functools import wraps
+from contextlib import closing
+import MySQLdb
+import time
+import requests
+from datetime import datetime, timedelta
+import pandas as pd
+
+
+# 存储原始股票数据的数据库配置
+MYSQL_ARGS = {
+    'host': 'localhost',
+    'user': 'develop',
+    'passwd': 'sd61131707',
+    'db': 'spider_data'
+}
+
+
+def with_db_connection(db="com_beta", commit=False, mysql_args=None):
+    def func_wraps(func):
+        @wraps(func)
+        def args_wraps(*args, **kwargs):
+            conf = dict()
+            conf['db'] = db
+            conf['charset'] = 'utf8'
+            if commit:
+                conf['host'] = 'dbmaster'
+
+            if mysql_args:
+                conf.update(mysql_args)
+
+            with closing(MySQLdb.connect(**conf)) as con:
+                ret = func(cursor=con.cursor(), *args, **kwargs)
+                if commit:
+                    con.commit()
+                return ret
+        return args_wraps
+    return func_wraps
+
+
+class MiniInvestSpider(object):
+
+    def __init__(self):
+        self.days = None
+
+    def set_days(self, days):
+        self.days = days
+
+    def set_url(self):
+        self.url = "https://www.investing.com/instruments/HistoricalDataAjax"
+
+    def set_header(self):
+        self.header = {
+            'User-Agent': 'Mozilla/5.0',
+            'referer': "https://www.investing.com",
+            'host': 'www.investing.com',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+
+    def set_data(self, bond_id=None, start_date=None, end_date=None, order='ASC', freq='Daily'):
+        if bond_id is None:
+            print "please set the bond_id"
+            return
+        self.data = {
+            'name': 'china_bond',
+            'curr_id': bond_id,
+            'sort_col': 'date',
+            'action': 'historical_data',
+            'st_date': start_date,
+            'end_date': end_date,
+            'sort_ord': order,
+            'frequency': freq
+        }
+
+    def send_req(self):
+        resp = requests.post(url=self.url, data=self.data, headers=self.header)
+        return resp
+
+    def get_product_data_from_resp(self, resp):
+        product_data = pd.read_html(resp.content)[0]
+        return product_data
+
+    def create_start_end_date(self, days=1):
+        if self.days is not None:
+            days = self.days
+        start_date = (datetime.now() - timedelta(days=days)).strftime('%m/%d/%Y')
+        end_date = datetime.now().strftime('%m/%d/%Y')
+        return start_date, end_date
+
+    @with_db_connection(mysql_args=MYSQL_ARGS)
+    def insert_bond_data_to_db(self, cursor, bond_price_df=None, bond_id=None):
+        for bond_price in bond_price_df.values:
+            if 'No results found' in bond_price:
+                continue
+            _date_raw, _close, _open, _high, _low, _zf = bond_price
+            _date = time.strftime("%Y-%m-%d %H:%M:%S", time.strptime(_date_raw, u"%b %d, %Y"))
+            try:
+                cursor.execute("replace into bond_rate_day (Date, BondId, OpenPrice, HighPrice, LowPrice, ClosePrice)"
+                               " values ('{}', {}, {}, {}, {}, {})".format(
+                                _date, int(bond_id), float(_open), float(_high), float(_low), float(_close)))
+                print 'save the bond price: {}'.format(_date)
+            except Exception as e:
+                print e
+
+    @with_db_connection(mysql_args=MYSQL_ARGS)
+    def insert_fx_data_to_db(self, cursor, fx_price_df=None, fx_id=None):
+        for fx_price in fx_price_df.values:
+            if 'No results found' in fx_price:
+                continue
+            _date_raw, _close, _open, _high, _low, _zf = fx_price
+            _date = time.strftime("%Y-%m-%d %H:%M:%S", time.strptime(_date_raw, u"%b %d, %Y"))
+            zf = float(_zf[:-1])
+            # print _date, int(fx_id), float(_open), float(_high), float(_low), float(_close), zf
+            try:
+                cursor.execute("replace into fx_price_day (Date, FxId, OpenPrice, HighPrice, LowPrice, ClosePrice, Chg)"
+                               " values ('{}', {}, {}, {}, {}, {}, {})".format(_date, int(fx_id), float(_open), float(_high),
+                                                                           float(_low), float(_close), zf))
+                print 'save the fx price: {}'.format(_date)
+            except Exception as e:
+                print e
+
+    @with_db_connection(mysql_args=MYSQL_ARGS)
+    def insert_usdi_data_to_db(self, cursor, usdi_price_df=None, usdi_id=None):
+        for usdi_price in usdi_price_df.values:
+            if 'No results found' in usdi_price:
+                continue
+            date_raw, _close, _open, _high, _low, _vol, _zf = usdi_price
+            _date = time.strftime("%Y-%m-%d %H:%M:%S", time.strptime(date_raw, u"%b %d, %Y"))
+            zf = float(_zf[:-1])
+
+            try:
+                cursor.execute(
+                    "replace into fx_price_day (Date, FxId, OpenPrice, HighPrice, LowPrice, ClosePrice, Chg)"
+                    " values ('{}', {}, {}, {}, {}, {}, {})".format(_date, int(usdi_id), float(_open), float(_high),
+                                                                    float(_low), float(_close), zf))
+                print 'save the usdi price: {}'.format(_date)
+            except Exception as e:
+                print e
+
+    @with_db_connection(mysql_args=MYSQL_ARGS)
+    def insert_coin_data_to_db(self, cursor, coin_price_df=None, coin_id=None):
+        if coin_id == 945629:  # 比特币id替换
+            coin_id = 57391
+        for coin_price in coin_price_df.values:
+            if 'No results found' in coin_price:
+                print 'No results'
+                continue
+            date_raw, _close, _open, _high, _low, _vol,  _zf = coin_price
+            _date = time.strftime("%Y-%m-%d %H:%M:%S", time.strptime(date_raw, u"%b %d, %Y"))
+            zf = float(_zf[:-1])
+            try:
+                cursor.execute("replace into fx_price_day (Date, FxId, OpenPrice, HighPrice, LowPrice, ClosePrice, Chg)"
+                               " values ('{}', {}, {}, {}, {}, {}, {})".format(
+                                _date, int(coin_id), float(_open), float(_high), float(_low), float(_close), zf))
+                print 'save the coin price: {}'.format(_date)
+            except Exception as e:
+                print e
+
+    def update_history_price(self, product_id, start_date, end_date, product_type=None):
+        self.set_url()
+        self.set_header()
+        self.set_data(product_id, start_date, end_date)
+        resp = self.send_req()
+        if resp.status_code == 200:
+            print "success"
+            product_price_df = self.get_product_data_from_resp(resp)
+            if product_type == 'bond':
+                self.insert_bond_data_to_db(bond_id=product_id, bond_price_df=product_price_df)
+            elif product_type == 'fx':
+                self.insert_fx_data_to_db(fx_id=product_id, fx_price_df=product_price_df)
+            elif product_type == 'usdi':
+                self.insert_usdi_data_to_db(usdi_id=product_id, usdi_price_df=product_price_df)
+            elif product_type == 'coin':
+                self.insert_coin_data_to_db(coin_id=product_id, coin_price_df=product_price_df)
+        else:
+            print "failed"
+
+    def update_all_bond(self):
+        start_date, end_date = self.create_start_end_date()
+        bonds = (29227, 23705, 23901, 23693)  # (中， 美， 日， 德)
+        for bond in bonds:
+            self.update_history_price(bond, start_date, end_date, product_type='bond')
+
+    def update_all_fx(self):
+        start_date, end_date = self.create_start_end_date()
+        fxs = (961728, 3)  # 离岸人民币， 美元/日元
+        for fx in fxs:
+            self.update_history_price(fx, start_date, end_date, product_type='fx')
+
+    def update_usdi(self):
+        start_date, end_date = self.create_start_end_date()
+        usdis = (942611, )
+        for usdi in usdis:
+            self.update_history_price(usdi, start_date, end_date, product_type='usdi')
+
+    def update_coin(self):
+        start_date, end_date = self.create_start_end_date()
+        coins = (945629, 997650)
+        for coin in coins:
+            self.update_history_price(coin, start_date, end_date, product_type='coin')
+
+    def update(self, days=None):
+        self.set_days(days)
+        self.update_all_bond()
+        self.update_all_fx()
+        self.update_usdi()
+        self.update_coin()
+
+
+if __name__ == '__main__':
+    mis = MiniInvestSpider()
+    mis.update(days=5)

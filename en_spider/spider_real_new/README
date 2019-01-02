@@ -1,0 +1,25 @@
+spider_real/
+    __init__.py			# None
+    settings.py			# setting
+    items.py			# item
+    manage.py			# main 
+    spiders.py			# spider main
+    pipelines.py		# pipeline
+    my_utils.py			# base
+    main_request/		# request
+        base_request.py
+        get_request.py
+        ...
+    main_parse/			# parse
+        base_parse.py
+        get_parse.py
+        ...
+    content_parse.py		# parse content
+    log/			# log
+        logging.conf
+        run.log
+        spider.log
+        request.log
+        parse.log
+        ...
+

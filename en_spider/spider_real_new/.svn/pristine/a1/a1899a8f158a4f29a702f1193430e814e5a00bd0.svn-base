@@ -1,0 +1,25 @@
+# -*- encoding:utf-8 -*-
+import logging
+import json
+from lxml import etree
+import re, time
+from items import Item
+
+logger = logging.getLogger("parse")
+
+
+def investor_user_parse(raw_html):
+    """ http://data.eastmoney.com/DataCenter_V3/Chart/cjsj/weeklystockaccountsnew.ashx?r=0.659568071773031&isxml=false
+    """
+    lists = []
+    raw_json_data = json.loads(raw_html)
+    days = lambda x: int(time.mktime((int(x[0]), int(x[1]), int(x[2]), 8, 0, 0, 0, 0, 0))/86400+4)/7*7-6
+    days = map(days, map(lambda x: x.split('-'), raw_json_data['X'].split(',')))
+    values = map(lambda x: float(x)*10000, raw_json_data['Y'][0].split(','))
+    for day, value in zip(days, values):
+        item = Item()
+        item.set('id', 7001, int)
+        item.set('days', day, int)
+        item.set('self_value', value, float)
+        lists.append(item)
+    return lists

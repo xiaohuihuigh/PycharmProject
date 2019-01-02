@@ -1,0 +1,26 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+class P5w1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//ul[contains(@class,'sto-left-list')]/li")
+        for li in lines:
+            item = Item()
+            url_temp = "".join(li.xpath("./h2/a/@href"))
+            item.set('url', "http://www.p5w.net/stock/market/gng/"+url_temp.lstrip("\.").lstrip("/"))
+            item.set('status', 1)
+            item.set('title', "".join(li.xpath("./h2/a/text()")))
+            nid_match = re.match(r".*/[a-z]*(\d+)_(\d+)\.htm$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            item.set('abstract', "".join(li.xpath("./p/text()")))
+            times = "".join(li.xpath(".//*[contains(@class,'time')]/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)

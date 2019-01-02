@@ -1,0 +1,57 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+class Xinhua081(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//article[contains(@class,'media')]")
+        for li in lines:
+            item =Item()
+            item.set('url', "".join(li.xpath("./div[@class='newsinfo']/a/@href")))
+            item.set('status', 1)
+            item.set('title', "".join(li.xpath("./div[@class='newsinfo']/a//*[contains(name(),'h')]/text()")))
+            item.set('abstract', "".join(li.xpath("./div[@class='newsinfo']/a//p/text()")))
+            nid_match = re.match(r".*/(\d+)/(\d+)\.shtml$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            times = "".join(li.xpath(".//div[contains(@class,'cattime')]/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+class Xinhua2(BaseParse):
+    """http://www.xinhuanet.com/fortune/gd.htm"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//ul[@class='dataList']/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./h3/a/@href"))
+            nid_match = re.match(r".*/c_(\d{5,30})\.htm", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./h3/a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./a/div[2]//p/text()"))
+            # time_text = "".join(li.xpath("./div/span/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)

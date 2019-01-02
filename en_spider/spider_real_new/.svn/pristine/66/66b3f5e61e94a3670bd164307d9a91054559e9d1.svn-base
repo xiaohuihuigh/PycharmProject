@@ -1,0 +1,31 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Ccstock1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'listMain')]/ul/li")
+        for li in lines:
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            nid_match = re.match(r".*/A(\d*)\.html$", url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            item.set('url', url)
+            item.set('status', 1)
+            item.set('title', "".join(li.xpath("./a/@title")))
+            times = "".join(li.xpath("./span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

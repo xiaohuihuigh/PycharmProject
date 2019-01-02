@@ -1,0 +1,136 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+# 解析的基类
+
+import logging
+import re
+#import my_utils
+import time
+
+logger = logging.getLogger("parse")
+
+
+class BaseParse(object):
+    """
+        status = -1           # html error
+        status = -2           # json error
+        status = 0            # init
+        status = 1            # html success
+        status = 2            # html error
+        data format = [dict,dict,]
+        USAGE
+        run(raw_html="",timestamp=...)
+        get_data()
+        get_log()
+
+    """
+
+    def __init__(self):
+        self._url = ""
+        self._sid = 0
+        self._weight = 0
+        self._data = {}
+        self._status = 0
+        self._timestamp = 0
+        self.count = 0
+        self._log = {}
+
+    def _has_updated(self):
+        pass
+
+    def run(self, raw_html=u"", sid=0, url="", timestamp=0, weight=1):
+        """ filter websites timestamp > timestamp """
+        self.count += 1
+        self._url = url
+        self._sid = sid
+        self._timestamp = timestamp
+        self._weight = weight
+        setnid = set(self._data.keys())
+        try:
+            logger.debug("start parse title")
+            self._parse(raw_html.text)
+        except Exception as e:
+            message = "error %s sid = %s  link_url = %s  timestamp = %s" % (
+                e.mess0age, str(sid), str(url), str(timestamp))
+            logger.info(message)
+            logger.info(raw_html.text)
+        setnid = set(self._data.keys()) - setnid
+        # print "setnid", setnid
+        return [self._data[nid] for nid in setnid]
+
+    def _call_back(self, nid=0, link_url="", title=""):
+        """ "error" : { hash_id : (short_message,long_message) } """
+        level = 1
+        hash_id = hash(str(nid) + link_url + title)
+        if level > 0:
+            error_dict = self._log.setdefault("error", {})
+            error_message = []
+            if len(title) == 0:
+                error_message.extend([u"标题问题", title])
+            if len(link_url) == 0:
+                error_message.extend([u"链接问题", link_url])
+            if nid == 0:
+                error_message.extend([u"nid问题", str(nid)])
+
+            if hash_id not in error_dict:
+                short_message = " ".join(error_message[::2])
+                long_message = " ".join(error_message)
+                error_dict[hash_id] = (short_message, long_message)
+
+        elif level == 0:
+            pass
+
+    def _add_to_data(self, item):
+        """ 增加数据，统一配置sid和weight，并统一依据时间戳处理数据回滚 """
+        # 状态和时间戳过滤
+        # 什么状态下会过滤，什么状态下会不过滤
+        # 调试专用
+        # print item.get_status(), item.get('timestamp'), self._timestamp
+        # 这里，假如timestamp 是None的话，与0进行比较。会有问题。
+        item_time = item.get("timestamp")
+        if item_time is None:
+            print "warning: parse time error"
+            item_time = 1
+        print 'item.getstatus',item.get_status(),self._status
+        print 'item.time',item_time
+        if item.get_status() and item_time > self._timestamp:
+            item.set('sid', self._sid)
+            item.set('weight', self._weight)
+            if not item.get('url'):
+                item.set('url', self._url)
+                item.set('status', -1)
+            self._data[item.get('nid')] = item
+        else:
+            self._call_back(item.get('nid', ""), item.get('url', ""), item.get('title', ""))
+
+    def _parse(self, raw_html):
+        """ parse the raw html use self._add_to_data """
+        pass
+
+    @property
+    def url(self):
+        return self._url
+
+    def get_url(self):
+        """为了向前兼容"""
+        return self._url
+
+    def get_sid(self):
+        return self._sid
+
+    def get_data(self):
+        return self._data
+
+    def get_status(self):
+        print 'maybe by 0', self._status
+        return self._status
+
+    def get_timestamp(self):
+        return self._timestamp
+
+    def get_log(self):
+        return self._log
+
+
+if __name__ == "__main__":
+    pass

@@ -1,0 +1,165 @@
+# -*- coding:utf-8 -*-
+# 用途： 页面采集爬虫,采集后,对失败的再进行处理版
+# 创建日期: 18-8-25 下午5:44
+
+import gevent.monkey
+gevent.monkey.patch_all()  # 对python标准库进行修改
+
+import time
+import logging
+# import random
+logger = logging.getLogger("spider")
+import os
+import gevent
+from gevent.pool import Pool
+from settings import CON, CONCURRENT_ITEMS,  CONCURRENT_PER_REQUESTS, HTML_DIR
+from main_request.get_request import Request
+from page_parse import content_parse, get_failed
+from pipelines import page_pipelines
+from items import PageItem
+from xpath_pool import XPATH_DIC
+# from rediscon import rs_con
+
+
+class PageSpider(object):
+    """
+        页面爬虫,用来采集已经有url,但没有采集页面具体信息.
+        item 字段说明 news_count 0代表正常采集并解析 1代表解析为空 2代表解析内容过短 -1代表采集失败 -2 代表解析表达式错误
+    """
+
+    def __init__(self):
+        """ 初始化 """
+        self._pool = Pool(CONCURRENT_ITEMS)
+        self._site = []
+        self._data = []
+        self._exist_id = set([])
+        self._valid_site_ids = set([])
+        self._site_index = 0
+        self._data_index = 0
+        self._item_count = 0
+        self._request_count = 0
+        self._request = Request()
+
+    def _get_page(self, item):
+        """ 采集页面并处理"""
+        # print "aaaaa"
+        if item.get('run_status') > 0:  # 仅采集状态大于0的网站
+            article_id = item.get("article_id")
+            title = item.get("title")
+            site_id = item.get("site_id")
+            logger.debug("start running article {} site {}".format(article_id, site_id))
+            request = self._request.get_class(sid=site_id, mode=True)
+            while request.COUNTS > CONCURRENT_PER_REQUESTS:  # 限制发送请求总数量
+                gevent.sleep(0)
+            # resp = None
+            with gevent.Timeout(30, False) as timeout:  # 设置超时时间
+                resp = request.run(url=item.get('news_url'), num=3)
+            if resp:
+                self.save_html_text(html_text=resp.text, title=title, article_id=article_id, site_id=site_id)
+                status_code = resp.status_code
+                if status_code < 300:
+                    pass
+                else:
+                    logger.info("get html status error {}, {}".format(status_code, article_id))
+                content_parse(item.get('site_id'), resp, item)  # 解析内容
+            else:
+                print "get html failed {}".format(article_id)
+                status_code = 404
+                item.set('news_count', get_failed)
+                # 这里需要标记一个失败动作
+            item.set('status', status_code)
+            self._data.append(item)
+
+    def save_html_text(self, html_text, title, article_id, site_id):
+        file_dir = HTML_DIR
+        if file_dir is None:
+            print "warning: html_dir is None"
+            return
+        file_name = "{}_{}_{}".format(article_id, site_id, title) + ".html"
+        file_path = os.path.join(file_dir, file_name)
+        with open(file_path, 'w') as wf:
+            wf.write(html_text.encode("utf8"))
+
+    def set_exist_ids(self):
+        """获取已经访问过的id,用于去重"""
+        cur = CON.cursor()
+        cur.execute("select `id` from `news_url_content` where `used` = 2 order by `id`")
+        for article_id, in cur.fetchall():
+            self._exist_id.add(article_id)
+        if len(self._exist_id) != 0:
+            max_id = max(self._exist_id)
+            self._site_index = max_id
+
+    def set_valid_site_ids(self):
+        """获取有效网址"""
+        for site_id, xpath_text in XPATH_DIC.items():
+            if xpath_text:
+                self._valid_site_ids.add(site_id)
+
+    def set_ignore_sites(self):
+        """添加临时过滤网站"""
+        ignore_sites = {358, 230, 296, 344, 347, 365}
+        self._valid_site_ids = self._valid_site_ids - ignore_sites
+
+    def get_items(self, mod=1, task_num=1000, run_status=1):
+        """领取采集任务,最好一次领取很多个任务
+        ::mod 取模,用于任务分组
+        ::task_num 一次获取数量
+        ::run_status 运行标志,先设置为1
+        """
+        items = []
+        # print self._site_index
+        """
+        当前这个代码，是针对第一次采集和解析失败后，读取数据库进行重新采集及补充
+        后续，如果要对一千万的url进行重新采集，则需要进行数据表的切换，切换到news_url表，然后注意，新表缺少content字段，要进行去除。
+        然后再打开去重和筛选。
+        """
+
+        cur = CON.cursor()
+        cur.execute("SELECT `id`, `site_id`, `news_url`, `status`, `source`, `site`, `news_title`, `news_count`, "
+                    "`news_time`, `used`, `content` FROM `news_url_content` WHERE `used` = 1 and "
+                    "`news_count` != 0 and `id` > %s ORDER BY `id` limit %s",
+                    (self._site_index, task_num))
+        for article_id, site_id, news_url, status, source, site, news_title, news_count, news_time, used, content in \
+                cur.fetchall():
+            # 不需要再进行筛选
+            # if site_id not in self._valid_site_ids or article_id in self._exist_id or (article_id % 10) != mod:
+            #     continue
+            used = 2  # 设置采集次数标记，用于去重
+            item_dic = {'article_id': article_id, 'site_id': site_id, 'news_url': news_url, 'source': source,
+                        'site': site, 'news_title': news_title, 'news_count': news_count, 'news_time': news_time,
+                        'used': used, 'content': content, 'status': status, 'run_status': run_status}
+            item = PageItem(**item_dic)
+            items.append(item)
+            self._site_index = article_id
+        cur.close()
+        # 这里最好做一个随机的打乱处理
+        # items = random.shuffle(items)
+        return items
+
+    def run(self):
+        """ 新闻爬虫主流程入口 """
+        self.set_exist_ids()
+        self.set_valid_site_ids()
+        self.set_ignore_sites()
+
+        timestamp = time.time()
+        stop_time = timestamp + 86400 * 10
+        self._step = 10 if timestamp % 86400 < 28800 else 60
+        self._pipetime = timestamp + 30
+        while True and timestamp < stop_time:  # 调试状态,永远运行
+            timestamp = time.time()
+            self._second = int(timestamp+28800) % 86400
+            items = self.get_items()
+            for item in items:
+                self._pool.add(gevent.spawn(self._get_page, item))  # 这里进行了内容页的抓取
+            logger.debug('pool add in loop')
+            gevent.sleep(0)  # 交出控制权,其实这句不需要
+            self._pool.join()  # 等待任务结束
+            page_pipelines(self._data)  # 存储采集结果   这里要特别注意 self._data的溢出问题
+            del self._data[:]
+
+
+if __name__ == '__main__':
+    spider = PageSpider()
+    spider.run()

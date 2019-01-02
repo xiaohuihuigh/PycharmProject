@@ -1,0 +1,43 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Hexun1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'mod newslist')]/ul/li")
+        for li in lines:
+            item = Item()
+            item.set('url', "".join(li.xpath("./a/@href")))
+            item.set('status', 1)
+            # http://news.cnstock.com/news/sns_bwkx/201606/3817181.htm
+            nid_match = re.match(r".*/(\d+)/(\d+)\.htm$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1) + nid_match.group(2))
+            item.set('title', "".join(li.xpath("./a/text()")))
+            times = "".join(li.xpath("./span[@class='pub_time']/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+class Hexun2(BaseParse):
+    def _parse(self, raw_html):
+        raw_json_data = my_utils.get_special_json_data(raw_html)
+        for sub_item in raw_json_data:
+            item = Item()
+            item.set('title', sub_item.get("title", None))
+            item.set('url', sub_item.get("url"))
+            item.set('status', 1)
+            item.set('nid', sub_item.get("newsId"))
+            times = sub_item.get("time")
+            time_match = re.match(r".*/(\d+)-(\d+)-(\d+)/\d+\.html$", item.url)
+            if time_match:
+                times = time_match.group(1) + time_match.group(2) + time_match.group(3) + times
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)

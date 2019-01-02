@@ -1,0 +1,24 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+# http://aastocks.com/sc/stocks/analysis/china-hot-topic.aspx?catg=1
+class Aastocks1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        main_divs = root.xpath("//div[@class='common_box'][@ref]")
+        for sub in main_divs:
+            item = Item()
+            item.set('nid', "".join(sub.xpath("@ref")))
+            item.set('url',"".join(sub.xpath(".//a/@href")))
+            item.set('status', 1)
+            item.set('title',"".join(sub.xpath(".//a/text()")))
+            item.set('abstract', "".join(sub.xpath(".//div[contains(@class,'newscontent2')]/text()")))
+            my_time = "".join(sub.xpath(".//div[contains(@class,'newstime')]/text()"))
+            item.set('timestamp', my_utils.get_timestamp(my_time))
+            self._add_to_data(item)

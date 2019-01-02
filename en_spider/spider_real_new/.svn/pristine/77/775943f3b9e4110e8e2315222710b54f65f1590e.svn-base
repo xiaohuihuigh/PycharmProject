@@ -1,0 +1,104 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from lxml import etree
+from items import Item
+from base_parse import BaseParse
+
+
+class Tjqka1(BaseParse):
+    def _parse(self, raw_html):
+        raw_json_data = my_utils.get_special_json_data(raw_html)
+        for sub_item in raw_json_data:
+            item = Item()
+            item.set('timestamp', sub_item.get("rtime", -1))
+            item.set('title', sub_item.get("title", None))
+            item.set('abstract', sub_item.get("content", None))
+            item.set('url', sub_item.get("url"))
+            item.set('status', 1)
+            item.set('nid', sub_item.get("seq"))
+            importance = sub_item.get("import")
+            item.set('score', 1 if importance is not None and len(importance)>0 else 0)
+            # item.set('stocks', sub_item.get("stocks"))
+            self._add_to_data(item)
+
+
+class Tjqka2(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'content')]//div[@class='list-con']//li")
+        for li in lines:
+            item = Item()
+            item.set('url', "".join(li.xpath("./span/a/@href")))
+            item.set('status', 1)
+            item.set('title', "".join(li.xpath("./span/a/text()")))
+            nid_match = re.match(r".*/(\d*)/c(\d*)\.shtml", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1) + nid_match.group(2))
+            times = "".join(li.xpath("./span/span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            item.set('abstract', "".join(li.xpath("./a/text()")))
+            self._add_to_data(item)
+
+
+class Tjqka3(BaseParse):
+    """ http://yuanchuang.10jqka.com.cn/qingbao/ """
+    def _parse(self, raw_html):
+        raw_json_data = my_utils.get_special_json_data(raw_html)
+        for sub_item in raw_json_data:
+            dstr = sub_item.get('time')
+            if ':' not in dstr:
+                continue
+            item = Item()
+            item.set('nid', sub_item.get('seq'))
+            item.set('url', sub_item.get('PCurl'))
+            item.set('status', 1)
+            hour2minute = dstr.split(':')
+            dstr = item.url.split('/')[-2]
+            times = '%s-%s-%s %02d:%02d' %(dstr[0:4], dstr[4:6], dstr[6:8], int(hour2minute[0]), int(hour2minute[1]))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            item.set('title', sub_item.get('title'))
+            item.set('content', sub_item.get('abstract'))
+            item.set('stocks', ','.join(stock.get('code','') for stock in sub_item.get('stocks',[])))
+            self._add_to_data(item)
+
+
+class Tjqka4(BaseParse):
+    """http://stock.10jqka.com.cn/gpgd_list/"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='list-con']/ul/li")
+        # print "lines", lines
+        for li in lines:
+            # print "li"
+            # if li.get("class") == "none":
+            #     continue
+            item = Item()
+            url = "".join(li.xpath("./span/a/@href"))
+            # print url
+            nid_match = re.match(r".*/c(\d{5,30})\.shtml", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./span/a/text()"))
+            abstract = "".join(li.xpath("./a/text()"))
+            time_text = "".join(li.xpath("./span/span/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

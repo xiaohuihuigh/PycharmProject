@@ -1,0 +1,29 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from lxml import etree
+from base_parse import BaseParse
+from items import Item
+
+class Laoqianzhuang1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        main_list = root.xpath("//ul[@id='list_ul']/li[contains(@class,'clearfix')]/div")
+        for li in main_list:
+            item = Item()
+            item.set('url', "".join(li.xpath("./span/a/@href")))
+            item.set('status', 1)
+            nid_match = re.match(r".*/(\d*)/(\d*)\.shtml$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            item.set('title', "".join(li.xpath("./span/a/@title")))
+            item.set('abstract', "".join(li.xpath("./a[contains(@class,'cot-intro')]/text()")))
+            times = "".join(li.xpath("./span/span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

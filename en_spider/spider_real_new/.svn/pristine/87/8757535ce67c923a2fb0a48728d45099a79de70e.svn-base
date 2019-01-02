@@ -1,0 +1,20 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+#from main_request.base_request import BaseRequest
+import requests
+
+html = requests.get(url='http://stock.xinhua08.com/hydt/')
+html.encoding = 'utf8'
+print html
+from main_parse.xinhua08_parse import Xinhua081 as parse_fun
+test = parse_fun()
+test._parse(html.text)
+data = test.get_data()
+print len(data)
+num = 0
+for nid in data:
+    print nid,'\t'.join(data[nid].gets(keys=('title', 'url')))
+    num += 1
+    if num > 3:
+        break

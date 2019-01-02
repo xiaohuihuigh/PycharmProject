@@ -1,0 +1,29 @@
+# -*- coding:utf-8 -*-
+# 用途： 标题过滤测试
+# 创建日期: 18-9-5 下午4:35
+
+import time
+import MySQLdb
+from title_filter import should_filter
+con = MySQLdb.connect(host='192.168.0.210', user='develop', passwd='sd61131707', db='web_news', charset='utf8')
+
+
+def get_useful_title():
+    site_index = 0
+    task_num = 10000
+    cursor = con.cursor()
+    cursor.execute("SELECT `id`, `site_id`, `news_url`, `status`, `source`, `site`, `news_title`, `news_count`, "
+                   "`news_time`, `used`, `content` FROM `news_url_content` WHERE `used` = 1 and "
+                   "`news_count` != 0 and `id` > %s ORDER BY `id` limit %s",
+                   (site_index, task_num))
+    for article_id, site_id, news_url, status, source, site, news_title, news_count, news_time, used, content in \
+            cursor.fetchall():
+        print should_filter(news_title, site_id)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    get_useful_title()
+
+    print("use time: %s" % (time.time() - start_t))

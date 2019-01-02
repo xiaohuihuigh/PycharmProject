@@ -1,0 +1,109 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+import time
+from six.moves.urllib.parse import urljoin
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+logger = logging.getLogger("parse")
+
+
+# http://www.cailianpress.com/
+class Cailianpress1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        divs = root.xpath("//div[contains(@class,'centerWrpa')]/div[contains(@class,'contentLeft')]//div[contains(@class,'newsRight')]")
+        temp_timestamp = int(time.time() / 86400) * 86400
+        for div in divs:
+            item = Item()
+            abstract = "".join(div.xpath(".//p[contains(@class,'contentC')]//text()"))
+            if not abstract:
+                continue
+            title, abstract = my_utils.split_title_content(abstract)
+            item.set('abstract', abstract)
+            item.set('title', title)
+            item.set('timestamp', time.time())
+            roll_str = "".join(div.xpath(".//a//@href")).strip()
+            roll_id = roll_str.split('/')[-1]
+            nid = int('%s%s'%(temp_timestamp, roll_id))
+            item.set('nid', nid)
+            self._add_to_data(item)
+
+
+# http://www.cailianpress.com/reference
+class Cailianpress2(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        divs = root.xpath("//div[contains(@class,'centerWrpa')]/div[contains(@class,'contentLeft')]//div[contains(@class,'newsRight')]")
+        temp_timestamp = int(time.time() / 86400) * 86400
+        for div in divs:
+            i_num = int("".join(div.xpath("@data-reactid")))
+            item = Item()
+            title = "".join(div.xpath("./div[contains(@class,'title')]//text()"))
+            item.set('title', title)
+            abstract = "".join(div.xpath("./div[contains(@class,'content')]/text()"))
+            item.set('abstract', abstract)
+            timestamp = my_utils.get_timestamp("".join(div.xpath("./div[contains(@class,'authorWrap')]/div[contains(@class,'ctime')]/text()")))
+            item.set('timestamp', timestamp)
+            nid = int('%s%s'%(temp_timestamp, i_num))
+            item.set('nid', nid)
+            self._add_to_data(item)
+
+
+# http://www.cailianpress.com/subject.html
+class Cailianpress3(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        ulines = root.xpath("//div[@id='entries']/ul")
+        for ul in ulines:
+            item = Item()
+            item.set('title', "".join(ul.xpath("./li[contains(@class,'title')]/a/text()")))
+            item.set('url', "".join(ul.xpath("./li[contains(@class,'title')]/a/@href")))
+            item.set('abstract', "".join(ul.xpath("./li[contains(@class,'content')]/text()")))
+            item.set('timestamp', "".join(ul.xpath("./@ctime")))
+            nid_match = re.match(r".*/(\d+)\.html$", item.get('url'))
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            item.set('status', 1)
+            self._add_to_data(item)
+
+
+class Cailianpress4(BaseParse):
+    def _parse(self, raw_html):
+        base_url = 'https://www.cailianpress.com/theme'
+        root = etree.HTML(raw_html)
+        divs = root.xpath("//div[contains(@class, 'theme-index-detail-box')]")
+        temp_timestamp = int(time.time() / 86400) * 86400
+        logger.debug("Cailianpress4 parse")
+        for div in divs:
+            url_text = "".join(div.xpath("./div[1]/a[contains(@class, 'theme-index-detail-title')]/@href"))
+            # print url_text
+            num_match = re.match(r".*/theme/(\d{1,10})", url_text)
+            if num_match:
+                i_num = num_match.group(1)
+            else:
+                logger.warning("parse i_num error")
+                continue
+            title = "".join(div.xpath("./div[1]/a[contains(@class, 'theme-index-detail-title')]/text()"))
+            abstract = "".join(div.xpath("./div[3]/text()"))
+            url = urljoin(base_url, url_text)
+            # url = urljoin(url_text)
+            time_text = "".join(div.xpath("./div[2]/span/text()"))
+            ts = my_utils.get_timestamp(time_text)
+            item = Item()
+            item.set('title', title)
+            item.set('abstract', abstract)
+            item.set('url', url)
+            item.set('timestamp', ts)
+            nid = int('%s%s' % (temp_timestamp, i_num))
+            item.set('nid', nid)
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

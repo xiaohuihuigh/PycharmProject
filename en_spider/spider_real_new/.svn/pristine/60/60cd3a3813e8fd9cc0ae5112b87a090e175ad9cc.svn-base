@@ -1,0 +1,30 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class China1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//ul[contains(@class,'news_list')]/li")
+        for li in lines:
+            item = Item()
+            item.set('url', "".join(li.xpath("./a[position()=last()]/@href")))
+            item.set('status', 1)
+            nid_match = re.match(r".*/(\d*)/(\d*)\.shtml$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            item.set('title', "".join(li.xpath("./a[position()=last()]/text()")))
+            times = "".join(li.xpath("./span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

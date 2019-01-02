@@ -1,0 +1,15 @@
+# -*- coding:utf-8 -*-
+# 用途： 分布式爬虫专用(后续会进行改进)
+# 创建日期: 18-9-13 上午11:00
+
+import time
+
+MOD = 9
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

@@ -1,0 +1,185 @@
+# -*- coding:utf-8 -*-
+# 用途： 目前不用了.用于历史新闻采集,执行服务器端脚本
+# 创建日期: 18-8-30 下午9:54
+
+import time
+from fabric import Connection, ThreadingGroup as Group, task
+
+SPIDER_DIR = "spider_v2"
+
+
+@task
+def upload_source(c):
+    file_head = "spider_v2"
+    tar_file_name = file_head + ".tar.gz"
+    c.put("/home/wzl/source/{}".format(tar_file_name), remote="spider_source/{}".format(tar_file_name))
+    with c.cd("spider_source"):
+        c.run("tar -zxvf {}".format(tar_file_name))
+        c.run("cp -r spider_master/log/logging.conf {}/log/logging.conf".format(file_head))
+        # c.run("cp -r spider_master/settings.py {}/settings.py".format(file_head))
+
+
+@task
+def update_spider(c):
+    file_name = "page_spider/spider_new.py"
+    c.put("/home/wzl/source/spider_real_new/{}".format(file_name),
+          remote="spider_source/{}/{}".format(SPIDER_DIR, file_name))
+
+
+@task
+def update_file(c):
+    file_name = "page_spider/xpath_pool.py"
+    c.put("/home/wzl/source/spider_real_new/{}".format(file_name),
+          remote="spider_source/{}/{}".format(SPIDER_DIR, file_name))
+
+
+@task
+def update_used(c):
+    c.put("/home/wzl/source/spider_real_new/script/set_used.py", remote="spider_source/spider_new/script/set_used.py")
+    with c.cd("spider_source/spider_new"):
+        c.run("python -m script.set_used")
+
+
+@task
+def put_run_shell(c):
+    file_name = "runnew.sh"
+    c.put("/home/wzl/source/spider_real_new/{}".format(file_name), remote="spider_source/{}/{}".format(
+        SPIDER_DIR, file_name))
+
+
+@task
+def start_spider_new(c):
+    with c.cd("spider_source/{}".format(SPIDER_DIR)):
+        # c.run("chmod +x runnew.sh")
+        c.run("./runnew.sh")
+
+
+@task
+def stop_spider(c):
+    c.run("ps -ef | grep 'page_spider' | grep -v grep | cut -c 9-15 | xargs kill -9")
+
+
+@task
+def delete_source(c):
+    with c.cd("spider_source"):
+        c.run("rm -r spider_new")
+        c.run("rm -r spider_new.*")
+
+
+@task
+def deploy_new(c):
+    upload_source(c)
+    start_spider_new(c)
+
+
+@task
+def upload_sql(c):
+    # c.put("save_sql.py")
+    c.run("mysqldump -udevelop -psd61131707 web_news news_url_content > 'news_content.sql'")
+    c.run("python save_sql.py")
+
+
+# @task
+def upload_all_sql():
+    for conn in Group("tmpspider1", "tmpspider2", "tmpspider3", "tmpspider4", "tmpspider5", "tmpspider6",
+                      "tmpspider7", "tmpspider8", "tmpspider9"):
+        upload_sql(conn)
+
+
+@task
+def look_run_log(c):
+    c.run("tail log/runnew.log")
+    # c.run("ps -ef|grep page_spider")
+
+
+@task
+def install_unar(c):
+    # c.run("apt update")
+    # c.run("yes | apt install unar")
+    c.run("unar /tmp/url_new1.zip")
+
+
+@task
+def exec_script(c):
+    file_name = "script/delete_sql.py"
+    c.put("/home/wzl/source/spider_real_new/{}".format(file_name),
+          remote="delete_sql.py")
+    c.run("python delete_sql.py")
+
+
+@task
+def rm_useless_sql(c):
+    # c.run("rm news_content.sql")
+    # c.run("rm -r htmls")
+    # c.run("mkdir htmls")
+    c.run("rm *.tar.gz")
+
+
+@task
+def rm_useless_html(c):
+    c.put("/home/wzl/source/spider_real_new/rm_html.sh", remote="rm_html.sh")
+    c.run("chmod +x rm_html.sh")
+    c.run("./rm_html.sh")
+
+
+@task
+def tar_rm_upload(c):
+    # c.run("./tar_rm.sh >> /tmp/null 2>&1 &")
+    c.run("python save_oos.py >> /root/log/save_oos.log 2>&1 &")
+
+
+@task
+def create_table(c):
+    c.put("/home/wzl/source/spider_real_new/script/insert_sql.py", remote="insert_sql.py")
+    c.run("python -m insert_sql")
+
+
+@task
+def update_site_id(c):
+    # exec_script(c)
+    update_file(c)
+    update_spider(c)
+    start_spider_new(c)
+
+
+def control_all():
+    for conn in Group("tmpspider", "tmpspider1", "tmpspider2", "tmpspider3", "tmpspider4", "tmpspider5", "tmpspider6",
+                      "tmpspider7", "tmpspider8", "tmpspider9"):
+        # update_used(conn)
+        # deploy_new(conn)
+        # look_run_log(conn)
+        print conn.host
+        try:
+            # update_site_id(conn)
+            # update_spider(conn)
+            # update_file(conn)
+            # exec_script(conn)
+            # rm_useless_sql(conn)
+            tar_rm_upload(conn)
+            # rm_useless_html(conn)
+            # look_run_log(conn)
+            # upload_source(conn)
+            # put_run_shell(conn)
+            # start_spider_new(conn)
+            # install_unar(conn)
+            # stop_spider(conn)
+        except Exception as e:
+            print e
+        # update_file(conn)
+        # start_spider_new(conn)
+
+
+def spider_monitor():
+    while True:
+        control_all()
+        time.sleep(600)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    control_all()
+
+    # spider_monitor()
+
+    print("use time: %s" % (time.time() - start_t))

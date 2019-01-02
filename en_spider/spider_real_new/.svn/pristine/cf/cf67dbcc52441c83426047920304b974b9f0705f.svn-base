@@ -1,0 +1,25 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Jfinfo1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[contains(@class,'w_660 listBlock')]/ul/li/dl")
+        for dl in lines:
+            item = Item()
+            item.set('url', "".join(dl.xpath("./dt/a/@href")))
+            item.set('status', 1)
+            item.set('title', "".join(dl.xpath("./dt/a/text()")))
+            nid_match = re.match(r".*/(\d+)/(\d+)\.shtml$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1)+nid_match.group(2))
+            times = "".join(dl.xpath(".//p[contains(@class,'keyTime')]/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times.strip()))
+            self._add_to_data(item)

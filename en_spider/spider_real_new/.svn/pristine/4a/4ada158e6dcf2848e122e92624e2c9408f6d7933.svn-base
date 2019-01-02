@@ -1,0 +1,33 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Microbell1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        table_rows = root.xpath("//table[@id='tableList']//tr")
+        n = len(table_rows)
+        for i_num in range(0, n, 3):
+            item = Item()
+            url = "".join(table_rows[i_num].xpath(".//a/@href"))
+            if len(url) > 0:
+                url = "http://www.microbell.com/" + item.url
+            item.set('url',  url)
+            item.set('status', -1)
+            item.set('title', "".join(table_rows[i_num].xpath(".//a/text()")))
+            nid_match = re.match(r".*_(\d*)\.html$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            times = "".join(table_rows[i_num + 1].xpath(".//span[@style='color:#E20203']/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times + " 00:00:00"))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

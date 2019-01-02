@@ -1,0 +1,26 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from lxml import etree
+
+from base_parse import BaseParse
+from items import Item
+
+class Stockstar1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='listnews']//li[not(@class='space')]")
+        for li in lines:
+            item =Item()
+            times = "".join(li.xpath("./span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            item.set('url', "".join(li.xpath("./a/@href")))
+            item.set('status', 1)
+            item.set('title', "".join(li.xpath("./a/text()")))
+            nid_match = re.match(r".*/[^\d]*(\d*)\.shtml", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            self._add_to_data(item)

@@ -1,0 +1,57 @@
+# -*- coding:utf-8 -*-
+# 用途： 中国建筑装饰网解析
+# 创建日期: 18-8-21 下午7:47
+
+import time
+import logging
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class Ccd1(BaseParse):
+    """http://news.ccd.com.cn/article-0-1.shtml"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        # print raw_html
+        lines = root.xpath("//ul[@class='channel-list']/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./span[2]/a/@href"))
+            url = urljoin(self.url, url)
+            # print url
+            nid_match = re.match(r".*/(\d{5,30})-.*\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # nid = my_utils.get_hash_nid(nid)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./span[2]/a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./div[1]/text()"))
+            time_text = "".join(li.xpath("./span[3]/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

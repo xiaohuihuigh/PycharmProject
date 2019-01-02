@@ -1,0 +1,40 @@
+# -*- coding:utf-8 -*-
+# 用途： 数据库连接
+# 创建日期: 18-8-2 下午1:49
+
+import time
+from functools import wraps
+import MySQLdb
+from contextlib import closing
+import sqlalchemy
+from settings import MASTER_MYSQL_ARGS
+
+
+def use_db_con(mysql_args, pd_con=False):
+    def func_wraps(func):
+        @wraps(func)
+        def args_wraps(*args, **kwargs):
+            if pd_con:
+                con = sqlalchemy.create_engine("mysql+mysqldb://{user}:{passwd}@{host}/{db}?charset=utf8".format(
+                    **mysql_args))
+                ret = func(con=con, *args, **kwargs)
+                return ret
+            else:
+                mysql_args.update({'charset': 'utf8'})
+                with closing(MySQLdb.connect(**mysql_args)) as con:
+                    ret = func(cursor=con.cursor(), *args, **kwargs)
+                    return ret
+        return args_wraps
+    return func_wraps
+
+
+db_master_con_pd = use_db_con(mysql_args=MASTER_MYSQL_ARGS, pd_con=True)
+db_cursor_master = use_db_con(mysql_args=MASTER_MYSQL_ARGS)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

@@ -1,0 +1,27 @@
+# -*- coding:utf-8 -*-
+# 用途： 根据标题进行过滤
+# 创建日期: 18-9-5 下午2:34
+
+import time
+from rules import all_filter_conditions, filter_conditions
+
+
+def should_filter(title, site_id, all_filter=all_filter_conditions, site_filter=filter_conditions):
+    filter_rule = set(all_filter) | set(site_filter.get(site_id, set([])))
+    for rule in filter_rule:
+        rule = rule.decode("utf-8")
+        # print rule, title, type(rule), type(title)
+        # raise Exception
+        if rule in title:
+            break
+    else:
+        return True
+    return False
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

@@ -1,0 +1,95 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import logging
+import requests
+import re
+import time
+import gevent
+import random
+
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+logger = logging.getLogger("request")
+
+
+class BaseRequest(object):
+    """  """
+    TIMEOUT = 20
+    COUNTS = 0
+    _WEIGHT = 0
+
+    def __init__(self, session=True, post=False, encoding=None, proxies=None):
+        """ set HEAD """
+        user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36'
+        self.HEAD = {'User-Agent': user_agent, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Encoding': 'gzip,deflate', 'Accept-Language': 'en-US,en;q=0.5', 'Connection': 'keep-alive'}
+        self._bsession = session
+        self._bpost = post
+        self.encoding = encoding
+        self._proxies = proxies # {'http': 'http://shudan:sd61131707@m.afook.org:3128','https': 'http://shudan:sd61131707@m.afook.org:3128'}
+        self.set()
+
+    def set(self):
+        """ set Session and (get or post) mode """
+        if self._bsession:
+            self._mode = requests.Session()
+        else:
+            self._mode = requests
+        if self._bpost:
+            self._request = self._mode.post
+        else:
+            self._request = self._mode.get
+
+    def run(self, url=None, data=None, num=0):
+        """ 获取页面，如无法获取直接跳出 """
+        if self._WEIGHT > 32:
+            return None
+        self.COUNTS += 1
+        resp = None
+        try:
+            # url地址包含时间属性字段时实时计算
+            timestamp_ms = int(time.time()*1000)
+            timestamp = int(timestamp_ms/1000)
+            timestamp_30s = int(timestamp/30)
+            date_Ymd = time.strftime('%Y%m%d')
+            real_url = url.format(lbrace='{', rbrace='}', timestamp=timestamp, timestamp_30s=timestamp_30s, timestamp_ms=timestamp_ms, date_Ymd=date_Ymd, random_17f="%.17f" %random.random())
+            real_url = real_url.strip()
+            # 实际超市可以设置为15s, 测试时设置为30s
+            with gevent.Timeout(15, False) as timeout:
+                resp = self._request(real_url, timeout=self.TIMEOUT, headers=self.HEAD, data=data,
+                                     proxies=self._proxies, verify=False)
+                # resp = self._request(real_url, timeout=self.TIMEOUT, headers=self.HEAD)
+            # print "real url", real_url
+            # print "resp", resp, resp.url, url
+            if resp:
+                if self.encoding:
+                    encoding = self.encoding
+                else:
+                    charset = re.search(r'charset=[\'"]?([a-zA-Z0-9\-]*)[\'"]?', resp.headers['content-type'])
+                    if not charset:
+                        charset = re.search(r'<meta[^>]*charset=[\'"]?([a-zA-Z0-9\-]*)[\'"]?', resp.text)
+                    if charset:
+                        encoding = charset.group(1).lower()
+                    else:
+                        encoding = 'gbk'
+                resp.encoding = encoding
+            else:
+                resp = None
+        except Exception:
+            time.sleep(1+random.random())
+            if num > 0:
+                logger.warning(Exception)
+                self.set()
+                num -= 1
+                resp = self.run(url, data, num)
+            else:
+                logger.error(url)
+                logger.error(Exception)
+        if resp:
+            self._WEIGHT = min(self._WEIGHT+1, 32)
+        else:
+            self._WEIGHT -= 2
+        self.COUNTS -= 1
+        return resp
+

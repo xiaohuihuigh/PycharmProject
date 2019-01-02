@@ -42,7 +42,7 @@ main_path = 'theme_all_url_info'
 theme_list = listdir(main_path)
 check_main = 'check_download'
 
-com = "SLADY"
+com = "MyGirl"
 for theme in theme_list:
     if theme.find(com) == -1:
         continue

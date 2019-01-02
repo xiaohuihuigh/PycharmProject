@@ -1,0 +1,177 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import logging
+logger = logging.getLogger("spider")
+
+import gevent.monkey
+gevent.monkey.patch_all()
+import gevent
+from gevent.pool import Pool
+
+import time
+from datetime import datetime
+import random
+from settings import CON, CONCURRENT_ITEMS, CONCURRENT_REQUESTS, CONCURRENT_PER_REQUESTS, SLOW_TIME
+from main_request.get_request import Request
+from main_parse.get_parse import Parse
+from main_parse.content_parse import content_parse
+from shudan_spider.eastmoney_investor_user_parse import investor_user_parse
+from pipelines import pipelines, pipeline
+
+
+class Spider(object):
+    """
+    实时新闻主爬虫
+    """
+
+    def __init__(self):
+        """ 初始化 """
+        self._parse = Parse()
+        self._pool = Pool(CONCURRENT_ITEMS)
+        self._site = []
+        self._data = []
+        self._site_index = 0
+        self._data_index = 0
+        self._item_count = 0
+        self._request_count = 0
+        self._request = Request()
+        # CUR.connect_cursor()
+        CUR = CON.cursor()
+        CUR.execute("SELECT sid,re_url,url,source,weight,pbes,main_class,parse_func,status FROM spider_site "
+                    "WHERE status > 0 ORDER BY weight DESC")
+        self._site_argv = {}
+        self._site_time = {}
+        for sid, re_url, url, source, weight, pbes, main_class, parse_func, status in CUR.fetchall():
+            self._site_argv[sid] = (re_url, url, source, weight, pbes, main_class, parse_func)
+            self._site_time[sid] = 0  # 这个0是什么意思，不明白
+        CUR.close()
+        self._other_list = (('http://data.eastmoney.com/DataCenter_V3/Chart/cjsj/weeklystockaccountsnew.ashx'
+                             '?r=0.659568071773031&isxml=false', "investor_user_parse"),)
+        self._other_data = []
+        logger.debug(self._site_time.keys())
+
+    def _run(self, sid):
+        """ 爬取单个链接 """
+        logger.debug(sid)
+        # 参数初始化
+        data = []
+        re_url, url, source, weight, pbes, main_class, parse_func = self._site_argv[sid]
+        # 依据配置选择休眠或退出，调试时注释掉先
+        if pbes:
+            lists = [int(tmp) for tmp in pbes.split(',')]
+            if random.randint(0, 100) < lists[0]:
+                return
+            if self._second < lists[1] or self._second > lists[2]:
+                return
+            gevent.sleep(lists[3]*0.5)
+        # 类初始化
+        request = self._request.get_class(sid=sid)
+        title = self._parse.get_class(sid)
+
+        # gevent.sleep(0.1)  # 调试专用
+        # 依据上次请求时间休眠 调试时暂时关闭
+        step = time.time() - self._site_time[sid]
+        if step < self._step:
+            gevent.sleep(self._step - step)
+
+        # 当request请求数量超了之后排队等待
+        while request.COUNTS > CONCURRENT_PER_REQUESTS:
+            gevent.sleep(0)
+
+        # 提交请求并记录请求时间和数据
+        html = None
+        with gevent.Timeout(30, False) as timeout:
+            timestamp = time.time()
+            html = request.run(url)
+            self._site_time[sid] = (time.time()+timestamp)/2
+        # 解析结果
+        if html:
+            logger.debug("have html")
+            data = title.run(html, sid, url=source, weight=weight)
+            if data:
+                logger.debug("sid : %s, new data length: %s, url: %s" % (sid, len(data), source))
+            else:
+                logger.debug('%s not data' % url)
+            # print "data nums", len(data), title
+        else:
+            # print "get html failed", request, html
+            logger.error("sid : %s, url: %s, html is empty." %(sid, source))
+        self._site.append((sid, data))
+
+    def _update(self, item):
+        """ 检测与更新内容 """
+        if item.get('status') > 0:  # 仅采集状态大于0的网站
+            request = self._request.get_class(sid=item.get('sid'), mode=True)
+            while request.COUNTS > CONCURRENT_PER_REQUESTS:  # 限制发送请求总数量
+                gevent.sleep(0)
+            html = None
+            with gevent.Timeout(30, False) as timeout:  # 设置超时时间
+                html = request.run(url=item.get('url'), num=3)
+            if html:
+                content_parse(self._site_argv[item.get('sid')][-1], html, item)  # 解析内容
+        self._data.append(item)
+
+    def _other(self, argv):
+        request = self._request.get_class(sid=0)
+        html = None
+        with gevent.Timeout(60, False) as timeout:
+            html = request.run(argv[0])
+        if html:
+            self._other_data.extend(globals()[argv[1]](html.text))
+
+    def run(self):
+        """ 新闻爬虫主流程入口 """
+        timestamp = time.time()
+        self._second = int(timestamp + 28800) % 86400  # 暂时不知道,这个的作用是什么
+        # 这个早晨爬虫调试期间,暂时关闭
+        # if timestamp % 86400 < 3600:
+        #     self._pool.map(self._other, self._other_list)
+        #     logger.debug("pipe to sector_price_day %s rows." % len(self._other_data))
+        #     if self._other_data:
+        #         pipeline('sector_price_day', ('id', 'days', 'self_value', 'self_values'), ('id', 'days', 'self_value'),
+        #                  self._other_data)
+        stoptime = int(timestamp/3600)*3600 + 3570  # 每小时运行
+        # stoptime = timestamp + 10  # 调试使用
+        weeks = int((timestamp-60)/86400+5) % 7  # 暂时没看到使用
+        self._step = 10 if timestamp % 86400 < 28800 else 60
+        self._pipetime = timestamp + 30
+        logger.debug(self._site_time)
+        # 这个代码是用来做测试的
+        # self._site_time = {152: 0}
+        for sid in self._site_time:
+            self._pool.add(gevent.spawn(self._run, sid))
+        logger.debug('after pool add')
+        # 调试时可以设置为False
+        GET_CONTENT = False
+        GET_CONTENT = True
+        while GET_CONTENT and timestamp < stoptime:
+            timestamp = time.time()
+            self._second = int(timestamp+28800) % 86400
+            if len(self._site) > self._site_index:
+                for item in self._site[self._site_index][1]:
+                    # print "xxxxxxxxxxxxx", item
+                    self._pool.add(gevent.spawn(self._update, item))  # 这里进行了内容页的抓取
+                logger.debug('pool add in loop')
+                self._pool.add(gevent.spawn(self._run, self._site[self._site_index][0]))
+                logger.debug('after pool run')
+                self._site_index += 1
+            len_data = len(self._data)
+            timestamp = time.time()
+            if len_data > self._data_index and timestamp > self._pipetime:
+                pipelines(self._data[self._data_index:len_data])
+                logger.debug("pipe data count: %s" % (len_data-self._data_index))
+                self._data_index = len_data
+                self._pipetime = timestamp + 5
+            gevent.sleep(0)
+        self._pool.join()
+        logger.debug('save data start:%s of all %s' % (self._data_index, len(self._data)))
+        pipelines(self._data[self._data_index:])
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    print "{}: spider start running...".format(datetime.now())
+    spider.run()
+    print "{}: spider stop.".format(datetime.now())
+

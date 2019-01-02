@@ -1,0 +1,17 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from lxml import etree
+from items import Item
+
+
+if __name__ == "__main__":
+    import requests
+    resp = requests.get('https://www.cailianpress.com/theme')
+    root = etree.HTML(resp.text)
+    lines = root.xpath("//div[@class='jsx-386044781 list']")
+    for li in lines:
+        print li.xpath("")

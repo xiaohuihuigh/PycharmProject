@@ -1,0 +1,193 @@
+# -*- coding:utf-8 -*-
+# 用途： 雪球最新文章爬虫.运行频率,每天运行一次.
+# 创建日期: 18-7-18 上午10:52
+
+import time
+import json
+import requests
+import MySQLdb
+from contextlib import closing
+import sqlalchemy
+import pandas as pd
+from sqlalchemy.exc import IntegrityError
+from lxml.etree import HTML
+from functools import wraps
+
+import os
+
+USER_FILE = os.path.join(os.path.dirname(__file__), "xueqiu_user.txt")
+
+MASTER_MYSQL_ARGS = {
+    'host': 'localhost',
+    'user': 'develop',
+    'passwd': 'sd61131707',
+    'db': 'spider_data',
+    'charset': 'utf8'
+}
+
+
+def use_db_con(mysql_args, pd_con=False):
+    def func_wraps(func):
+        @wraps(func)
+        def args_wraps(*args, **kwargs):
+            if pd_con:
+                con = sqlalchemy.create_engine("mysql+mysqldb://{user}:{passwd}@{host}/{db}?charset=utf8".format(
+                    **mysql_args))
+                ret = func(con=con, *args, **kwargs)
+                return ret
+            else:
+                mysql_args.update({'charset': 'utf8'})
+                with closing(MySQLdb.connect(**mysql_args)) as con:
+                    ret = func(cursor=con.cursor(), *args, **kwargs)
+                    return ret
+        return args_wraps
+    return func_wraps
+
+
+db_master_con_pd = use_db_con(mysql_args=MASTER_MYSQL_ARGS, pd_con=True)
+db_cursor_master = use_db_con(mysql_args=MASTER_MYSQL_ARGS)
+
+
+class PostSpider(object):
+
+    def __init__(self):
+
+        self.headers = {
+            "host": "xueqiu.com",
+            "user-agent": "Baiduspider"
+        }
+
+    @staticmethod
+    def get_user_ids(file_path=USER_FILE):
+        with open(file_path, "r") as rf:
+            user_infos = rf.read().split("\n")
+        user_ids = [i.split("\t")[0] for i in user_infos if i]
+        return user_ids
+
+    @db_cursor_master
+    def get_post_ids_from_db(self, user_id, cursor=None):
+        """for drop the post duplicated"""
+        sql = "SELECT DISTINCT(`id`) FROM `xueqiu_blog` WHERE `user_id` = {} ORDER BY `id`".format(user_id)
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        post_ids = [row[0] for row in rows]
+        return post_ids
+
+    @db_cursor_master
+    def get_user_ids_from_db(self, cursor=None):
+        """not finished"""
+        sql = "SELECT `id` FROM `xueqiu_user` WHERE `followers_count` > 10000 order by `followers_count` DESC"
+        cursor.execute(sql)
+        user_rows = cursor.fetchall()
+        user_ids = [row[0] for row in user_rows]
+        return user_ids
+
+    def create_session(self):
+        url = "http://www.xueqiu.com"
+        se = requests.Session()
+        resp = se.get(url, headers=self.headers)
+        if resp.status_code != 200:
+            print "create session error"
+            print resp
+            raise Exception
+        return se
+
+    def get_post(self, user_id, se, page, count=10):
+        params = {
+            "page": page,
+            "user_id": user_id,
+            "count": count,
+            "type": 2
+        }
+        post_url = "https://xueqiu.com/v4/statuses/user_timeline.json"
+        resp = se.get(post_url, params=params, headers=self.headers)
+        if resp.status_code == 200:
+            return resp
+        else:
+            print "get post error", resp
+            time.sleep(1)
+        return None
+
+    @staticmethod
+    def parse_post(resp, exist_post_ids=None):
+        try:
+            post_dic = json.loads(resp.content)
+        except ValueError as e:
+            print e
+            raise Exception
+
+        statuses = post_dic["statuses"]
+        post_list = []
+        for status in statuses:
+            content_html = status["text"]
+            user_id = status["user"]["id"]
+            content = "".join(HTML(content_html).xpath("//text()"))
+            # print status["title"]
+            post_id = status["id"]
+
+            if post_id in exist_post_ids:
+                continue
+            userful_post = {
+                "id": status["id"],
+                "title": status["title"],
+                "user_id": user_id,
+                "created_at": status["created_at"],
+                "fav_count": status["fav_count"],
+                "like_count": status["like_count"],
+                "mark": status["mark"],
+                "reply_count": status["reply_count"],
+                "retweet_count": status["retweet_count"],
+                "view_count": status["view_count"],
+                "type": status["type"],
+                "target": status["target"],
+                "description": status["description"],
+                "content": content,
+                "html": content_html,
+            }
+            post_list.append(userful_post)
+            # break
+        return post_list
+
+    @db_master_con_pd
+    def _insert_post(self, post_list, con=None, table_name="xueqiu_blog"):
+        post_df = pd.DataFrame(post_list)
+        try:
+            post_df.to_sql(table_name, con=con, index=None, if_exists="append")
+        except IntegrityError:
+            print "have exist"
+
+    def get_user_post(self, user_id, se):
+        resp = self.get_post(user_id=user_id, se=se, page=1)
+        exist_post_ids = set(self.get_post_ids_from_db(user_id=user_id))
+        if resp and resp.status_code == 200:
+            post_list = self.parse_post(resp, exist_post_ids=exist_post_ids)
+            if post_list:
+                self._insert_post(post_list)
+            else:
+                print "user {} has no new post".format(user_id)
+            # max_page = int(json.loads(resp.content)["maxPage"])
+            # for page in range(2, max_page + 1):
+            #     print "save post", user_id, page
+            #     self.get_post(user_id, se, page)
+
+    def run(self, user_id=None, start=None, end=None):
+        if user_id is None:
+            user_ids = self.get_user_ids()
+        else:
+            user_ids = [user_id]
+
+        se = self.create_session()
+        for i, user_id in enumerate(user_ids[start:end]):
+            print i, user_id
+            self.get_user_post(user_id=user_id, se=se)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    ps = PostSpider()
+
+    ps.run(start=None, end=None)
+    print("use time: %s" % (time.time() - start_t))
+
+    # unittest.main()

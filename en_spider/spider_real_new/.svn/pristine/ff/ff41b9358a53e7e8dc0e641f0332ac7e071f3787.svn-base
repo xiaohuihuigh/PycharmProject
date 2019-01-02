@@ -1,0 +1,63 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Xuangubao1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//section[contains(@class,'zhutiku-main')]//div[contains(@class,'jinri-content')]")
+        for sec in lines:
+            item =Item()
+            item.set('url', 'https://xuangubao.cn/zhutiku'+"".join(sec.xpath("./div[contains(@class,'jinri-msg')]/div[contains(@class,'jinri-msg-title')]//a//@href")))
+            item.set('status', 1)
+            item.set('title', "".join(sec.xpath("./div[contains(@class,'jinri-msg')]/div[contains(@class,'jinri-msg-title')]//a//text()")).strip())
+            item.set('abstract', item.title)
+            item.set('stocks', re.sub(r'[^\d,]+','',",".join(sec.xpath(".//div[contains(@class,'jinri-msg-stocks')]//a[contains(@class,'stock-group-item')]/@href")).strip()))
+            nid_match = re.match(r".*/article/(\d+)$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            timestr = "".join(sec.xpath("./div[contains(@class,'jinri-time')]//text()")).strip()
+            timere = re.match(r".*(\d+)\:(\d+).*$", timestr)
+            if timere:
+                hour = int(timere.group(1))
+                minute = int(timere.group(2))
+            else:
+                hour = 0
+                minute = 0
+            import time
+            temp_time = time.localtime()
+            times = '%d-%02d-%02d %02d:%02d'%(temp_time.tm_year,temp_time.tm_mon,temp_time.tm_mday,hour,minute)
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+class Xuangubao2(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//ul[contains(@class,'home-news-container')]/li[contains(@class,'news-item')]")
+        # print "lines", lines
+        for sec in lines:
+            # print sec
+            item = Item()
+            item.set('nid', "".join(sec.xpath("./@id")).replace('news', ''))
+            item.set('url', 'https://xuangubao.cn/article/%s' %item.nid)
+            item.set('status', 1)
+            item.set('title', "".join(sec.xpath(".//div[contains(@class,'news-item-title')]//a//text()")).strip())
+            item.set('abstract', "".join(sec.xpath(".//div[contains(@class,'news-item-detail')]//text()")).strip())
+            item.set('stocks', re.sub(r'[^\d,]+','',",".join(sec.xpath(".//div[contains(@class,'news-item-intro')]//a[contains(@class,'stock-group-item')]/@href")).strip()))
+            item.set('sectors', ",".join(sec.xpath(".//div[contains(@class,'news-item-intro')]/a[contains(@class,'news-item-intro-topic')]/text()")).strip())
+            month = "".join(sec.xpath(".//div[contains(@class,'news-item-timeline-date-month')]//text()"))
+            month = int(month.replace(u'\u6708', ''))
+            day = int("".join(sec.xpath(".//div[contains(@class,'news-item-timeline-date-day')]//text()")).strip())
+            timeline = "".join(sec.xpath(".//div[contains(@class,'news-item-timeline-time')]//text()")).strip()
+            import time
+            temp_time = time.localtime()
+            times = '%d-%02d-%02d %s'%(temp_time.tm_year, month, day, timeline)
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+

@@ -1,0 +1,77 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class Cfi1(BaseParse):
+    """有时页面内容会不存在"""
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines_a = root.xpath("//div[contains(@class,'zidiv2')]/a")
+        lines_span_text = root.xpath("//div[contains(@class,'zidiv2')]/span/text()")
+        n = min(len(lines_a), len(lines_span_text))
+        for num_i in range(n):
+            item = Item()
+            line_a = lines_a[num_i]
+            url = "".join(line_a.xpath("./@href"))
+            if len(url.strip()) > 0:
+                url = "http://industry.cfi.cn/" + url
+            item.set('url', url)
+            item.set('status', 1)
+            nid_match = re.match(r".*/p(\d*)\.html$", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            item.set('title', "".join(line_a.xpath("./text()")))
+            my_time = lines_span_text[num_i]
+            timestamp = my_utils.get_timestamp(my_time)
+            if timestamp == 0:
+                my_time = my_time + " 00:00:00 "
+                timestamp = my_utils.get_timestamp(my_time)
+            item.set('timestamp', timestamp)
+            importance = line_a.xpath("./font")
+            item.set('score', 1 if len(importance)>0 else 0)
+            self._add_to_data(item)
+
+
+class Cfi2(BaseParse):
+    """http://stock.cfi.cn/BCA0A4127A4346A4443.html"""
+
+    def _parse(self, raw_html):
+        base_url = "http://stock.cfi.cn"
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='xinwen']/a")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./@href"))
+            url = urljoin(base_url, url)
+            nid_match = re.match(r".*/p(\d{5,30})\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./text()"))
+            # print title
+            # abstract = "".join(li.xpath("./a/text()"))
+            # time_text = "".join(li.xpath("./h3/span/i/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

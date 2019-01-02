@@ -1,0 +1,36 @@
+# -*- coding:utf-8 -*-
+# 用途： 创建表
+# 创建日期: 18-9-11 下午9:06
+
+import time
+import MySQLdb
+from subprocess import Popen,PIPE
+
+
+LOCAL_MYSQL_ARGS = {
+    'host': 'localhost',
+    'user': 'root',
+    'passwd': '',
+    'db': 'web_news',
+    'charset': 'utf8'
+}
+
+con = MySQLdb.connect(**LOCAL_MYSQL_ARGS)
+
+
+def insert_sql_file(file_path="/root/url_new1.sql"):
+    cursor = con.cursor()
+    # cursor.execute("source {}".format(file_path))
+    # with open(file_path, 'r') as f:
+    #     cursor.execute(f.read())
+    # process = Popen('mysql -uroot -p web_news', stdout=PIPE, stdin=PIPE, shell=True)
+    # process.communicate('use web_news')
+    # output = process.communicate('source ' + file_path)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    insert_sql_file()
+
+    print("use time: %s" % (time.time() - start_t))

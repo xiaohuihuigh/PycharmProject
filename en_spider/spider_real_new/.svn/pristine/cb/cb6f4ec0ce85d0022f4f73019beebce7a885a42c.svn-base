@@ -1,0 +1,29 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from lxml import etree
+from base_parse import BaseParse
+from items import Item
+
+
+class Yicai1(BaseParse):
+    def _parse(self, raw_html):
+        datas = my_utils.get_special_json_data(raw_html)
+        for data in datas:
+            item = Item()
+            item.set('url', data.get("url"))
+            item.set('status', 1)
+            title, abstract = my_utils.split_title_content(data.get("content"))
+            item.set('title', title)
+            item.set('abstract', abstract)
+            nid_match = re.match(r".*/(\d*)\.html", item.url)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            importance = data.get("important")
+            item.set('score', 1 if importance is not None and len(importance)>0 else 0)
+            times = data.get("date")
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)

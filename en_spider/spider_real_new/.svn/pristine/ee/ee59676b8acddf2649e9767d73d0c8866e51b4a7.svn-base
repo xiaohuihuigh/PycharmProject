@@ -1,0 +1,56 @@
+# -*- coding:utf-8 -*-
+# 用途： 全球金融网解析
+# 创建日期: 18-8-21 下午7:47
+
+import time
+import logging
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class Ometal1(BaseParse):
+    """http://www.ometal.com/news_china.htm"""
+
+    def _parse(self, raw_html):
+        base_url = "http://www.ometal.com/news_china.htm"
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//td[@class='font105pt']/a")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./@href"))
+            url = urljoin(base_url, url)
+            # print url
+            nid_match = re.match(r".*/(\d{5,30})\.htm", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+                # print nid
+            else:
+                continue
+            title = "".join(li.xpath("./text()"))
+            # print title
+            # abstract = "".join(li.xpath("./div[@class='ptxt']/p/text()"))
+            # time_text = "".join(li.xpath("./span/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            # item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

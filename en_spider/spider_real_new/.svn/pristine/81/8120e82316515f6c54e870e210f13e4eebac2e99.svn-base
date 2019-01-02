@@ -1,0 +1,61 @@
+# -*- coding:utf-8 -*-
+# 用途： 计算历史爬虫失败率
+# 创建日期: 18-9-3 下午3:43
+
+import time
+
+from settings import CON
+
+
+def get_count(cur, sql):
+    cur.execute(sql)
+    count_rows = cur.fetchall()
+    count_dic = {site_id: count for count, site_id in count_rows}
+    return count_dic
+
+
+def get_failed_count(cur):
+    sql = "SELECT COUNT(*) as c, site_id FROM `news_url_content` WHERE `news_count` = 1 GROUP BY `site_id` "  \
+          "HAVING c > 100 ORDER BY `site_id`"
+    return get_count(cur, sql)
+
+
+def get_total_count(cur):
+    sql = "SELECT COUNT(*) as c, site_id FROM `news_url` GROUP BY `site_id` "  \
+          "HAVING c > 500 ORDER BY `site_id`"
+    return get_count(cur, sql)
+
+
+def compare(cur):
+    failed_dic = get_failed_count(cur)
+    total_dic = get_total_count(cur)
+
+    errors = []
+    counts = []
+
+    for site_id, count in failed_dic.items():
+        total_count = total_dic.get(site_id, 1) * 1.0
+        # print count, total_count
+        counts.append((site_id, count, (count * 10) / total_count * 100))
+        errors.append(site_id)
+    sort_counts = sorted(counts, key=lambda x: x[0])
+    n = 0
+    for a, b, c in sort_counts:
+        if b > 500 and c > 20:
+            n += 1
+            print a, b, c
+    print n
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    cursor = CON.cursor()
+
+    compare(cursor)
+
+    cursor.close()
+
+    CON.close()
+
+    print("use time: %s" % (time.time() - start_t))

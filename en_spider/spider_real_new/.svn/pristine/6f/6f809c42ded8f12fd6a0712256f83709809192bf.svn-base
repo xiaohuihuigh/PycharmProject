@@ -1,0 +1,31 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import logging
+from base_request import BaseRequest
+
+logger = logging.getLogger("spider")
+
+
+class Request(object):
+    """  """
+    _ARG = {}
+    _HOSTS = {}
+    _REQUEST = None
+
+    def __init__(self):
+        """ set HEAD """
+        self._REQUEST = [{},{}]
+
+    def get_class(self, sid=None, mode=False):
+        """ get class """
+        index = 1 if mode else 0
+        if sid not in self._REQUEST[index]:
+            tmp = self._ARG.get(sid)
+            if tmp:
+                # session=True, post=False, encoding=None, proxies=None
+                self._REQUEST[index][sid] = BaseRequest(tmp[0], tmp[1], tmp[2])
+            else:
+                self._REQUEST[index][sid] = BaseRequest()
+        return self._REQUEST[index][sid]

@@ -1,0 +1,52 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+import logging
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Wallstreetcn1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='wscn-tab-pane']/div/div[contains(@class, 'live-item')]")
+        # print "lines", lines
+        for li in lines:
+            # class_text = li.get("class")
+            item = Item()
+            # not every li has url it is hide in the content
+            # item.set('url', "".join(li.xpath(".//div[contains(@class,'content')]/p/a/@href")))
+            item.set('status', 1)
+            time_text = "".join(li.xpath("./div[@class='live-item__time']/span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            nid_text = "".join(li.xpath("./div[@class='live-item__time']/a/@href"))
+            nid_match = re.match('.*/(\d+)', nid_text)
+            if nid_match:
+                item.set('nid', nid_match.group(1))
+            # if class_text == "live-item score-3":
+            #     raw_content = "".join(li.xpath(".//div[contains(@class,'content')]/span[@class='content-html']"
+            #                                    "/p/tr/text()"))
+            # else:
+            raw_content = "".join(li.xpath(".//div[contains(@class,'content')]/span[@class='content-html']"
+                                            "/p/text()"))
+
+            # print raw_content
+            title, abstract = my_utils.split_title_content(raw_content)
+            item.set('title', title)
+            item.set('abstract', abstract)
+            # score = 0
+            # importance = "".join(li.xpath("@data-importance"))
+            # if len(importance) > 0:
+            #     if importance == "2":
+            #         score += 1
+            #     if importance == "3":
+            #         score += 2
+            # item.set('score', score)
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

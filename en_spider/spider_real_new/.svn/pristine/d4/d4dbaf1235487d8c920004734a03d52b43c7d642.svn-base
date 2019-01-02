@@ -1,0 +1,185 @@
+# -*- coding:utf-8 -*-
+# 东方财富数据采集爬虫,用于大盘诊断页分钟级数据 运行频率,每30秒一次.
+import requests
+import json
+import MySQLdb
+from datetime import datetime
+
+
+TABLE_FOREIGN_INDEX_PRICE_M1_CRAWL = "foreign_index_price_m1_crawl"
+
+EASTMONEY_INDEX_URL = "http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx"
+
+EASTMONEY_PRODUCT_CODE = ['0000011', '3990012', '0003001', '3990062', '3990052',  # A股
+                          'HSI5', 'KS11_UI', 'N225_UI', 'TWII_UI', 'SENSEX_UI', 'STI_UI',  # 亚洲
+                          'FTSE_UI', 'GDAXI_UI', 'FCHI_UI', 'RTS_UI',   # 欧洲
+                          'DJIA_UI', 'SPX_UI', 'NDX_UI', 'BVSP_UI', 'MXX_UI', 'TSX_UI',  # 美洲
+                          'UDI0', 'EURUSD0', 'GBPUSD0', 'USDCAD0', 'USDJPY0', 'USDCNH_FOS',  # 外汇
+                          'AS51_UI',  # 澳洲
+                          'BC0', 'CL00Y0',   # 原油
+                          'GC00Y0', 'SI00Y0'  # 贵金属
+                          ]
+
+EASTMONEY_TO_WIND_CODE = {
+    '000001': '000001.SH',  # 上证
+    '399001': '399001.SZ',  # 深成
+    '399005': '399005.SZ',  # 中小板
+    '399006': '399006.SZ',  # 创业板
+    '000300': '000300.SH',  # 沪深300
+    'HSI': 'HSI.HI',  # 香港恒生
+    'TWII': 'TWII.TW',  # 台湾
+    'N225': 'N225.GI',  # 日经225
+    'KS11': 'KS11.GI',  # 韩国
+    'STI': 'STI',  # 新加坡, 这个指数编码更改了
+    'SENSEX': 'SENSEX.GI',  # 印度孟买
+    'AS51': 'AS51.GI',  # 澳大利亚
+    'FTSE': 'FTSE.GI',  # 英国富时100
+    'FCHI': 'FCHI.GI',  # 法国
+    'GDAXI': 'GDAXI.GI',  # 德国
+    'RTS': 'RTS.GI',  # 俄罗斯
+    'TSX': 'GSPTSE.GI',  # 多伦多
+    'NDX': 'IXIC.GI',  # 纳斯达克综指，这里东方财富代码出错，NDX本不是纳斯达克综指，是100指，但数值是对的
+    'SPX': 'SPX.GI',  # 标普500
+    'DJIA': 'DJI.GI',  # 道琼斯
+    'BVSP': 'IBOVESPA.GI',  # 巴西
+    'MXX': 'MXX.GI',  # 墨西哥
+    'USDCNH': 'USDCNH.FX',  # 美元离岸人民币
+    'EURUSD': 'EURUSD.FX',  # 欧元美元
+    'GBPUSD': 'GBPUSD.FX',  # 英镑美元
+    'USDCAD': 'USDCAD.FX',  # 美元加元
+    'USDJPY': 'USDJPY.FX',  # 美元日元
+    'UDI': 'USDX.FX',  # 美元指数
+    'SI00Y': 'SI.CMX',  # 白银
+    'GC00Y': 'GC.CMX',  # 黄金
+    'CL00Y': 'CL00.NYM',  # 原油
+    'BC': 'B00.IPE'  # 布油
+}
+
+
+MYSQL_CONFIG = {
+    'host': 'localhost',
+    'user': 'develop',
+    'passwd': 'sd61131707',
+    'db': 'spider_data',
+    'charset': 'utf8',
+}
+
+
+class GlobalIndexPriceRealTime(object):
+
+    def __init__(self):
+        self.con = self._create_mysql_con()
+
+    @staticmethod
+    def _create_mysql_con():
+        conf = MYSQL_CONFIG
+        return MySQLdb.connect(**conf)
+
+    @staticmethod
+    def _get(url, params):
+        return requests.get(url, params=params)
+
+    @staticmethod
+    def _make_params(index_list):
+        params = {
+            'cmd': index_list,
+            'type': 'CT',
+            'sty': 'FCRH',
+            'sortType': '',
+            'sortRule': '1',
+            'page': '1',
+            'pageSize': '20',
+            'token': '7bc05d0d4c3c22ef9fca8c2a912d779c',
+        }
+        return params
+
+    @staticmethod
+    def _transfer_code(product_price_dic, code_dic):
+        for product_price in product_price_dic.values():
+            product_price[0] = code_dic[product_price[0]]
+        return product_price_dic
+
+    @staticmethod
+    def _filter(product_price_dic):
+        price_time = product_price_dic['HSI'][1]
+        hour = price_time[11:13]
+        if hour == '12':
+            product_price_dic.pop('HSI')
+        return product_price_dic
+
+    @staticmethod
+    def _insert_price(cursor, product_price_dic=None):
+        if not product_price_dic:
+            return
+        # dup_nums = 0
+        for product_price in product_price_dic.values():
+            # try:
+            # print product_price
+            sql = "replace into {} (trade_time, index_id, popen, phigh, plow, pclose, chg, vol, prefclose) " \
+                           "values ('{}', '{}', {}, {}, {}, {}, {}, {}, {})".format(
+                            TABLE_FOREIGN_INDEX_PRICE_M1_CRAWL,
+                            product_price[1], product_price[0], product_price[2], product_price[3],
+                            product_price[4], product_price[5], product_price[6], product_price[7], product_price[8]
+                            )
+            # print sql
+            cursor.execute(sql)
+
+            # except IntegrityError:
+            #     dup_nums += 1
+        # print 'duplicate nums is', dup_nums
+
+    def _get_global_index_text(self):
+        url = EASTMONEY_INDEX_URL
+        index_list = EASTMONEY_PRODUCT_CODE
+        params = self._make_params(index_list)
+        response = self._get(url, params)
+        return response.text
+
+    def get_global_index_price_dic(self):
+        price_text = self._get_global_index_text()
+        index_prices = json.loads(price_text[1:-1])
+        index_price_dic = {}
+        for index_price in index_prices:
+            index_price = index_price.split(',')
+            code = index_price[1]
+            try:
+                _close = float(index_price[3])
+                _zf = float(index_price[5][:-1])
+                _datetime = index_price[6][:-2] + '00'
+                _open = float(index_price[8])
+                _high = float(index_price[9])
+                _low = float(index_price[10])
+                _zclose = float(index_price[11])
+            except ValueError:
+                # print index_price
+                continue
+            _volumn = 0
+
+            index_price_dic.update({code: [code, _datetime, _open, _high, _low, _close, _zf, _volumn, _zclose]})
+        return index_price_dic
+
+    def save(self):
+        product_price_dic = self.get_global_index_price_dic()
+        print str(datetime.now())[:-7], product_price_dic['HSI'][1], \
+            product_price_dic['HSI'][0], str(product_price_dic['HSI'][5]),
+        product_price_nums = len(product_price_dic.keys())
+        product_price_dic = self._transfer_code(product_price_dic, EASTMONEY_TO_WIND_CODE)  # 这里只转换了value中的code
+        product_price_dic = self._filter(product_price_dic)
+
+        cursor = self.con.cursor()
+        # print product_price_dic['BVSP']
+        self._insert_price(cursor=cursor, product_price_dic=product_price_dic)
+
+        cursor.close()
+        self.con.commit()
+        self.con.close()
+
+        if product_price_nums == 32:
+            print 'running successful.'
+        else:
+            print "product price nums less of 32,  it's %d." % product_price_nums
+
+
+if __name__ == '__main__':
+    gip = GlobalIndexPriceRealTime()
+    gip.save()

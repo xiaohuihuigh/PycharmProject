@@ -1,0 +1,132 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+import re
+import my_utils
+from base_parse import BaseParse
+from lxml import etree
+from items import Item
+
+
+class Sina1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        temp_class = root.xpath("/html/body//div[contains(@class,'bd_list')]//div[contains(@class,'bd_i bd_i_og')]")
+        for sub in temp_class:
+            item = Item()
+            item.set('timestamp', sub.get('data-time'))
+            title_text = "".join(sub.xpath(".//p[@class='bd_i_txt_c']/text()"))
+            title_text_match = re.match(u'【(?P<title>.*)】(.*)', title_text)
+            if title_text_match:
+                item.set('title', title_text_match.group(1))
+                item.set('abstract', title_text_match.group(2))
+            else:
+                item.set('title', title_text)
+                item.set('abstract', item.title)
+            item.set('nid', sub.get('data-id'))
+            class_name = "".join(sub.xpath("@class"))
+            item.set('score', 1 if re.match(r".*bd_i_focus.*", class_name) else 0)
+            self._add_to_data(item)
+
+
+class Sina2(BaseParse):
+    """http://roll.finance.sina.com.cn/finance/cj4/index.shtml"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='listBlk']/ul/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            nid_match = re.match(r".*/.*(\d{5,30})\.shtml", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./a/div[2]//p/text()"))
+            time_text = "".join(li.xpath("./span/text()"))
+            time_text = time_text[1:-1]
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+class Sina3(BaseParse):
+    """http://roll.mil.news.sina.com.cn/col/zgjq/index.shtml"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@class='fixList']/ul/li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            nid_match = re.match(r".*/.*nea(\d{5,30})\.shtml", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./a/div[2]//p/text()"))
+            time_text = "".join(li.xpath("./span/text()"))
+            time_text = time_text[1:-1]
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+class Sina4(BaseParse):
+    """http://roll.tech.sina.com.cn/s/channel.php
+    ?ch=05#col=30&spec=&type=&ch=05&k=&offset_page=0&offset_num=0&num=60&asc=&page=1"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//div[@id='d_list']//li")
+        # print "lines", len(lines)
+        for li in lines:
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./span[@class='c_tit']/a/@href"))
+            nid_match = re.match(r".*/.*nea(\d{5,30})\.shtml", url)
+            if nid_match:
+                print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./span[@class='c_tit']/a/text()"))
+            print title
+            # abstract = "".join(li.xpath("./a/div[2]//p/text()"))
+            time_text = "".join(li.xpath("./span[@class='c_time']/text()"))
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

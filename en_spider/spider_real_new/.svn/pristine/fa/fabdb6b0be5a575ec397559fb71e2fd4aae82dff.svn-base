@@ -1,0 +1,103 @@
+# -*- coding: utf-8 -*-
+
+import re
+import time
+
+re_none = re.compile(ur"^[^0-9a-zA-Z\u4E00-\u9FA5]+$")
+
+
+class BaseItem(object):
+    """预留的通用item类"""
+
+    def __init__(self, **kwargs):
+        """ init """
+        for key in kwargs:
+            self.set(key, kwargs[key])
+
+    def get(self, key, defaule=None):
+        """ get value use key from data """
+        return self.__dict__.get(key, defaule)
+
+    def set(self, key, value):
+        """ set key value to data """
+        self.__dict__[key] = value
+
+
+class Item(BaseItem):
+    """
+        'sid', 'nid', 'url', 'title', 'abstract', 'content', 'stocks',
+        'sectors', 'timestamp', 'score', 'weight', 'counts', 'source', 'status'
+    """
+
+    def set(self, key, value, types=None):
+        """ set key value to data """
+        if value:
+            if types:
+                if isinstance(value, str):
+                    try:
+                        value = types(value.strip())
+                        if value:
+                            self.__dict__[key] = value
+                    except Exception:
+                        return
+                elif isinstance(value, types):
+                    self.__dict__[key] = value
+            elif key in {'sid','nid','timestamp','score','weight','counts','source','status'}:
+                if not isinstance(value, int):
+                    value = int(value)
+                if key=='timestamp':
+                    timestamp = int(time.time()+600)
+                    while value > timestamp:
+                        value -= 86400
+                if value:
+                    self.__dict__[key] = value
+            elif key in {'url','title','abstract','content', 'stocks', 'sectors', 'values'}:
+                if not re_none.match(value):
+                    self.__dict__[key] = value.strip()
+
+    def gets(self, keys=('sid', 'nid', 'url', 'title', 'abstract', 'content',
+                         'stocks', 'sectors', 'timestamp', 'score', 'weight',
+                         'counts', 'source', 'status')):
+        """ get data tuple """
+        return tuple(self.get(key) for key in keys)
+
+    def get_status(self, keys=('nid', 'title', ('abstract', 'content', 'url'))):
+        """ status """
+        status = True
+        for key in keys:
+            if isinstance(key, str):
+                if key not in self.__dict__:
+                    status = False
+                    break
+            elif not set(keys) & set(self.__dict__.keys()):
+                status = False
+                break
+        return status
+
+    def get_content_status(self):
+        """ content status """
+        return self.__dict__.has_key('content')
+
+
+class PageItem(BaseItem):
+    """页面解析爬虫类"""
+
+    def gets(self, keys=('article_id', 'site_id', 'news_url', 'status', 'source', 'site',
+                         'news_title', 'news_count', 'news_time', 'used', 'content'
+                         )):
+        """ get data tuple """
+        return tuple(self.get(key) for key in keys)
+
+    def is_need_save(self):
+        return True
+
+
+class PageNewItem(BaseItem):
+
+    def gets(self, keys=('article_id', 'news_title', 'content', 'news_url', 'news_time', 'site_id', 'status',
+                         'news_count', 'used')):
+        """ get data tuple """
+        return tuple(self.get(key) for key in keys)
+
+    def is_need_save(self):
+        return True

@@ -1,0 +1,17 @@
+# -*- coding:utf-8 -*-
+# 用途： redis连接.用于后续进行任务分配,和去重操作
+# 创建日期: 18-8-27 上午10:54
+
+import time
+import redis
+from settings import RS_DB
+
+rs_con = redis.StrictRedis(**RS_DB)
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    pass
+
+    print("use time: %s" % (time.time() - start_t))

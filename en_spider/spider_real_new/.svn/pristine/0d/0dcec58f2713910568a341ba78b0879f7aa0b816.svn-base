@@ -1,0 +1,68 @@
+#! /usr/bin/python
+# -*- encoding:utf-8 -*-
+
+
+import re
+import my_utils
+from base_parse import BaseParse
+import logging
+from lxml import etree
+from items import Item
+from six.moves.urllib.parse import urljoin
+
+
+class Cs1(BaseParse):
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        temp_li = root.xpath("/html/body//div[contains(@class,'subleftbox')]/div[contains(@class,'column-box')]//li")
+        for li in temp_li:
+            item = Item()
+            item.set('url', self._url + "".join(li.xpath("./a/@href"))[2:])
+            item.set('status', 1)
+            nid_match = re.match(r".*/t(\d*)_(\d*)\.html", item.url)
+            if nid_match:
+                item.set('nid',nid_match.group(1) + nid_match.group(2))
+            item.set('title', "".join(li.xpath("./a/text()")))
+            times = "".join(li.xpath("./span/text()"))
+            item.set('timestamp', my_utils.get_timestamp(times))
+            self._add_to_data(item)
+
+
+class Cs2(BaseParse):
+    """http://www.cs.com.cn/ssgs/gsxw/"""
+
+    def _parse(self, raw_html):
+        root = etree.HTML(raw_html)
+        lines = root.xpath("//ul[contains(@class,'list-lm')]/li")
+        # print "lines", lines
+        for li in lines:
+            if li.get("id") == "line":
+                continue
+            # print "li"
+            item = Item()
+            url = "".join(li.xpath("./a/@href"))
+            url = urljoin(self.url, url)
+            nid_match = re.match(r".*/.*_(\d{5,30})\.html", url)
+            if nid_match:
+                # print "match"
+                nid = nid_match.group(1)
+            else:
+                continue
+            title = "".join(li.xpath("./a/text()"))
+            # print title
+            # abstract = "".join(li.xpath("./a/div[2]//p/text()"))
+            time_text = "".join(li.xpath("./span/text()"))
+            time_text = time_text.strip()
+            # print time_text
+            status = 1
+            item.set("nid", nid)
+            item.set("title", title)
+            item.set("url", url)
+            item.set("status", status)
+            # item.set("abstract", abstract)
+            item.set('timestamp', my_utils.get_timestamp(time_text))
+            self._add_to_data(item)
+
+
+if __name__ == "__main__":
+    pass

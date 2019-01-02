@@ -1,0 +1,106 @@
+# -*- coding:utf-8 -*-
+# 用途： 华尔街财经日历爬虫.该爬虫,运行频率不太确定,可能为每周运行一次.
+# 创建日期: 18-8-3 下午3:36
+
+import time
+import json
+import MySQLdb
+from _mysql_exceptions import IntegrityError, ProgrammingError
+from datetime import datetime, timedelta
+from calendar import monthrange
+
+import requests
+
+URL = "https://api-prod.wallstreetcn.com/apiv1/finance/macrodatas"
+
+
+WRITE_MYSQL_ARGS = {
+    'host': 'localhost',
+    'user': 'develop',
+    'passwd': 'sd61131707',
+    'db': 'spider_data',
+    'charset': "utf8"
+}
+
+
+class CalendarSpider(object):
+
+    def __init__(self):
+        self.header = {
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+        }
+        self.con = MySQLdb.connect(**WRITE_MYSQL_ARGS)
+
+    def get_wall_calendar(self, start=1530374400, end=1533052799):
+        params = {
+            "start": start,
+            "end": end
+        }
+        resp = requests.get(URL, params=params, headers=self.header)
+        if resp.status_code == 200:
+            return resp.content
+        else:
+            print resp
+            return None
+
+    @staticmethod
+    def create_time(month, year=2018):
+        start_dt = datetime(year=year, month=month, day=1)
+        start = int(time.mktime(start_dt.timetuple()))
+        end = int(time.mktime((start_dt + timedelta(days=monthrange(year=year, month=month)[1])).timetuple()))
+        return start, end
+
+    def parse_calendar(self, content):
+        # print chardet.detect(content)
+        content_dic = json.loads(content, encoding="utf-8")
+        assert content_dic["code"] == 20000
+        assert content_dic["message"] == "OK"
+        items = content_dic["data"]["items"]
+        self.parse_items(items)
+        return
+
+    def parse_items(self, items):
+        cursor = self.con.cursor()
+
+        for item in items:
+            item_id = item["id"]
+            country = item["country"].encode("utf8")
+            public_date = item["public_date"]
+            title = item["title"].encode('utf8')
+
+            # print item_id, title, country, public_date
+            # raise Exception
+            sql = """insert into finance_calendar_global (`id`, `timestamp`, `level`, `title`, `country`) 
+                  values ({}, {}, {}, "{}", "{}")""".format(item_id, public_date, 0, title, country)
+            try:
+                # 为了防止标题中含有引号等特殊字符
+                cursor.execute(sql)
+                # cursor.execute("insert into finance_calendar_global (`id`, `timestamp`, `level`, `title`, `country`) "
+                #                "values (%s, %s, %s, '%s', '%s')", (item_id, public_date, 0, title, country))
+            except IntegrityError:
+                print "duplicate:", item_id
+            except ProgrammingError:
+                print sql
+
+        cursor.close()
+
+    def run(self, month=8, year=2018):
+        start, end = self.create_time(month=month, year=year)
+        data = self.get_wall_calendar(start=start, end=end)
+        self.parse_calendar(content=data)
+
+    def close(self):
+        self.con.close()  # 关闭数据库连接
+
+
+if __name__ == "__main__":
+    start_t = time.time()
+
+    cs = CalendarSpider()
+
+    for m in range(9, 13):
+        cs.run(m, year=2017)
+
+    cs.close()
+
+    print("use time: %s" % (time.time() - start_t))
