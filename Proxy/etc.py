@@ -1,11 +1,11 @@
 #coding:utf-8
 redis_host = '127.0.0.1'
 redis_db = 0
-redis_psw = 'zyh'
+redis_psw = 'redisredis'
 redis_port = 6379
-
-inha_url = 'http://www.kuaidaili.com/free/inha/{}/'
-intr_url = 'http://www.kuaidaili.com/free/intr/{}/'
+s_89ip_url = 'http://www.89ip.cn/index_{}.html'
+s_kuaidaili_inha_url = 'http://www.kuaidaili.com/free/inha/{}/'
+s_kuaidaili_intr_url = 'http://www.kuaidaili.com/free/intr/{}/'
 # verified_url = "http://www.baidu.com"
 verified_url = "http://www.baidu.com"
 test_url = 'http://www.baidu.com/s?wd=ip'
@@ -31,3 +31,12 @@ alternate_db = 1
 crawl_db = 2
 
 info_list = ['IP','port','anonymity','ptype','locate','resspeed']
+headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Encoding':'gzip, deflate',
+            'Accept-Language': 'zh-CN,zh;q=0.9',
+            'Cache-Control': 'max-age=0',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+}
+has_proxy = True

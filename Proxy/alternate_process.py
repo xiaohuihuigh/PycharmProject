@@ -1,9 +1,9 @@
 #coding:utf-8
-from proxy_processing import Proxy_processing
+import proxy_processing
 import etc
 import time
 def alternate_process():
-    ap = Proxy_processing(type='alternate',from_db=etc.crawl_db,to_db=etc.alternate_db)
+    ap = proxy_processing.Proxy_processing(type='alternate',from_db=etc.crawl_db,to_db=etc.alternate_db)
     while 1:
         if ap.should_add_to_db():
 

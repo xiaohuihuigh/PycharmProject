@@ -1,4 +1,4 @@
-import requests
+from session import Session
 from bs4 import BeautifulSoup as bf
 import time
 import json
@@ -6,7 +6,7 @@ import etc
 import proxy_io
 def get_html_to_soup(url):
     print(url)
-    response = requests.get(url)
+    response = Session().get(url)
     soup = bf(response.text,'html.parser')
     return soup
 
@@ -25,7 +25,7 @@ def get_proxies_info(soup):
 def crawl_proxies():
     for i in range(2,50):
         time.sleep(3)
-        soup = get_html_to_soup(etc.intr_url.format(i))
+        soup = get_html_to_soup(etc.s_kuaidaili_intr_url.format(i))
         proxies_list = get_proxies_info(soup)
         proxy_db = proxy_io.ProxiesIO(db = etc.crawl_db)
         for proxy in proxies_list:

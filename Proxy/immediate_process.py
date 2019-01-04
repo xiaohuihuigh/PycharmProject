@@ -1,10 +1,10 @@
 #coding:utf-8
-from proxy_processing import Proxy_processing
+import proxy_processing
 import etc
 import time
 
 def immediate_process():
-    ap = Proxy_processing(type='immediate',from_db=etc.alternate_db,to_db=etc.immediate_db)
+    ap = proxy_processing.Proxy_processing(type='immediate',from_db=etc.alternate_db,to_db=etc.immediate_db)
     while 1:
         if ap.should_add_to_db():
             print('in the immediate_process')

@@ -17,7 +17,6 @@ class ProxiesIO(redis.Redis):
         ip_list = IP.split('.')
         proxy = IP+port
         key = "".join(re.findall(r'\d',IP+port))
-        print('key',key)
         return key
     '''
     暂时还不知道是干嘛的。。。
@@ -40,12 +39,22 @@ class ProxiesIO(redis.Redis):
         else:
             return False,None
     '''
+    根据keys检测IP是否存在与数据库中，存在返回True，不存在返回False
+    '''
+    def check_proxy_with_key(self,IPkey):
+        if self.exists(IPkey):
+            return True
+        else:
+            return False
+    '''
     插入数据成功返回Ture，没有成功插入返回False，暂时没有影响
     '''
     def insert_proxy(self,IP_info):
         IPkey = self.get_IPkey(IP_info)
         try:
-            self.set(IPkey,json.dumps(IP_info))
+            if not self.check_proxy_with_key(IPkey):
+                self.set(IPkey,json.dumps(IP_info))
+                print(IP_info['IP'],':',IP_info['port'])
         except Exception as e:
             print('insert the proxy',IP_info,'false')
             return False
@@ -59,6 +68,8 @@ class ProxiesIO(redis.Redis):
     '''
     def pop_proxy(self):
         IPkey = self.randomkey()
+        if IPkey == None:
+            return None
         IP_info = self.get(IPkey)
 
         self.delete(IPkey)

@@ -3,6 +3,7 @@ from verify_proxy_validity import *
 import subprocess,time,sys
 import multiprocessing
 import os
+import time
 TIME = 1
 class Auto_Run():
     def __init__(self,sleelp_time,cmd):
@@ -17,7 +18,11 @@ class Auto_Run():
         self.run()
 
         try:
+            stime = time.time()
             while 1:
+                etime = time.time()
+                if etime - stime > 3540:
+                    break
                 time.sleep(sleelp_time *60)
                 self.poll = self.p.poll()
                 if self.poll is None:
@@ -39,8 +44,9 @@ class Auto_Run():
 if __name__ == "__main__":
     CMD = []
     pwd = os.path.dirname(os.path.realpath(__file__))
-    #CMD.append(os.path.join(pwd,'crawl_kuaidaili_proxies.py'))
-    #CMD.append(os.path.join(pwd,'crawl_kuaidaili_proxies1.py'))
+    CMD.append(os.path.join(pwd,'crawl_kuaidaili_proxies.py'))
+    CMD.append(os.path.join(pwd,'crawl_kuaidaili_proxies1.py'))
+    CMD.append(os.path.join(pwd,'89ip.py'))
     CMD.append(os.path.join(pwd,'alternate_process.py'))
     CMD.append(os.path.join(pwd,'immediate_process.py'))
     print(pwd)

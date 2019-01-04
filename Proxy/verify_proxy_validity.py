@@ -1,5 +1,5 @@
 #coding:utf8
-import requests
+import session
 import json
 import time
 import os
@@ -19,7 +19,8 @@ def verify_proxy(IP_info,test_url = etc.test_url):
     # print (proxies)
     try:
         print("it wanner to get a url")
-        rsp = requests.get(url=test_url, proxies=proxies, timeout=10)
+
+        rsp = session.Session(proxies=proxies).get(url=test_url, timeout=10)
 
         print("it has get the url", etc.test_url)
         print(check_proxy_IP(rsp.text))
@@ -35,31 +36,33 @@ def verify_proxy(IP_info,test_url = etc.test_url):
 def check_proxy_IP(req):
     word = re.findall(r'<span class="c-gap-right">(.*?)</span>',req)
     return word
-
-def save_source():
-    # proxy_list = get_the_proxy_list()
-    get_proxies_db = proxy_io.ProxiesIO(db=etc.crawl_db)
-    proxy = 1
-    put_proxies_db = proxy_io.ProxiesIO(db=etc.alternate_db)
-    while proxy:
-        proxy = get_proxies_db.pop_proxy()
-        proxies = {
-            'http':'http://'+proxy['IP']+':'+proxy['port']
-        }
-        print(proxy)
-        # print (proxies)
-        try:
-            print ("it wanner to get a url")
-            rsp = requests.get(url = etc.test_url,proxies=proxies,timeout=10)
-
-            print ("it has get the url",etc.test_url)
-            print (check_proxy_IP(rsp.text))
-
-        except Exception as e:
-            print (e)
-            print('the proxy is error{}'.format(proxy['IP']))
-            pass
-        else:
-            print ('the proxy could be use {}'.format(proxy['IP']))
-            put_proxies_db.insert_proxy(proxy)
-# save_source()
+#
+# def save_source():
+#     # proxy_list = get_the_proxy_list()
+#     get_proxies_db = proxy_io.ProxiesIO(db=etc.alternate_db)
+#     proxy = 1
+#     put_proxies_db = proxy_io.ProxiesIO(db=etc.immediate_db)
+#     while proxy:
+#         proxy = get_proxies_db.pop_proxy()
+#         if proxy == None:
+#             continue
+#         proxies = {
+#             'http':'http://'+proxy['IP']+':'+proxy['port']
+#         }
+#         print(proxy)
+#         # print (proxies)
+#         try:
+#             print ("it wanner to get a url")
+#             rsp = session.Session(proxies=proxies).get(url=etc.test_url, timeout=10)
+#             print ("it has get the url",etc.test_url)
+#             print (check_proxy_IP(rsp.text))
+#
+#         except Exception as e:
+#             print (e)
+#             print('the proxy is error{}'.format(proxy['IP']))
+#             pass
+#         else:
+#             print ('the proxy could be use {}'.format(proxy['IP']))
+#             put_proxies_db.insert_proxy(proxy)
+# if __name__ == '__main__':
+#     save_source()

@@ -1,118 +1,24 @@
-# import redisconnector
-# import etc
-# import redis
-# import json
-# import time
-#
+import requests
+import selenium
+from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
 
-import proxy_processing
+driver = webdriver.PhantomJS(executable_path='/opt/phantomjs/bin/phantomjs')
 
-proxy_processing.immediate_process()
-#
-# # redis_h.lpush()
-# class ProxiesIO(redis.Redis):
-#     def __init__(self, host=etc.redis_host, port=etc.redis_port, password=etc.redis_psw, db=etc.redis_db):
-#         super(ProxiesIO, self).__init__(host=host, port=port, password=password, db=db)
-#         # 可以在初始化的时候创建如果没有list的话？？？
-#         # 具体看怎么存的。。。
-#
-# r = ProxiesIO()
-# i = 12306
-# while 1:
-#     i+=1
-#     # time.sleep(1)
-#     r.set(i,i ** i)
-#     print (i)
-#     r.expire(i,300)
-#     if not r.exists('1'):
-#         break
-    # @staticmethod
-    # def get_IPkey(IP_info):
-    #     IP = IP_info['IP']
-    #     port = int(IP_info['port'])
-    #     ip_list = IP.split('.')
-    #     key = 0
-    #     for i in ip_list:
-    #         key = key * 1000 + int(i)
-    #     _port = port
-    #     while _port:
-    #         key *= 10
-    #         _port //= 10
-    #     key += port
-    #     return key
-    #
-    # '''
-    # 暂时还不知道是干嘛的。。。
-    # '''
-    # # def create_list(self, listname, *values):
-    # #     self.lpush(listname, *values)
-    #
-    # '''
-    # 检测IP的是否存在于数据库中，存在返回True并返回上次验证的时间，不存在返回False和None
-    # '''
-    #
-    # def check_proxy(self, IP_info):
-    #     IPkey = self.get_IPkey(IP_info)
-    #     print(IP_info)
-    #     print('get an IPkey', IPkey)
-    #     if self.exists(IPkey):
-    #         IP_info = self.get(IPkey)
-    #         IP_info = json.loads(IP_info)
-    #         return True, IP_info['last_c_time']
-    #     else:
-    #         return False, None
-    #
-    # '''
-    # 插入数据成功返回Ture，没有成功插入返回False，暂时没有影响
-    # '''
-    #
-    # def insert_proxy(self, IP_info):
-    #     IPkey = self.get_IPkey(IP_info)
-    #     try:
-    #         self.set(IPkey, json.dumps(IP_info))
-    #     except Exception as e:
-    #         print('insert the proxy', IP_info, 'false')
-    #         return False
-    #     else:
-    #         return True
-    #
-    # '''
-    # 从数据库中拿到一个可用的IP信息
-    # 返回一条json格式的IP信息
-    #
-    # 采用多线程的等待模式 blpop ，等待时间10s
-    # '''
-    #
-    # def pop_proxy(self):
-    #     IPkey = self.randomkey()
-    #     IP_info = self.get(IPkey)
-    #     self.delete(IPkey)
-    #     IP_info = json.loads(IP_info)
-    #     return IP_info
-    #
-    # # '''
-    # # 从数据库中拿到n个可用信息
-    # # 返回一个列表，列表中的每一个元素为一个json格式的IP信息
-    # # '''
-    # # def pop_n_proxies(self,n):
-    # #     proxies_list = []
-    # #     for i in range(n):
-    # #         proxies_list.append(self.pop_proxy())
-    # #     return proxies_list
-    # '''
-    # 返回一个列表的长度
-    # '''
-    #
-    # def check_len_db(self):
-    #     return self.dbsize()
-    #
-    # @staticmethod
-    # def byte2str(b):
-#     #     return b.decode('utf8') if isinstance(b, bytes) else b
-# import re
-#
-# with open('test.html','r')as f:
-#     sp = f.read()
-# print(re.findall(r'<span class="c-gap-right">(.*?)</span>',sp))
-# import time
-# print(int(time.time()))
+url = 'http://ip.zdaye.com/dayProxy/ip/208741.html'
+# url = 'www.baidu.com'
+head = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Encoding':'gzip, deflate',
+            'Accept-Language': 'zh-CN,zh;q=0.9',
+            'Cache-Control': 'max-age=0',
+            'Connection': 'keep-alive',
+            'Cookie': 'acw_tc=76b20f7115464079168466292e7fd0d34c0f58399805e23eba9a7c4970ae02; ASPSESSIONIDCASQCRCT=ECFFBDCCMABAIBJKKGKGJIHI; __51cke__=; Hm_lvt_8fd158bb3e69c43ab5dd05882cf0b234=1546407921; acw_sc__v3=2866D37C05AB8A6703E3752CD0F72C1675CF1C67; acw_sc__v2=NWMyYzUzZjZlZTA0MzRlNzc0MzZiMWM4YmU1OWEzOWJiOTA1YjI3MQ==; ASPSESSIONIDACTQCQDS=DLONBKCCMBDHLCELPKAFBIEO; __tins__16949115=%7B%22sid%22%3A%201546409786708%2C%20%22vd%22%3A%203%2C%20%22expires%22%3A%201546412880164%7D; __51laig__=56; Hm_lpvt_8fd158bb3e69c43ab5dd05882cf0b234=1546411081',
+            'Host': 'ip.zdaye.com',
+            'Referer': 'http://ip.zdaye.com/dayProxy/2019/1/1.html',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+}
+driver.get(url)
+# with open('test.html','a')as f:
+#     f.write(driver.page_source.decode('utf-8').encode('utf-8'))
+print driver.page_source

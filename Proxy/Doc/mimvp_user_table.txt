@@ -1,0 +1,8 @@
+user_name
+user_pass
+user_telphone
+cookies
+order_number
+order_end_time
+order_surplus
+order
