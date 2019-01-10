@@ -4,6 +4,8 @@ import verify_proxy_validity
 import time
 import etc
 import json
+loginfo = etc.loginfo
+logerr = etc.logerr
 '''
 处理一条IP的流程的类
 包含，
@@ -15,23 +17,28 @@ import json
     检测要to_db的长度
 '''
 class Proxy_processing(object):
-    def __init__(self,type,from_db,to_db,effective_time=None,mlen = None):
-        if effective_time == None:
-            if type == 'crawl':
-                effective_time = etc.crawl_effective_time
-            elif type == 'alternate':
-                effective_time = etc.alternate_effective_time
-            elif type == 'immediate':
-                effective_time = etc.immediate_effective_time
-            elif type == 'to_use':
-                effective_time = etc.to_use_effective_time
-        if mlen == None:
-            if type == 'crawl':
-                mlen = etc.crawl_mlen
-            elif type == 'alternate':
-                mlen = etc.alternate_mlen
-            elif type == 'immediate':
-                mlen = etc.immediate_mlen
+    def __init__(self,type,from_db=None,to_db=None,effective_time=None,mlen = None):
+
+        if type == 'crawl':
+            effective_time = effective_time if effective_time else etc.crawl_effective_time
+            mlen = mlen if mlen else etc.crawl_mlen
+            to_db = to_db if to_db else etc.crawl_db
+        elif type == 'alternate':
+            effective_time = effective_time if effective_time else etc.alternate_effective_time
+            mlen = mlen if mlen else etc.alternate_mlen
+            from_db = from_db if from_db else etc.crawl_db
+            to_db = to_db if to_db else etc.alternate_db
+        elif type == 'immediate':
+            effective_time = effective_time if effective_time else etc.immediate_effective_time
+            mlen = mlen if mlen else etc.immediate_mlen
+            from_db = from_db if from_db else etc.alternate_db
+            to_db = to_db if to_db else etc.immediate_db
+        elif type == 'to_use':
+            effective_time = effective_time if effective_time else etc.to_use_effective_time
+            from_db = from_db if from_db else etc.immediate_db
+            to_db = to_db if to_db else etc.immediate_db
+
+
         self.from_db=from_db
         self.to_db = to_db
         self.type=type
@@ -49,7 +56,7 @@ class Proxy_processing(object):
             IP_info=self.from_redis.pop_proxy()
 
         except Exception as e:
-            print ("proxy_processing",e)
+            logerr.error (("proxy_processing",e))
 
             return self.get_a_proxy()
         else:
@@ -61,18 +68,32 @@ class Proxy_processing(object):
     获得一个IP，在检测可用性后如果可用加入to_db中，不可用raise一个错误出来
     '''
     def push_or_discare(self,IP_info):
-        intf,last_c_time=self.to_redis.check_proxy(IP_info)
-        print('intf',intf,'lastctime',last_c_time)
+        intf,last_c_time=self.to_redis.check_proxy_in(IP_info)
         if (intf and int(time.time()) - last_c_time >=self.effective_time) or not intf:#在队列中但是超过有效时间
-            fn,last_c_time=verify_proxy_validity.verify_proxy(IP_info)
-            if fn == True:
-                IP_info['last_c_time'] = last_c_time
-                self.to_redis.insert_proxy(IP_info)
+            if not intf and 'last_c_time' in IP_info:
+                last_c_time = IP_info['last_c_time']
+                if (int(time.time()) - last_c_time < self.effective_time):
+                    self.to_redis.insert_proxy(IP_info)
+                    return 0
+                else:
+                    fn,last_c_time=verify_proxy_validity.verify_proxy(IP_info)
+                    if fn == True:
+                        IP_info['last_c_time'] = last_c_time
+                        self.to_redis.insert_proxy(IP_info)
+                        return 1
+                    else:
+                        raise ValueError('a no useful proxy',IP_info['IP'])
             else:
-
-                raise ValueError('a no useful proxy',IP_info['IP'])
+                fn, last_c_time = verify_proxy_validity.verify_proxy(IP_info)
+                if fn == True:
+                    IP_info['last_c_time'] = last_c_time
+                    self.to_redis.insert_proxy(IP_info)
+                    return 1
+                else:
+                    raise ValueError('a no useful proxy', IP_info['IP'])
         else:
-            print('the proxy is in the {} queue'.format(self.type))
+            loginfo.info('the proxy is in the {} queue'.format(self.type))
+            return 0
     '''
     检测to_db中的数据是否到达要加入的最小临界点
     '''

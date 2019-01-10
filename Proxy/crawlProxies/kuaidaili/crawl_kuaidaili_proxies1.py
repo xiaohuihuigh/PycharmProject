@@ -1,11 +1,11 @@
-from session import Session
+from session.session import Session
 from bs4 import BeautifulSoup as bf
 import time
 import json
 import etc
 import proxy_io
+
 def get_html_to_soup(url):
-    print(url)
     response = Session().get(url)
     soup = bf(response.text,'html.parser')
     return soup
@@ -22,8 +22,10 @@ def get_proxies_info(soup):
             proxy_info_dict[info_list[i]] = proxy_info_list[i].text
         proxies_info_list.append(proxy_info_dict)
     return proxies_info_list
-def crawl_proxies():
-    for i in range(2,50):
+def crawl_proxies(a=2,b=50):
+    loginfo = etc.loginfo
+    loginfo.info('crawl proxies in kuaidaili1')
+    for i in range(a,b):
         time.sleep(3)
         soup = get_html_to_soup(etc.s_kuaidaili_intr_url.format(i))
         proxies_list = get_proxies_info(soup)

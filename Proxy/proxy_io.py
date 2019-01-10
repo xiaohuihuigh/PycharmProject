@@ -4,6 +4,8 @@ import redis
 import json
 import time
 import re
+loginfo = etc.loginfo
+logerr = etc.logerr
 # redis_h.lpush()
 class ProxiesIO(redis.Redis):
     def __init__(self,host=etc.redis_host,port = etc.redis_port,password=etc.redis_psw,db=etc.redis_db):
@@ -28,10 +30,8 @@ class ProxiesIO(redis.Redis):
     '''
     检测IP的是否存在于数据库中，存在返回True并返回上次验证的时间，不存在返回False和None
     '''
-    def check_proxy(self,IP_info):
+    def check_proxy_in(self,IP_info):
         IPkey = self.get_IPkey(IP_info)
-        print(IP_info)
-        print('get an IPkey',IPkey)
         if self.exists(IPkey):
             IP_info = self.get(IPkey)
             IP_info = json.loads(IP_info)
@@ -54,9 +54,12 @@ class ProxiesIO(redis.Redis):
         try:
             if not self.check_proxy_with_key(IPkey):
                 self.set(IPkey,json.dumps(IP_info))
-                print(IP_info['IP'],':',IP_info['port'])
+                # print(IP_info['IP'],'is not in redis')
+                loginfo.info((IP_info['IP'],':',IP_info['port']))
+            # else:
+                # print(IP_info['IP'], 'is in redis')
         except Exception as e:
-            print('insert the proxy',IP_info,'false')
+            logerr.error('insert the proxy',IP_info,'false')
             return False
         else:
             return True

@@ -1,491 +1,439 @@
-/usr/bin/python2.7 /home/zyh/PycharmProjects/Proxy/mimvp.py
-/usr/local/lib/python2.7/dist-packages/requests/__init__.py:83: RequestsDependencyWarning: Old version of cryptography ([1, 2, 3]) may cause slowdown.
-  warnings.warn(warning, RequestsDependencyWarning)
-<!DOCTYPE html>
-<html lang="zh-CN">
+
+<!DOCTYPE HTML>
+<html>
 <head>
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<meta name="applicable-device" content="pc,mobile" />
-<meta name="format-detection" content="telephone=no" />
-<meta name="renderer" content="webkit" />
-<title>会员注册 - 米扑代理</title>
-<meta name="Keywords" content="米扑代理,私密代理,独享代理,快代理,代理ip,ip代理,免费代理,免费代理ip,米扑科技,米扑,mimvp,http代理,https代理,socks代理,代理ip购买,free proxy,爬虫代理,稳定代理,高匿代理,匿名代理,HTTP,HTTPS,SOCKS4,SOCKS5,QQ代理,国内外代理,稳定代理,高匿代理,高匿代理ip,爬虫代理ip,刷单代理,刷单代理ip,投票代理ip,私密代理ip,独享代理,独享代理ip,高速http代理,免费代理ip,代理服务器">
-<meta name="description" content="米扑代理，99.9%可用的代理IP服务领导品牌，每天免费提取HTTP、HTTPS、Socks代理，全部高匿，覆盖中国30多个省市200多个城市，服务于数百家企业大客户伙伴，BAT技术团队保证代理IP质量99.9%可用，最新免费代理ip实时更新，买代理IP就找米扑代理！">
-<meta name="author" content="米扑代理" />
-<meta name="version" content="mimvp-proxy-1.1" />
-<meta name="copyright" content="2009-2019 by mimvp.com">
-<meta name="baidu_union_verify" content="20be1643a0f542b29d54e5137bea4225" />
-<meta name="baidu-site-verification" content="pzH9C12mmf" />
-<meta name="sogou_site_verification" content="QCi6brPm84" />
-<meta name="360-site-verification" content="d42818ef57d4f110b6c1fdf268c8cb07" />
-<meta name="shenma-site-verification" content="f85fa0493059ca7e6b73ad5ae44751ec_1498128383"/>
-<meta name="google-site-verification" content="DSE-4k0kg0zlz8aGyKmZImOoTkpiIreULTsgMwNqJYE" />
-<meta name="msvalidate.01" content="7B03EDC84171290ABCCF8E6F2DA645B1" />
-<meta name="baiduspider" content="index,follow" />
-<meta name="googlebot" content="index,follow" />
-<meta name="bingbot" content="index,follow" />
-<meta name="robots" content="index,follow" />
-<link rel="icon" href="/favicon.ico">
-<link href="/css/bootstrap.min.css" rel="stylesheet">
-<link href="/css/hint.min.css" rel="stylesheet">
-<link href="/css/mimvp-2018121120.css" rel="stylesheet">
-<script type="text/javascript">function displaySubMenu(a){if(a=a.getElementsByTagName("ul")[0])a.style.display="block"}function hideSubMenu(a){if(a=a.getElementsByTagName("ul")[0])a.style.display="none"};</script>
-</head>
-<body >
-	<div class="mimvp-header">
-		<nav class="header-nav">
-			<div class="nav-logo">
-				<a href="/"><img alt="米扑代理" src="/img/logo.png"></a>
-			</div>
-			<div class="nav-title">
-				<ul id="nav-ul">
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item " href="/">首页</a>
-					</li>
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item " href="../product.php">产品介绍</a>
-						<ul>
-							<a class="nav-item" href="../freesecret.php">免费代理</a>
-						</ul>
-					</li>
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item " href="../price.php">购买代理</a>
-						<ul>
-							<a class="nav-item" href="../buy.php">支付方式</a>
-						</ul>
-					</li>
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item " href="../fetchsecret.php">提取代理</a>
-					</li>
+<title>IP check</title>
 
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item
-						"href="../question.php">常见问题</a>
-						<ul>
-							<a class="nav-item" href="../demo.php">使用示例</a>
-							<a class="nav-item" href="../stat.php">统计代理</a>
-							<a class="nav-item" href="../check.php">检测代理</a>
-							<a class="nav-item" href="../exist.php">检测收录</a>
-							<a class="nav-item" href="../apidoc.php">API 文档</a>
-							<a class="nav-item" href="../help.php">帮助文档</a>
-						</ul>
-					</li>
-
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item active" href="../usercenter/userinfo.php">会员中心</a>
-						<ul>
-							<a class="nav-item" href="../usercenter/login.php">用户登录</a>
-							<a class="nav-item" href="../usercenter/regist.php">用户注册</a>
-							<a class="nav-item" href="../usercenter/findpwd.php">找回密码</a>
-													</ul>
-					</li>
-
-					<li onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-						<a class="nav-item " href="../partner.php">推广返利</a>
-						<ul>
-							<a class="nav-item" href="/about.php">关于我们</a>
-							<a class="nav-item" href="/credit.php">公司资质</a>
-							<a class="nav-item" href="/changelog.php">更新日志</a>
-							<a class="nav-item" href="/sitenav.php">本站导航</a>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div class="nav-clear"></div>
-		</nav>
-
-		<nav class="header-nav-mobile">
-			<div class="nav-logo">
-				<a href="/"><img alt="米扑代理" src="/img/logo.png" width="44" height="36"></a>
-			</div>
-			<div class="nav-title">
-				<ul id="nav-ul">
-					<li>
-						<a class="header-nav-item header-nav-item-mimvp" href="/">米扑代理</a>
-					</li>
-					<li style="float: right;">
-						<a id="hidemenu-btn" class="hidemenu-btn header-nav-item" href="#" onclick="hidemenu_btn_click()">
-							 <div class="hidemenu-icon">
-								 <span class="icon-bar"></span>
-								 <span class="icon-bar"></span>
-								 <span class="icon-bar"></span>
-							 </div>
-						</a>
-					</li>
-					<ul id="hidemenu" class="hidemenu" style="display: none;">
-						<li>
-							<ul>
-							<a class="nav-item " href="../product.php">产品介绍</a>
-							<a class="nav-item " href="../freesecret.php">免费代理</a>
-							</ul>
-						</li>
-						<li>
-							<ul>
-							<a class="nav-item " href="../price.php">购买代理</a>
-							<a class="nav-item " href="../buy.php">支付方式</a>
-							</ul>
-						</li>
-						<li>
-							<a class="nav-item " href="../fetchsecret.php">提取代理</a>
-						</li>
-
-						<li>
-							<a class="nav-item " href="../question.php">常见问题</a>
-							<ul>
-								<a class="nav-item " href="../demo.php">使用示例</a>
-								<a class="nav-item " href="../stat.php">统计代理</a>
-								<a class="nav-item " href="../check.php">检测代理</a>
-								<a class="nav-item " href="../exist.php">检测收录</a>
-								<a class="nav-item " href="../apidoc.php">API 文档</a>
-								<a class="nav-item " href="../help.php">帮助文档</a>
-							</ul>
-						</li>
-
-						<li>
-							<a class="nav-item " href="../usercenter/userinfo.php">会员中心</a>
-							<ul>
-								<a class="nav-item " href="../usercenter/login.php">用户登录</a>
-								<a class="nav-item active" href="../usercenter/regist.php">用户注册</a>
-								<a class="nav-item " href="../usercenter/findpwd.php">找回密码</a>
-															</ul>
-						</li>
-
-						<li>
-							<a class="nav-item " href="../partner.php">推广返利</a>
-							<ul>
-								<a class="nav-item " href="/about.php">关于我们</a>
-								<a class="nav-item " href="/credit.php">公司资质</a>
-								<a class="nav-item " href="/changelog.php">更新日志</a>
-								<a class="nav-item " href="/sitenav.php">本站导航</a>
-							</ul>
-						</li>
-					</ul>
-				</ul>
-			</div>
-			<div class="nav-clear"></div>
-		</nav>
-	</div>
-
-	<div class="mimvp-body" id="mimvp-body">
-		<div class="regist_content">
-			<div class="regist_title">注册米扑</div>
-
-		  	<input type="hidden" id="forurl" name="forurl" class="regist_input" value="login.php">
-			<div class="regist_item">
-		          <label class="regist_item_label" for="name">邮箱</label>
-		          <div class="regist_item_data">
-		            <input id="user_email" type="text" name="user_email" class="regist_input" placeholder="xxx@qq.com" value="" data-exist="0" tabindex="1">
-		            <span class="regist-to-login">已有米扑账号？<a href="login.php" tabindex="7"><b>直接登录>></b></a></span>
-		            &nbsp;<p id="user_email_err" class="regist_err" style="display:none;"></p>
-		            <p class="regist-to-login-mobile">已有米扑账号？<a href="login.php" tabindex="7"><b>直接登录>></b></a></p>
-		            <script type="text/javascript"> document.getElementById("user_email").focus(); </script>
-		          </div>
-		      </div>
-		      <div class="regist_item">
-		          <label class="regist_item_label" for="name">密码</label>
-		          <div class="regist_item_data">
-		            <input id="user_pwd" type="password" name="user_pwd" class="regist_input" placeholder="密码至少6位" value="" tabindex="2">
-		            <p id="user_pwd_err" class="regist_err" style="display:none;"></p>
-		          </div>
-		      </div>
-		      <div class="regist_item">
-		          <label class="regist_item_label" for="name">确认密码</label>
-		          <div class="regist_item_data">
-		            <input id="user_pwd2" type="password" name="user_pwd2" class="regist_input" placeholder="确认密码" value="" tabindex="3">
-		            <p id="user_pwd2_err" class="regist_err" style="display:none;"></p>
-		          </div>
-		      </div>
-		      <div class="regist_item">
-		          <label class="regist_item_label" for="name">验证码</label>
-		          <div class="regist_item_data">
-		            <input id="user_rcode" type="text" name="user_rcode" class="regist_input" placeholder="验证码" value="" tabindex="4" style="width: 110px; margin-right: 0px;">
-		            &nbsp;
-		            <img id= "img_rcode" onclick="changeRcode();" src='../common/ygrcode.php?rcode=123456' tabindex="8" />
-		            &nbsp;
-		            <a class="regist-rcode-img" href="javascript:changeRcode();" tabindex="9">换张图片</a>
-		            <br/>
-		            <span id="user_rcode_err" class="regist_err" style="display:none;"></span>
-		          </div>
-		      </div>
-		      <div class="regist_item">
-		          <label class="regist_item_label" for="name"></label>
-		          <div class="regist_item_data">
-		          	<label>
-			            <input type="checkbox" id="user_service" name="user_service" class="regist_checkbox" value="1" checked="checked" tabindex="5">
-			            &nbsp;
-			            我同意 <a target="_blank" href="/service.php">"本站服务协议"</a>
-		            </label>
-		            <p id="user_service_err" class="regist_err" style="display:none;"></p>
-		          </div>
-		      </div>
-		      <div class="submit">
-		          <span class="login_btn" tabindex="6"><a id="postcontent" href="javascript:void(0);">注 册</a></span>
-		      </div>
-		</div>
-	</div>
+<meta name="description" content="IP check is a free and very thorough anonymity test. Here you may see at a glance if you have really activated anonymous surfing or if you are using anonymous proxy servers.">
+<meta name="keywords" content="ip check,ip-check,anonymity test,anonymous surfing,anonymous proxy servers,hide your IP,hide my ip,hide my ip address,anonymity test,jondonym,tor">
+<link rel="canonical" href="http://ip-check.info/?lang=en">
+<meta name="robots" content="index,follow,archive">
+<meta name="revisit-after" content="2 days">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 
-<div class="mimvp-footer">
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+<link rel="shortcut icon" href="favicon.ico">
 
-	<div class="footer-contact-list">
-		<div class="footer-contact-items">
-			<p>新手开发</p>
-			<span class="footer-contact-items-detail">
-				<a target="_blank" href="/price.php">购买代理</a><br><a target="_blank" href="/fetchsecret.php">提取代理</a><br><a target="_blank" href="/demo.php">代码示例</a>
-			</span>
-		</div>
-		<div class="footer-contact-items">
-			<p>支付方式</p>
-			<span class="footer-contact-items-detail">
-				<a target="_blank" href="/buy.php">在线支付</a><br><a target="_blank" href="/question.php#faq_buy_how">银行汇款</a><br><a target="_blank" href="/question.php#faq_buy_invoice">开具发票</a>
-			</span>
-		</div>
-		<div class="footer-contact-items">
-			<p>常见问题</p>
-			<span class="footer-contact-items-detail">
-				<a target="_blank" href="/question.php">常见问题</a><br><a target="_blank" href="/stat.php">统计代理</a><br><a target="_blank" href="/sitenav.php">本站导航</a>
-			</span>
-		</div>
-		<div class="footer-contact-items">
-			<p>关于我们</p>
-			<span class="footer-contact-items-detail"><a target="_blank" href="/about.php">关于我们</a><br><a target="_blank" href="/credit.php">公司资质</a><br><a target="_blank" href="https://mimvp.com">米扑官网</a></span>
-		</div>
-	</div>
 
-	<div class="runningtime">
-		米扑代理运行 <span id="elapseClock" onclick="elapse_clock_click()"></span>
-	</div>
-	<div class="allright">
-		© 2013 - 2019 <a target="_blank" href="//mimvp.com">北京米扑科技有限公司</a>
-	</div>
-	<div class="icpbeian" id="icpbeian">
-		<a target="_blank" href="http://www.beianbeian.com/s?keytype=3&q=%E7%B1%B3%E6%89%91%E7%A7%91%E6%8A%80">京ICP备 16053632号</a>
-	 	<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802025552"><img src="/img/icp_gongan.png" style="width:18px; height:23px; padding-bottom:5px;"> 京公网安备 11010802025552号</a>
-	</div>
-	<div class="lawertip">
-      	只提供国内大数据采集分析服务，产品符合国内互联网政策，国内无法访问的网站，使用代理也无法访问
-	</div>
-	<div style="clear: both;"></div>
+
+<!--
+<link rel="stylesheet" type="text/css" href="xhelpfrms2.css?proxyCacheDeleter=f6cpb6hwspicwozqs7fo">
+<link rel="stylesheet" type="text/css" href="anontest.css?proxyCacheDeleter=g63ngfmb7pu0nbvwovxz">
+
+<link rel="stylesheet" type="text/css" href="all.css?proxyCacheDeleter=r8dh3nsu4amuobkamxy3">
+
+-->
+
+<link rel="stylesheet" type="text/css" href="https://shop.anonymous-proxy-servers.net/xhelpfrms2.css">
+<link rel="stylesheet" type="text/css" href="https://shop.anonymous-proxy-servers.net/anontest.css">
+
+<link rel="stylesheet" type="text/css" href="https://shop.anonymous-proxy-servers.net/bin/cssextension">
+
+<style type="text/css">
+.noscript {}
+img#imgServiceLeaking {visibility:hidden;display:none;}
+font#textServiceNOK_FILTER {visibility:hidden;display:none;}
+font#textServiceNOK_HTTPS {visibility:hidden;display:none;}
+font#textServiceNOK_FTP {visibility:hidden;display:none;}
+font#textServiceNOK_FLASH {visibility:hidden;display:none;}
+#textServiceHint {visibility:hidden;display:none;}
+font#textServiceNOK_JAVA {visibility:hidden;display:none;}
+</style>
+<script type="text/javascript">
+function urchinTracker(){}
+function fz3824(){}
+function load1342(){}
+function click7071(){}
+function getQueryVariable(variable)
+{
+	var query = window.location.search.substring(1);
+	if (query === undefined || query == null)
+	{
+		return null;
+	}
+
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++)
+	{
+		var pair = vars[i].split("=");
+		if (pair[0] == variable)
+		{
+			return pair[1];
+		}
+      }
+	return null;
+}
+
+function replaceAll(txt, replace, with_this)
+{
+  return txt.replace(new RegExp(replace, 'g'),with_this);
+}
+
+/**
+ * Filters variables that are sent by the web browser.
+ */
+function filterBrowserVariable(a_value)
+{
+	var value = String(a_value);
+	value = value.replace(/\</g, "&lt;");
+	value = value.replace(/\>/g, "&gt;");
+	return value;
+}
+
+
+function startsWith(a_myStr, str)
+{
+	if (a_myStr == undefined || a_myStr == null || str == undefined || str == null)
+	{
+		if (a_myStr === str)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	if (a_myStr.length < str.length)
+	{
+		return false;
+	}
+
+	return a_myStr.substr(0, str.length) === str;
+}
+
+function endsWith(a_myStr, str)
+{
+	if (a_myStr == undefined || a_myStr == null || str == undefined || str == null)
+	{
+		if (a_myStr === str)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	if (a_myStr.length < str.length)
+	{
+		return false;
+	}
+
+	return a_myStr.substr(a_myStr.length - str.length, str.length) === str;
+}
+
+function checkAttribute(a_attribute)
+{
+	if (typeof a_attribute != 'undefined' && a_attribute !== undefined) // && a_attribute != null && trim("" + a_attribute).length > 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+if (checkAttribute(window.name))
+{
+	if (window.name === undefined)
+	{
+		window.newWindowName = null;
+	}
+	else
+	{
+		window.newWindowName = window.name;
+	}
+
+	if (window.newWindowName != null && endsWith(window.newWindowName, "parsed"))
+	{
+		window.newWindowName = window.newWindowName.substr(0, window.name.indexOf("parsed"));
+		window.name = window.newWindowName;
+	}
+
+	if (window.newWindowName == null || window.newWindowName.indexOf('jsID') != 0 || window.newWindowName === 'jsID=0')
+	{
+        try {
+           var staid= localStorage.getItem("jsid");
+           if (staid != null && staid != 0) {
+               window.newWindowName= staid;
+           } else {
+              window.newWindowName = ((Math.random() +1) * 10000000);
+              window.newWindowName = Math.round(newWindowName);
+           }
+        } catch (e) {
+		   window.newWindowName = ((Math.random() +1) * 10000000);
+		   window.newWindowName = Math.round(newWindowName);
+        }
+		window.name = 'jsID=' + window.newWindowName;
+	}
+
+	if (window.name === undefined)
+	{
+		window.newWindowName = null;
+	}
+	else
+	{
+		window.newWindowName = window.name;
+	}
+
+	if (window.newWindowName == null || window.newWindowName.indexOf('jsID') != 0)
+	{
+		window.newWindowName = 'jsID=0';
+	}
+}
+else
+{
+	window.newWindowName = 'jsID=0';
+}
+
+function getJSID()
+{
+	if (window.name === undefined || window.name == null || window.name.indexOf('jsID') != 0)
+	{
+		return null;
+	}
+	return window.name.substring(window.name.indexOf('jsID') + 'jsID='.length, window.name.length);
+}
+
+
+function addJSIDtoStartU_R_L(a_hrefID)
+{
+	addJSIDtoStartU_R_Linternal(a_hrefID, 'referer=true', window.newWindowName);
+}
+
+
+/**
+ * Needs to be U_R_L because of anonmyouse.
+ */
+function addJSIDtoStartU_R_Linternal(a_hrefID, a_attrReferer, a_newWindowName)
+{
+	var hrefStartURL =  document.getElementById(a_hrefID);
+	if (hrefStartURL != null)
+	{
+		hrefStartURL = getAddedJSIDtoStartU_R_Linternal(hrefStartURL.href, a_attrReferer, a_newWindowName);
+
+		if (hrefStartURL != null)
+		{
+			document.getElementById(a_hrefID).href = hrefStartURL;
+		}
+	}
+}
+
+function getAddedJSIDtoStartU_R_L(a_hrefStartURL)
+{
+	return getAddedJSIDtoStartU_R_Linternal(a_hrefStartURL, 'referer=true', window.newWindowName);
+}
+
+
+function getAddedJSIDtoStartU_R_Linternal(hrefStartURL, a_attrReferer, a_newWindowName)
+{
+		if (hrefStartURL != null && hrefStartURL.indexOf(a_attrReferer) >= 0 && hrefStartURL.indexOf('ip-check.info') >= 0)
+		{
+			var restURL = hrefStartURL.substr(hrefStartURL.indexOf(a_attrReferer), hrefStartURL.length);
+
+			hrefStartURL = hrefStartURL.substr(0, hrefStartURL.indexOf(a_attrReferer));
+			hrefStartURL += a_newWindowName + "&" + restURL;
+
+			return hrefStartURL;
+		}
+
+		return hrefStartURL;
+}
+
+noscript();
+
+function noscript()
+{
+	var head = document.getElementsByTagName('head')[0],
+    	style = document.createElement('style'),
+    	rules = document.createTextNode('.noscript {visibility:hidden;display:none;}');
+	style .setAttribute("type", "text/css");
+	//style.type = 'text/css';
+	if (style.styleSheet)
+	{
+    		style.styleSheet.cssText = rules.nodeValue;
+	}
+	else style.appendChild(rules);
+	{
+		head.appendChild(style);
+	}
+}
+
+
+
+/*
+function getStyleClass (className)
+{
+	if (document.styleSheets.length < 1)
+	{
+		return null;
+	}
+	if (document.styleSheets[0].cssRules)
+	{
+		var cssRules = 'cssRules';
+	} else
+	{
+		var cssRules = 'rules';
+	}
+	for (var s = 0; s < document.styleSheets.length; s++)
+	{
+		for (var r = 0; r < document.styleSheets[s][cssRules].length; r++)
+		{
+			if (document.styleSheets[s][cssRules][r].selectorText == '.' + className)
+			{
+				return document.styleSheets[s][cssRules][r];
+			}
+		}
+	}
+
+
+    return null;
+}
+*/</script>
+</head><body>
+<script type="text/javascript">
+function urchinTracker(){}
+function fz3824(){}
+function load1342(){}
+function click7071(){}
+</script>
+
+
+<div class="wrapper">
+
+<header id="header" class="container clearfix">
+
+    <div style="float: right; margin-left: 15px; margin-top: 15px; width: 30px;">
+    <img src="/images2/en.png" style="" width="24" height="16"  alt=""><br>
+    <a href="/index.php?lang=de">    <img src="/images2/de.png" width="24" height="16" style="margin-top: 5px;" alt=""></a></div>
+	<a href="https://anonymous-proxy-servers.net/index.html" id="logo">
+		<img src="/images/logo_ka.png" alt="SmartStart" width="212" height="120" >
+	</a>
+<nav id="main-nav">
+<ul>
+<li><a href="https://anonymous-proxy-servers.net/index.html" data-description="anonymisation">JonDonym</a>
+<ul>
+  <li><a href="https://anonymous-proxy-servers.net/en/why.html">Why anonymous surfing</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/benefits.html">Benefits of JonDonym</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/overview.html">Architecture Overview</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/anti-censorship.html">Censorship &amp; Abuses</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/law_enforcement.html">Law Enforcement</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/operators.html">List of Mix Operators</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/status/">Mix Server Status</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/support.html">Support Jondonym</a></li>
+</ul> </li>
+<li> <a href="https://anonymous-proxy-servers.net/en/premium.html" data-description="webshop">Premium</a>
+<ul>
+   <li class="coupons"><a href="https://shop.anonymous-proxy-servers.net/bin/testcoupon?lang=en" style="font-weight: 900;">Free Premium Test</a></li>
+   <li><a href="https://shop.anonymous-proxy-servers.net/bin/payment?lang=en">Buy a Premium Account</a></li>
+   <li><a href="https://shop.anonymous-proxy-servers.net/bin/status?lang=en">Check Payment Status</a></li>
+   <li class="btcshop"><a href="https://shop.anonymous-proxy-servers.net/bin/btc-shop?lang=de">Bitcoin Shop</a></li>
+
+</ul> </li>
+<li> <a href="https://anonymous-proxy-servers.net/en/software.html" data-description="genuinely secure">Download</a>
+<ul>
+    <li><a href="https://anonymous-proxy-servers.net/en/software_win.html">For Windows</a></li>
+    <li><a href="https://anonymous-proxy-servers.net/en/software_macos.html">For MacOS</a></li>
+    <li><a href="https://anonymous-proxy-servers.net/en/software_linux.html">For Linux / BSD</a></li>
+    <li><a href="https://anonymous-proxy-servers.net/en/software_more.html">Live-DVD &amp; more...</a></li>
+</ul> </li>
+<li> <a href="https://anonymous-proxy-servers.net/blog/index.php?user_language=en" data-description="news">Blog</a>
+ <ul>
+    <li><a href="https://anonymous-proxy-servers.net/blog/index.php?/categories/26-JonDonym-News">JonDonym News</a></li>
+    <li><a href="https://anonymous-proxy-servers.net/blog/index.php?/categories/11-Speakers-Corner">Speaker's Corner</a></li>
+    <li><a href="https://anonymous-proxy-servers.net/blog/index.php?/categories/4-Mix-Proxy-Operators">Mix Proxy Operators</a></li>
+  </ul>
+</li>
+<li> <a href="https://anonymous-proxy-servers.net/en/get-help.html" data-description="In case of trouble">Support</a>
+<ul>
+  <li><a href="https://anonymous-proxy-servers.net/en/help/index.html">Help</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/faq-jondo.html">FAQ</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/forum/">Forum</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/en/tutorials/index.html">Tutorials</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/wiki/index.php?title=Hauptseite&amp;uselang=de">Wiki</a></li>
+  <li><a href="https://anonymous-proxy-servers.net/bin/contact?lang=en">E-Mail</a></li>
+</ul> </li>
+<li> <a href="http://ip-check.info/?lang=en" data-description="Anonymity Test">Check It!</a>
+<ul>
+  <li><a href="http://ip-check.info/?lang=en">Test your Anonymity</a></li>
+  <li><a href="http://ip-check.info/description.php?lang=en">How does it work</a></li>
+  <li><a href="http://ip-check.info/website-image.php?lang=en">IP-Check for your website</a></li>
+</ul> </li>
+</ul>
+
+</nav>
+</header>
+<section id="content" class="container clearfix"><br><br>
+<a rel="nofollow" id="StartTest" href="http://ip-check.info/index.php?hotlinkingNotAllowed=25776508&auth=592387664&referer=true"></a><img width="0" height="0" id="StartTestImage" src=""><img width="0" height="0" id="StartTestImageLeak" src=""><script type="text/javascript">
+var txtStartLink = getAddedJSIDtoStartU_R_L('http://ip-check.info/index.php?hotlinkingNotAllowed=25776508&auth=592387664&referer=true');
+var txtStartImage = document.getElementById('StartTestImage').src;
+var txtStartImageLeak = document.getElementById('StartTestImageLeak').src;
+if(window.localStorage) { localStorage.setItem('jsid',getJSID() ); }
+if(window.sessionStorage) { sessionStorage.setItem('jsids',getJSID() ); }
+if(window.globalStorage) { window.globalStorage[''].ipcheckjsid = getJSID(); }
+</script>
+<h1 style="text-align: center;">IP check</h1>
+<h1 style="text-align: center;">
+<script type="text/javascript">
+document.write('<a rel="nofollow" title="Please click here to start the full anonymity test and see all results." h' + 'r' + 'ef="' + txtStartLink + '">114.94.171.178</a>');
+</script>
+<span class="noscript"><a rel="nofollow" title="Please click here to start the full anonymity test and see all results." href="http://ip-check.info/index.php?hotlinkingNotAllowed=25776508&auth=592387664&referer=true">114.94.171.178</a></span>
+</h1><p style="text-align: center; font-weight: 800; color: darkred">Warning: Your IP address is neither anonymized by JonDonym nor by Tor.<br>Start the test for details.<!--<br />Use JonDonym  <a href="http://anonymous-proxy-servers.net">anonymous proxy servers</a> to hide your IP address. --></p><br><br><br><br><h2  style="text-align: center;">
+<script type="text/javascript">
+document.write('<a rel="nofollow" title="Please click here to start the full anonymity test and see all results." h' + 'r' + 'ef="' + txtStartLink + '">START TEST!<br>Please click here to start the full anonymity test and see all results.</a>');
+</script>
+<span class="noscript"><a rel="nofollow" id="StartURL" title="Please click here to start the full anonymity test and see all results." href="http://ip-check.info/index.php?hotlinkingNotAllowed=25776508&auth=592387664&referer=true">START TEST!<br>Please click here to start the full anonymity test and see all results.</a></span></h2>
+<!--[if gte IE 9]>
+<div style="text-align: center; font-weight: 800; color: darkred">Please note: Internet Explorer 9 will crash if you do the test with a Java plugin version smaller than 1.6.0_024.</div><![endif]-->
+<p style="text-align: center"><a href="description.php">Learn more about the individual tests performed by the IP Check... Click here!</a><br><br><br><br><br><br><br><br><br></p><link rel="stylesheet" type="text/css" href="http://ipcheck.info/cache.css.php">
+<noscript><link rel="stylesheet" type="text/css" href="http://Session:592387664@ipcheck.info/auth.css.php">
+</noscript><iframe src="http://ipcheck.info/authAttack.php?id=592387664" width="0" height="0">
+		</iframe><p>&nbsp;</p><p>&nbsp;</p>
+</section><!-- end #content -->
 </div>
 
-<script>function hidemenu_btn_click(){var c=document.getElementById("hidemenu"),a=c.style.display,b=document.getElementById("mimvp-body");"none"==a?(c.style.display="inline",b.style.paddingTop="440px"):(c.style.display="none",b.style.paddingTop="0px")}window.onresize=function(){if(960<=document.documentElement.clientWidth){var c=document.getElementById("mimvp-body");hidemenu.style.display="none";c.style.paddingTop="0px"}};var isYear=0;timeElapse(isYear);setInterval(function(){timeElapse(isYear)},1E3);function timeElapse(c){var a=new Date(2013,10,10,0,0,0),b=Date(),a=(Date.parse(b)-Date.parse(a))/1E3,b=Math.floor(a/86400),a=a%86400,f=0;1==c&&(f=Math.floor(b/365),b%=365);var d=Math.floor(a/3600);10>d&&(d="0"+d);var a=a%3600,e=Math.floor(a/60);10>e&&(e="0"+e);a%=60;10>a&&(a="0"+a);var g='<span class="digit">'+b+'</span>\u5929<span class="digit">'+d+'</span>\u65f6<span class="digit">'+e+'</span>\u5206<span class="digit">'+a+"</span>\u79d2";1==c&&(g='<span class="digit">'+f+'</span>\u5e74<span class="digit">'+b+'</span>\u5929<span class="digit">'+d+'</span>\u65f6<span class="digit">'+e+'</span>\u5206<span class="digit">'+a+"</span>\u79d2");document.getElementById("elapseClock").innerHTML=g}function elapse_clock_click(){isYear=1==isYear?0:1;timeElapse(isYear)};</script>
-<script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?51e3cc975b346e7705d8c255164036b3";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm, s);})();</script>
-<!--
-<script>(function(){var bp=document.createElement('script');var curProtocol=window.location.protocol.split(':')[0];if(curProtocol==='https'){bp.src='https://zz.bdstatic.com/linksubmit/push.js'}else{bp.src='http://push.zhanzhang.baidu.com/push.js'}var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(bp,s)})();</script>
-<script>(function(){var src=(document.location.protocol=="http:")?"http://js.passport.qihucdn.com/11.0.1.js?c04eeb2714038f29e0e77ed0a550f782":"https://jspassport.ssl.qhimg.com/11.0.1.js?c04eeb2714038f29e0e77ed0a550f782";document.write('<script src="'+src+'" id="sozz"><\/script>')})();</script>
--->
-	<script src="../js/jquery.min.js"></script>
-	<script type="text/javascript">
+<footer id="footer" class="clearfix">
 
-		function changeRcode(){
-			document.getElementById('img_rcode').src="../common/ygrcode.php?rand=" + Math.random();
-		}
+<div class="container">
 
-		function checkEmailExist(email){
-		    var is_exist = false;
-		    return is_exist;
-		}
+<div class="three-fourth">
+<nav id="footer-nav" class="clearfix">
+<ul>
+<li><a href="https://anonymous-proxy-servers.net/index.html" data-description="Anonymisation">JonDonym</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/premium.html" data-description="Webshop">Premium Services</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/software.html" data-description="genuinely secure">Download</a></li>
+<li><a href="https://anonymous-proxy-servers.net/blog/index.php?user_language=en" data-description="contemporary">Blog</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/get-help.html" data-description="In case of trouble">Support</a></li>
+<li><a href="https://anonymous-proxy-servers.net/bin/contact?lang=en" data-description="JonDonym GmbH">Contact</a></li>
+</ul>
+</nav>
 
-		 function checkEmail(a) {
-			    var b = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-			    if (!b.test(a)) {
-			        return false
-			    }
-			    return true
-			}
+<ul class="contact-info">
+<li class="address">Bruderw&ouml;hrdstra&szlig;e 15b, 93055 Regensburg</li>
+<li class="email">info[at]jondos.de</li>
+</ul>
+</div>
 
-		String.prototype.trim=function(){
-	　　    	return this.replace(/(^\s*)|(\s*$)/g, "");
-	　　	}
+<div class="one-fourth last">
+<span class="title">Not connected to:</span>
+<ul class="solin">
+<li class="twitter"><a href="https://anonymous-proxy-servers.net/en/dislike.html">Twitter</a></li>
+<li class="facebook"><a href="https://anonymous-proxy-servers.net/en/dislike.html">Facebook</a></li>
+<li class="google"><a href="https://anonymous-proxy-servers.net/en/dislike.html">Google+</a></li>
+</ul>
+</div>
 
-		$(document).ready(function() {
+</div>
+</footer>
 
-			$(document).keyup(function(event){
-				if(event.keyCode == 13){
-					$("#postcontent").trigger("click");
-				}
-			});
-
-	        // 同意服务协议
-	        $("input[name=user_service]").click(function() {
-	        		$(this).attr("checked", !($(this).attr("checked")));
-	        });
-
-			$('#postcontent').bind("mousedown", function() {
-		        $(this).addClass('active');
-		    }).bind("mouseup", function() {
-		       $(this).removeClass('active');
-		    }).click(function() {
-		        var user_email = $('#user_email').val().trim();
-		        var user_pwd = $('#user_pwd').val().trim();
-		        var user_pwd2 = $('#user_pwd2').val().trim();
-		        var user_rcode = $('#user_rcode').val().trim();
-		        var forurl = $('#forurl').val().trim();
-		        var user_service = 0;
-		        if( $('#user_service').attr("checked")) user_service = 1;
-
-		        $(".regist_err").hide();
-		        if(!user_email){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱不能为空").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-		        if(!checkEmail(user_email)){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱格式不正确").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-		        if(user_email.split("@")[0].length < 4){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱用户名不能少于4位").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-		        if(user_email.split("@")[0].indexOf("mimvp") != -1 || user_email.split("@")[0].indexOf("mipu") != -1){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱中不能包含【mimvp, mipu】等米扑品牌").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-		        if(user_email.split("@")[1] == "mimvp.com" || user_email.split("@")[1] == "mipu.com"){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱中不能包含【mimvp, mipu】等米扑品牌").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-
-		        if($("#user_email").attr("data-exist") == "1"){
-		            $("#user_email").addClass("invalid");
-		            $("#user_email_err").text("邮箱已被注册").show();
-		            $("#user_email").focus();
-		            return;
-		        }
-		        if(!user_pwd){
-		            $("#user_pwd").addClass("invalid");
-		            $("#user_pwd_err").text("设置密码").show();
-		            $("#user_pwd").focus();
-		            return;
-		        }
-		        if(user_pwd.length < 6){
-		            $("#user_pwd").addClass("invalid");
-		            $("#user_pwd_err").text("密码不能少于6位").show();
-		            $("#user_pwd").focus();
-		            return;
-		        }
-// 		        if(!/^[0-9a-zA-Z.]+$/m.test(user_pwd)){
-// 		            $("#user_pwd").addClass("invalid");
-// 		            $("#user_pwd_err").text("格式不正确！密码只能由数字、字母和 . 组成").show();
-// 		            $("#user_pwd").focus();
-// 		            return;
-// 		        }
-		        if(!user_pwd2){
-		            $("#user_pwd2").addClass("invalid");
-		            $("#user_pwd2_err").text("确认密码").show();
-		            $("#user_pwd2").focus();
-		            return;
-		        }
-		        if(user_pwd != user_pwd2){
-		            $("#user_pwd2").addClass("invalid");
-		            $("#user_pwd2_err").text("两次输入的密码不一致，请重新输入").show();
-		            $("#user_pwd2").focus();
-		            return;
-		        }
-		        if(!user_rcode){
-		            $("#user_rcode").addClass("invalid");
-		            $("#user_rcode_err").text("验证码不能为空").show();
-		            $("#user_rcode").focus();
-		            return;
-		        }
-		        if(user_service != 1){
-		            $("#user_service").addClass("invalid");
-		            $("#user_service_err").text("您同意本站服务协议才可注册").show();
-		            $("#user_service").focus();
-		            return;
-		        }
-
-		        $('#postcontent').text("注册中");
-
-		        $.ajax({
-			        url:  '../lib/user_regist_check.php',
-			    		type: "post",
-			        dataType: "json",
-			        data: {
-				        "user_email" : user_email,
-				        	"user_pwd"  : user_pwd2,
-				        	"user_rcode"  : user_rcode,
-				        	"forurl":forurl
-				        	},
-				    cache: false,
-			        async: true,
-		            success: function(res){
-		                if(res && res.code == 0){
-			                	$('#postcontent').text("注册成功");
-			                	jump(2);
-		                }
-		                else if (res && res.code == 1){
-			                	$("#user_rcode_err").text(res.code_msg).show();
-			    		        $('#postcontent').text("注 册");
-	// 			            	$('#user_email').val('');
-			                	$('#user_pwd').val('');
-			                	$('#user_pwd2').val('');
-			                	$('#user_rcode').val('');
-			                	$("#user_email").focus();
-			    		    		changeRcode();
-		                }
-		                else if (res && res.code == 2){
-			                	$("#user_rcode_err").text("服务器繁忙，请稍候注册").show();
-			    		        $('#postcontent').text("注 册");
-			    		    		changeRcode();
-		                }
-		                else if (res && res.code == 4){
-			                	$("#user_rcode_err").text("验证码错误").show();
-			    		        $('#postcontent').text("注 册");
-			                	$("#user_rcode").focus();
-		                }
-		                else if (res && res.code == 16){
-			                	$("#user_email_err").text(res.code_msg).show();
-			    		        $('#postcontent').text("注 册");
-			                	$("#user_email").focus();
-		                }
-		                else if (res && res.code == 32){
-			                	$("#user_pwd_err").text(res.code_msg).show();
-			    		        $('#postcontent').text("注 册");
-			                	$("#user_pwd").focus();
-		                }else{
-			                	$("#user_rcode_err").text(res.code_msg).show();
-			    		        $('#postcontent').text("注 册");
-			                	$("#user_email").focus();
-		                }
-		            },
-		            error: function(res){
-		            	alert("error: " + res.code);
-		            }
-		        });
-
-		        function jump(count) {
-	                window.setTimeout(function(){
-	                    count--;
-	                    if(count > 0) {
-	                        $('#postcontent').text("注册成功");
-	                        jump(count);
-	                    } else {
-	                        location.href="userinfo.php";
-	                    }
-	                }, 1000);
-	            }
-// 	            jump(4);
-		    });
-		});
-</script>
-</body>
-</html>
-
-
-Process finished with exit code 0
+<footer id="footer-bottom" class="clearfix">
+<div class="container">
+<ul>
+<li><a href="https://anonymous-proxy-servers.net/en/jondos.html">JonDos GmbH</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/press.html">Press</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/terms.html">Terms</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/privacy.html">Privacy</a></li>
+<li><a href="https://anonymous-proxy-servers.net/en/imprint.html">Imprint</a></li>
+</ul>
+</div>
+</footer>
+ </body></html>
