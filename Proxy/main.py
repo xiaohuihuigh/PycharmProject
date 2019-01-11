@@ -1,10 +1,10 @@
 #coding:utf-8
-from verify_proxy_validity import *
+# from code.verify_proxy_validity import *
 import subprocess,time,sys
 import multiprocessing
 import os
 import time
-import etc
+from code import etc
 
 loginfo = etc.loginfo
 logerr = etc.logerr
@@ -47,17 +47,18 @@ class Auto_Run():
             pass
 if __name__ == "__main__":
     CMD = []
-    pwd = os.path.dirname(os.path.realpath(__file__))
+    pwd = etc.pwd
     loginfo.info(pwd)
     # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies.py'))
     # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies1.py'))
     CMD.append(os.path.join(pwd,'crawl_process.py'))
     CMD.append(os.path.join(pwd,'alternate_process.py'))
     CMD.append(os.path.join(pwd,'immediate_process.py'))
-    loginfo.info(pwd)
     for i in CMD:
         p = multiprocessing.Process(target = Auto_Run,args=(TIME,i))
         p.start()
     p.join()
 
 # multiprocessing.Process(Auto_Run(TIME,CMD2))
+# from crawlProxies import crawl_proxies_conf
+# crawl_proxies_conf.test()
