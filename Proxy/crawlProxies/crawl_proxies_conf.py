@@ -1,6 +1,10 @@
 # coding:utf-8
 import os
-from configparser import ConfigParser
+import platform
+if platform.python_version()[0] == '3':
+    from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 def set_config():
     fp = 'crawlProxies/crawlProxies.conf'
     conf = ConfigParser()

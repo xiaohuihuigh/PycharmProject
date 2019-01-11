@@ -6,15 +6,21 @@ from crawlProxies.kuaidaili import crawl_kuaidaili_proxies,crawl_kuaidaili_proxi
 from crawlProxies import goubanjia
 from crawlProxies import seofangfa
 from multiprocessing import Process
-from configparser import ConfigParser
+import platform
+if platform.python_version()[0] == '3':
+    from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 from crawlProxies import crawl_proxies_conf
 import time
 import os
 fp = 'crawlProxies/crawlProxies.conf'
 conf = ConfigParser()
 conf.read(os.path.join(os.getcwd(),fp))
+print(os.path.join(os.getcwd(),fp))
 ilist = dir()
 [ilist.remove(i) for i in ['os','crawl_proxies_conf','conf','ConfigParser', 'Process', '__builtins__', '__doc__', '__file__', '__name__', '__package__', 'fp', 'time']]
+print(conf.sections())
 conf.set('all','name',str(ilist))
 with open(fp,'w')as f:
     conf.write(f)

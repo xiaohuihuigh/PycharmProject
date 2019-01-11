@@ -50,7 +50,7 @@ headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,imag
 }
 has_proxy = True
 
-logconf=os.path.join(pwd,'log/stdout.conf')
+logconf=os.path.join(pwd,'log/logging.conf')
 logging.config.fileConfig(logconf)
 loginfo = logging.getLogger('info')
 logerr = logging.getLogger('error')
