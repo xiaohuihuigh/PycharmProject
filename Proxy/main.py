@@ -1,10 +1,10 @@
 #coding:utf-8
-# from code.verify_proxy_validity import *
+# from Code.verify_proxy_validity import *
 import subprocess,time,sys
 import multiprocessing
 import os
 import time
-from code import etc
+from Code import etc
 
 loginfo = etc.loginfo
 logerr = etc.logerr
@@ -13,12 +13,8 @@ class Auto_Run():
     def __init__(self,sleelp_time,cmd):
         self.sleep_time = sleelp_time
         self.cmd = cmd
-        self.ext = (cmd[-3:]).lower()
+        # self.ext = (cmd[-3:]).lower()
         self.p = None
-
-        self.add_a = 0
-        self.add_b = 0
-
         self.run()
 
         try:
@@ -38,26 +34,26 @@ class Auto_Run():
             logerr.error("check the Ctrl+c,and prepare to kill the process",e)
             self.p.kill()
     def run(self):
-        if self.ext == ".py":
-            loginfo.info('start ok!')
-            self.add_a+=1
-            self.add_b+=1
-            self.p = subprocess.Popen(['python3','%s'%self.cmd],stdin=sys.stdin,stdout=sys.stdout,stderr=sys.stderr,shell=False)
-        else:
-            pass
+        # if self.ext == ".py":
+        loginfo.info('start ok!')
+        self.p = subprocess.Popen(['python3','-m','%s'%self.cmd],stdin=sys.stdin,stdout=sys.stdout,stderr=sys.stderr,shell=False,cwd=etc.parent)
+        # else:
+        #     pass
 if __name__ == "__main__":
     CMD = []
     pwd = etc.pwd
     loginfo.info(pwd)
     # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies.py'))
     # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies1.py'))
-    CMD.append(os.path.join(pwd,'crawl_process.py'))
-    CMD.append(os.path.join(pwd,'alternate_process.py'))
-    CMD.append(os.path.join(pwd,'immediate_process.py'))
+    CMD.append('Code.crawl_process')
+    CMD.append('Code.alternate_process')
+    CMD.append('Code.immediate_process')
+    ps = []
     for i in CMD:
         p = multiprocessing.Process(target = Auto_Run,args=(TIME,i))
-        p.start()
-    p.join()
+        ps.append(p)
+    [p.start() for p in ps]
+    [p.join() for p in ps]
 
 # multiprocessing.Process(Auto_Run(TIME,CMD2))
 # from crawlProxies import crawl_proxies_conf

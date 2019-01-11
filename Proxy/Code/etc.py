@@ -57,7 +57,7 @@ headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,imag
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
 }
 has_proxy = True
-logfile=op.join(log_path,'logging.conf')
+logfile=op.join(log_path,'stdout.conf')
 logging.config.fileConfig(logfile)
 loginfo = logging.getLogger('info')
 logerr = logging.getLogger('error')

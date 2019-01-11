@@ -1,5 +1,5 @@
 #coding:utf-8
-from code import proxy_io,etc,verify_proxy_validity
+from Code import proxy_io,etc,verify_proxy_validity
 import time
 loginfo = etc.loginfo
 logerr = etc.logerr

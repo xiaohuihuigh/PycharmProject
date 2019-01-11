@@ -1,5 +1,5 @@
 #coding:utf-8
-from code import etc
+from Code import etc
 import redis
 import json
 import re

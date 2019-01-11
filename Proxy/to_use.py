@@ -1,5 +1,5 @@
 #coding:utf-8
-from code import proxy_processing,etc
+from Code import proxy_processing,etc
 import time
 loginfo = etc.loginfo
 logerr = etc.logerr

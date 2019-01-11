@@ -1,21 +1,21 @@
 #coding:utf-8
 # from mimvp import mimvp
 
-from code.crawlProxies.mimvp import mimvp
-from code.crawlProxies.n89ip import n89ip
-from code.crawlProxies.kuaidaili import crawl_kuaidaili_proxies,crawl_kuaidaili_proxies1
-from code.crawlProxies import goubanjia
-from code.crawlProxies import seofangfa
+from Code.crawlProxies.mimvp import mimvp
+from Code.crawlProxies.n89ip import n89ip
+from Code.crawlProxies.kuaidaili import crawl_kuaidaili_proxies,crawl_kuaidaili_proxies1
+from Code.crawlProxies import goubanjia
+from Code.crawlProxies import seofangfa
 from multiprocessing import Process
 import platform
 if platform.python_version()[0] == '3':
     from configparser import ConfigParser
 else:
     from ConfigParser import ConfigParser
-from code.crawlProxies import crawl_proxies_conf
+from Code.crawlProxies import crawl_proxies_conf
 import time
 import os
-from code import etc
+from Code import etc
 fp = os.path.join(etc.conf_path,'crawl_proxies.conf')
 conf = ConfigParser()
 conf.read(os.path.join(os.getcwd(),fp))

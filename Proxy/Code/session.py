@@ -1,5 +1,5 @@
 import requests
-from code import etc
+from Code import etc
 import to_use
 def Session(has_proxy=False,proxies=None,anonymity = True):
     s = requests.Session()

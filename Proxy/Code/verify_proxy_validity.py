@@ -1,7 +1,7 @@
 #coding:utf8
-import code.session
+import Code.session
 import time
-import etc
+from Code import etc
 from lxml import etree
 
 loginfo = etc.loginfo
@@ -18,7 +18,7 @@ def verify_proxy(IP_info,test_url = etc.test_url):
     try:
         loginfo.info("it wanner to get a url")
 
-        rsp =code.session.Session(proxies=proxies).get(url=test_url, timeout=10)
+        rsp =Code.session.Session(proxies=proxies).get(url=test_url, timeout=10)
 
         loginfo.info(("it has get the url", etc.test_url))
         check_proxy_IP(rsp.text)

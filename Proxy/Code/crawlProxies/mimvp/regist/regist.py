@@ -1,8 +1,8 @@
 
-from code.session import Session
+from Code.session import Session
 import json
 import ConfigParser
-from code import etc
+from Code import etc
 import time
 loginfo = etc.loginfo
 logerr = etc.logerr
@@ -68,7 +68,7 @@ class Regist(object):
         }
         rsp = self.sess.post(self.regist_check_url,data)
         rsp_j = json.loads(rsp.text)
-        if rsp_j['code'] != 0:
+        if rsp_j['Code'] != 0:
             logerr.error(rsp.text)
 
 if __name__ == "__main__":

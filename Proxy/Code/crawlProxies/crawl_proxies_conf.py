@@ -1,7 +1,7 @@
 # coding:utf-8
 import os
 import platform
-from code import etc
+from Code import etc
 if platform.python_version()[0] == '3':
     from configparser import ConfigParser
 else:

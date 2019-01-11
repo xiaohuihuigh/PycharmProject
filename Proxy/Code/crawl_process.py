@@ -1,7 +1,7 @@
 #coding:utf-8
-from code import proxy_processing, etc
+from Code import proxy_processing, etc
 import time
-from code.crawlProxies import crawl_proxies
+from Code.crawlProxies import crawl_proxies
 loginfo = etc.loginfo
 logerr = etc.logerr
 def crawl_process():

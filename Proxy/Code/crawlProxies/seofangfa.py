@@ -1,7 +1,7 @@
 #coding:utf-8
-from code.session import Session
+from Code.session import Session
 from lxml import etree
-from code import etc, proxy_io
+from Code import etc, proxy_io
 loginfo = etc.loginfo
 def get_html_to_tree(url):
     response = Session().get(url)
