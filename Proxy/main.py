@@ -1,5 +1,5 @@
 #coding:utf-8
-# from Code.verify_proxy_validity import *
+# from code.verify_proxy_validity import *
 import subprocess,time,sys
 import multiprocessing
 import os

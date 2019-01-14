@@ -7,7 +7,7 @@ loginfo = etc.loginfo
 logerr = etc.logerr
 # redis_h.lpush()
 class ProxiesIO(redis.Redis):
-    def __init__(self,host=etc.redis_host,port = etc.redis_port,password=etc.redis_psw,db=etc.redis_db):
+    def __init__(self,host=etc.redis_host,port = etc.redis_port,password=etc.redis_psw,db=etc.crawl_db):
         super(ProxiesIO,self).__init__(host=host,port=port,password=password,db=db)
         #可以在初始化的时候创建如果没有list的话？？？
         #具体看怎么存的。。。
