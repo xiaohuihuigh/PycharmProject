@@ -128,9 +128,9 @@ class sendMail(MailConf):
         self.smtp.quit()
 
 if __name__ == "__main__":
-    receive_email = sys.argv[1] if len(sys.argv>1) else None
-    subject = sys.argv[2] if len(sys.argv>2) else None
-    text = sys.argv[3] if len(sys.argv>3) else None
-    annexs_str = sys.argv[4] if len(sys.argv>4) else None
+    receive_email = sys.argv[1] if len(sys.argv)>1 else None
+    subject = sys.argv[2] if len(sys.argv)>2 else None
+    text = sys.argv[3] if len(sys.argv)>3 else None
+    annexs_str = sys.argv[4] if len(sys.argv)>4 else None
     annexs_list = annexs_str.split(";") if annexs_str else None
     sendMail(receive_email,subject,text,annexs_list)
