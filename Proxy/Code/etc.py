@@ -12,7 +12,7 @@ conf_path = op.join(config_path,'conf')
 
 redis_host = '127.0.0.1'
 redis_db = 0
-redis_psw = 'redisredis'
+redis_psw = 'zyh'
 redis_port = 6379
 s_89ip_url = 'http://www.n89ip.cn/index_{}.html'
 s_kuaidaili_inha_url = 'http://www.kuaidaili.com/free/inha/{}/'
@@ -22,7 +22,7 @@ proxy_path = 'os.path.'
 goubanjia_url = 'http://www.goubanjia.com/'
 seofangfa_url = 'http://ip.seofangfa.com/'
 
-mimvp_api_url = 'https://proxyapi.mimvp.com/api/fetchopen.php?orderid=865040229171210416&num=49&http_type=1&anonymous=5&result_fields=1,2,3,4,5,7&result_format=json'
+mimvp_api_url = 'https://proxyapi.mimvp.com/api/fetchopen.php?orderid=866134503914150100&num=185&http_type=1&anonymous=5&result_fields=1,2,3,4,5,7&result_format=json'
 # verified_url = "http://www.baidu.com"
 verified_url = "http://www.baidu.com"
 test_url = 'http://ip.seofangfa.com/checkproxy/'

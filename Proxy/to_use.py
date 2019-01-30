@@ -11,14 +11,13 @@ def get_a_proxy(anonymity=False):
 
         try:
             ap.push_or_discare(proxy_info)
-            if anonymity == False or proxy_info['anonymity'] == u'高匿名':
-                loginfo.info((proxy_info['IP'],':',proxy_info['port']))
-                #print(("get a proxy",proxy_info['IP'],':',proxy_info['port']))
+            if proxy_info['anonymity'] == u'高匿名':
+                loginfo.info(proxy_info)
                 return {
                         'http':'http://'+proxy_info['IP']+':'+proxy_info['port']
                     }
             else:
-                #print(proxy_info['anonymity'])
+                print(proxy_info['anonymity'])
                 get_a_proxy()
         except Exception as e:
             logerr.error(e)
@@ -37,4 +36,4 @@ def check_proxy(type):
 if __name__ == "__main__":
     # for i in range(10):
     #     check_proxy('immediate')
-    print (get_a_proxy())
+    print (int(time.time()))

@@ -36,11 +36,11 @@ class Auto_Run():
     def run(self):
         # if self.ext == ".py":
         loginfo.info('start ok!')
-        self.p = subprocess.Popen(['python','-m','%s'%self.cmd],stdin=sys.stdin,stdout=sys.stdout,stderr=sys.stderr,shell=False,cwd=etc.parent)
+        self.p = subprocess.Popen(['python3','-m','%s'%self.cmd],stdin=sys.stdin,stdout=sys.stdout,stderr=sys.stderr,shell=False,cwd=etc.parent)
         # else:
         #     pass
-if __name__ == "__main__":
-#def main():
+#if __name__ == "__main__":
+def main():
     CMD = []
     pwd = etc.pwd
     loginfo.info(pwd)
@@ -55,6 +55,7 @@ if __name__ == "__main__":
         ps.append(p)
     [p.start() for p in ps]
     [p.join() for p in ps]
+
 # multiprocessing.Process(Auto_Run(TIME,CMD2))
 # from crawlProxies import crawl_proxies_conf
 # crawl_proxies_conf.test()
