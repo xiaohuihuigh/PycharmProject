@@ -1,14 +1,19 @@
 
 from Code.session import Session
 import json
-import ConfigParser
+import platform
+if platform.python_version()[0] == '3':
+    from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 from Code import etc
 import time
+import random
 loginfo = etc.loginfo
 logerr = etc.logerr
 class Regist(object):
     def __init__(self):
-        cf = ConfigParser.ConfigParser()
+        cf = ConfigParser()
         cf.read('regist.conf')
         proxies = {
             'http': 'http://' + '27.24.197.129' + ':' + '9000'
@@ -18,13 +23,13 @@ class Regist(object):
         self.vc_url = cf.get('regist','vc_url')
         self.regist_check_url = cf.get('regist','regist_check_url')
         self.run()
-        print self.sess.proxies
-        print self.sess.cookies
+        print(self.sess.proxies)
+        print(self.sess.cookies)
     def GetVc(self):
         res = self.sess.get(self.vc_url)
         with open('validatecode.png','wb') as f:
             f.write(res.content)
-        return str(raw_input('input the validatecode:'))
+        return str(input('input the validatecode:'))
     @staticmethod
     def create_random_str(num1=3,num2=5):
         choice_str1 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'

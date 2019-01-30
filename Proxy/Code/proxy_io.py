@@ -5,7 +5,6 @@ import json
 import re
 loginfo = etc.loginfo
 logerr = etc.logerr
-# redis_h.lpush()
 class ProxiesIO(redis.Redis):
     def __init__(self,host=etc.redis_host,port = etc.redis_port,password=etc.redis_psw,db=etc.crawl_db):
         super(ProxiesIO,self).__init__(host=host,port=port,password=password,db=db)
