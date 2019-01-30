@@ -21,7 +21,7 @@ conf = ConfigParser()
 conf.read(os.path.join(os.getcwd(),fp))
 print(os.path.join(os.getcwd(),fp))
 ilist = dir()
-[ilist.remove(i) for i in ['os','crawl_proxies_conf','conf','ConfigParser', 'Process', '__builtins__', '__doc__', '__file__', '__name__', '__package__', 'fp', 'time']]
+#[ilist.remove(i) for i in ['os','crawl_proxies_conf','conf','ConfigParser', 'Process', '__builtins__', '__doc__', '__file__', '__name__', '__package__', 'fp', 'time']]
 if 'all' in conf.sections():
     conf.set('all','name',str(ilist))
 else:
