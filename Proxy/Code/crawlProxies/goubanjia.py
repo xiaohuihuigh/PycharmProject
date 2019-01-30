@@ -4,7 +4,7 @@ from lxml import etree
 from Code import etc,proxy_io
 loginfo = etc.loginfo
 def get_html_to_tree(url):
-    response = Session().get(url)
+    response = session.Session().get(url)
     root = etree.HTML(response.text)
     return root
 

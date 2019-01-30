@@ -1,9 +1,10 @@
 #coding:utf-8
-from Code import proxy_processing,etc
+from Code import etc
 import time
 loginfo = etc.loginfo
 logerr = etc.logerr
 def get_a_proxy(anonymity=False):
+    from Code import proxy_processing
     ap = proxy_processing.Proxy_processing(type='to_use', from_db=etc.immediate_db, to_db=etc.immediate_db)
     yn,proxy_info = ap.get_a_proxy()
     if yn:
@@ -24,6 +25,7 @@ def get_a_proxy(anonymity=False):
     loginfo.info(None)
     return None
 def check_proxy(type):
+    from Code import proxy_processing
     ap = proxy_processing.Proxy_processing(type=type)
     yn,proxy_info = ap.get_a_proxy()
     if yn:
