@@ -1,5 +1,6 @@
 import requests
 from src.config import config
+from bs4 import BeautifulSoup as bf
 
 
 class Spider(requests.Session):
@@ -13,6 +14,7 @@ class Spider(requests.Session):
         self.anonymity = anonymity
         # else:
         #     self.proxies = getProxy.get_a_proxy(anonymity=anonymity)
+
     #
     # def get(self, url, **kwargs):
     #     r"""Sends a GET request. Returns :class:`Response` object.
@@ -25,3 +27,8 @@ class Spider(requests.Session):
     #     kwargs.setdefault('allow_redirects', True)
     #     threading.Thread(self.request())
     #     return self.request('GET', url, **kwargs)
+
+    def _get_html_to_soup(self, url):
+        response = self.get(url)
+        soup = bf(response.text, 'html.parser')
+        return soup

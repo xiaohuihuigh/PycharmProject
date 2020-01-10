@@ -2,22 +2,21 @@
 import os.path as op
 import logging.config
 
-# pwd = op.abspath(op.dirname(__file__))
-# parent = op.abspath(op.dirname(pwd))
-#
-# code_path = pwd
+pwd = op.abspath(op.dirname(__file__))
+parent = op.abspath(op.dirname(pwd))
+file_io_path = op.join(parent, 'proxy_io/file_io/proxy')
 # config_path = op.join(parent,'config')
 # log_path = op.join(config_path,'log')
 # doc_path = op.join(config_path,'doc')
 # conf_path = op.join(config_path,'conf')
 #
-# redis_host = '127.0.0.1'
-# redis_db = 0
-# redis_psw = 'zyh'
-# redis_port = 6379
-# s_89ip_url = 'http://www.n89ip.cn/index_{}.html'
+redis_host = '127.0.0.1'
+redis_db = 0
+redis_psw = 'zyh'
+redis_port = 6379
+s_89ip_url = 'http://www.n89ip.cn/index_{}.html'
 s_kuaidaili_inha_url = 'http://www.kuaidaili.com/free/inha/{}/'
-# s_kuaidaili_intr_url = 'http://www.kuaidaili.com/free/intr/{}/'
+s_kuaidaili_intr_url = 'http://www.kuaidaili.com/free/intr/{}/'
 # proxy_path = 'os.path.'
 #
 # goubanjia_url = 'http://www.goubanjia.com/'
@@ -39,14 +38,14 @@ s_kuaidaili_inha_url = 'http://www.kuaidaili.com/free/inha/{}/'
 # immediate_mlen = 100
 # immediate_llen = 200
 #
-# crawl_mlen = 5000
-# crawl_llen = 10000
-# alternate_sleep_time = 10
-# immediate_sleep_time = 10
-# crawl_sleep_time=60
-# immediate_db = 0
-# alternate_db = 1
-# crawl_db = 2
+crawl_mlen = 5000
+crawl_llen = 10000
+alternate_sleep_time = 10
+immediate_sleep_time = 10
+crawl_sleep_time=60
+immediate_db = 0
+alternate_db = 1
+crawl_db = 2
 #
 # Ip下载的网址
 # ip为四个int类型的数字列表

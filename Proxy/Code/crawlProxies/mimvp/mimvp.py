@@ -19,8 +19,8 @@ def get_proxies_info(j_dict):
     for proxy_dict in proxy_dict_list:
         proxy_info_dict = {}
         info_list = ['IP','port','locate']#,'anonymity','ptype','locate','resspeed']
-        proxy_info_dict['IP'] = proxy_dict['ip:port'].split(":")[0]
-        proxy_info_dict['port'] = proxy_dict['ip:port'].split(":")[1]
+        proxy_info_dict['IP'] = proxy_dict['port'].split(":")[0]
+        proxy_info_dict['port'] = proxy_dict['port'].split(":")[1]
         proxy_info_dict['locate'] = proxy_dict['country']
         proxy_info_dict['ptype'] = proxy_dict['http_type']
         proxy_info_dict['anonymity'] = proxy_dict['anonymous']

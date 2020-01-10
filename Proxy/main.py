@@ -45,7 +45,6 @@ def main():
     pwd = etc.pwd
     loginfo.info(pwd)
     # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies.py'))
-    # CMD.append(os.path.join(pwd,'crawlProxies/kuaidaili/crawl_kuaidaili_proxies1.py'))
     CMD.append('Code.crawl_process')
     CMD.append('Code.alternate_process')
     CMD.append('Code.immediate_process')

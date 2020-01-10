@@ -2,21 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f59e1393-b6da-40a1-9447-a8b3f77f36b1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/config/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ip/ip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pool/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pool/pool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/spider/spider.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/website/kuaidaili/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/website/kuaidaili/crawl_kuaidaili_proxies.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/website/kuaidaili/crawl_kuaidaili_proxies1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Proxy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Proxy.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy/proxy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy_io/proxy_file_io.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy_io/proxy_io.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/proxy_io/proxy_redis_io.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/website/n89ip/n89ip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/session.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_biquge" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code/crawlProxies/mimvp/mimvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/crawlProxies/mimvp/mimvp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ip/ip.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/spider/spider.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/spider/spider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/website/kuaidaili/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/proxy_io/file_io/proxy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/website/kuaidaili/crawl_kuaidaili_proxies.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/website/kuaidaili/crawl_kuaidaili_proxies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/website/kuaidaili/crawl_kuaidaili_proxies1.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,23 +48,45 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/config" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/website" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/website" />
+      <recent name="$PROJECT_DIR$/src/config" />
+      <recent name="$PROJECT_DIR$/src/spider_headers" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pool" />
       <recent name="$PROJECT_DIR$/src/ip" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/config" />
-      <recent name="$PROJECT_DIR$/src/spider_headers" />
-      <recent name="$PROJECT_DIR$/src/website" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python.crawl_kuaidaili_proxies">
+  <component name="RunManager" selected="Python.proxy_file_io">
+    <configuration name="config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Proxy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/config" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/config/config.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="crawl_kuaidaili_proxies" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proxy" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,7 +109,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="crawl_proxies" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="n89ip" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proxy" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -95,12 +117,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code/crawlProxies" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/website/n89ip" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/crawlProxies/crawl_proxies.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/website/n89ip/n89ip.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -109,7 +131,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ip" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="proxy_file_io" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proxy" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -117,12 +139,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/db" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/proxy_io" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/ip/ip.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/proxy_io/proxy_file_io.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -131,7 +153,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="proxy_redis_io" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Proxy" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -139,34 +161,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/proxy_io" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="spider" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Proxy" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/spider_headers" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/spider_headers/spider.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/proxy_io/proxy_redis_io.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -176,19 +176,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.crawl_proxies" />
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.ip" />
       <item itemvalue="Python.crawl_kuaidaili_proxies" />
-      <item itemvalue="Python.spider" />
+      <item itemvalue="Python.proxy_redis_io" />
+      <item itemvalue="Python.config" />
+      <item itemvalue="Python.proxy_file_io" />
+      <item itemvalue="Python.n89ip" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.proxy_file_io" />
         <item itemvalue="Python.crawl_kuaidaili_proxies" />
-        <item itemvalue="Python.spider" />
-        <item itemvalue="Python.ip" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.crawl_proxies" />
+        <item itemvalue="Python.n89ip" />
+        <item itemvalue="Python.config" />
+        <item itemvalue="Python.proxy_redis_io" />
       </list>
     </recent_temporary>
   </component>
@@ -215,6 +215,8 @@
       <option name="presentableId" value="Default" />
       <updated>1547188237807</updated>
       <workItem from="1577912750680" duration="8537000" />
+      <workItem from="1577967318695" duration="1870000" />
+      <workItem from="1578671611061" duration="18331000" />
     </task>
     <servers />
   </component>
@@ -222,54 +224,86 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="340" y="127" key="#Inspections" timestamp="1578677562360">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="340" y="127" key="#Inspections/0.23.1440.877@0.23.1440.877" timestamp="1578677562360" />
     <state x="320" y="127" key="#Web_Browsers" timestamp="1577916542378">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="127" key="#Web_Browsers/0.23.1440.877@0.23.1440.877" timestamp="1577916542378" />
-    <state width="1358" height="248" key="GridCell.Tab.0.bottom" timestamp="1577922086601">
+    <state x="204" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578674598205">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1577922086601" />
-    <state width="1358" height="248" key="GridCell.Tab.0.center" timestamp="1577922086601">
+    <state x="204" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877@0.23.1440.877" timestamp="1578674598205" />
+    <state x="478" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578680291285">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1577922086601" />
-    <state width="1358" height="248" key="GridCell.Tab.0.left" timestamp="1577922086600">
+    <state x="478" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1578680291285" />
+    <state width="1358" height="265" key="GridCell.Tab.0.bottom" timestamp="1578692484529">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1577922086600" />
-    <state width="1358" height="248" key="GridCell.Tab.0.right" timestamp="1577922086601">
+    <state width="1358" height="265" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1578692484529" />
+    <state width="1358" height="192" key="GridCell.Tab.0.bottom/1920.23.1440.877/0.23.1920.1057@0.23.1920.1057" timestamp="1578277811598" />
+    <state width="1358" height="265" key="GridCell.Tab.0.center" timestamp="1578692484528">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1577922086601" />
-    <state width="1358" height="248" key="GridCell.Tab.1.bottom" timestamp="1577922086602">
+    <state width="1358" height="265" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1578692484528" />
+    <state width="1358" height="192" key="GridCell.Tab.0.center/1920.23.1440.877/0.23.1920.1057@0.23.1920.1057" timestamp="1578277811594" />
+    <state width="1358" height="265" key="GridCell.Tab.0.left" timestamp="1578692484527">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1577922086602" />
-    <state width="1358" height="248" key="GridCell.Tab.1.center" timestamp="1577922086602">
+    <state width="1358" height="265" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1578692484527" />
+    <state width="1358" height="192" key="GridCell.Tab.0.left/1920.23.1440.877/0.23.1920.1057@0.23.1920.1057" timestamp="1578277811592" />
+    <state width="1358" height="265" key="GridCell.Tab.0.right" timestamp="1578692484529">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1577922086602" />
-    <state width="1358" height="248" key="GridCell.Tab.1.left" timestamp="1577922086602">
+    <state width="1358" height="265" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1578692484529" />
+    <state width="1358" height="192" key="GridCell.Tab.0.right/1920.23.1440.877/0.23.1920.1057@0.23.1920.1057" timestamp="1578277811595" />
+    <state width="1358" height="235" key="GridCell.Tab.1.bottom" timestamp="1578683927500">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1577922086602" />
-    <state width="1358" height="248" key="GridCell.Tab.1.right" timestamp="1577922086602">
+    <state width="1358" height="235" key="GridCell.Tab.1.bottom/0.23.1440.877@0.23.1440.877" timestamp="1578683927500" />
+    <state width="1358" height="235" key="GridCell.Tab.1.center" timestamp="1578683927499">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1358" height="248" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1577922086602" />
-    <state x="229" y="100" key="SettingsEditor" timestamp="1577915912512">
+    <state width="1358" height="235" key="GridCell.Tab.1.center/0.23.1440.877@0.23.1440.877" timestamp="1578683927499" />
+    <state width="1358" height="235" key="GridCell.Tab.1.left" timestamp="1578683927499">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="229" y="100" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1577915912512" />
-    <state x="399" y="294" key="com.intellij.ide.util.TipDialog" timestamp="1577912751708">
+    <state width="1358" height="235" key="GridCell.Tab.1.left/0.23.1440.877@0.23.1440.877" timestamp="1578683927499" />
+    <state width="1358" height="235" key="GridCell.Tab.1.right" timestamp="1578683927500">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="399" y="294" key="com.intellij.ide.util.TipDialog/0.23.1440.877@0.23.1440.877" timestamp="1577912751708" />
+    <state width="1358" height="235" key="GridCell.Tab.1.right/0.23.1440.877@0.23.1440.877" timestamp="1578683927500" />
+    <state x="212" y="149" key="SettingsEditor" timestamp="1578685164684">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="212" y="149" key="SettingsEditor/0.23.1440.877@0.23.1440.877" timestamp="1578685164684" />
+    <state x="592" y="384" key="VCS.ChangelistChooser" timestamp="1578675369533">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="592" y="384" key="VCS.ChangelistChooser/0.23.1440.877@0.23.1440.877" timestamp="1578675369533" />
+    <state x="399" y="294" key="com.intellij.ide.util.TipDialog" timestamp="1578671611729">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="399" y="294" key="com.intellij.ide.util.TipDialog/0.23.1440.877@0.23.1440.877" timestamp="1578671611729" />
+    <state x="502" y="99" key="refactoring.ChangeSignatureDialog" timestamp="1578674148254">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="502" y="99" key="refactoring.ChangeSignatureDialog/0.23.1440.877@0.23.1440.877" timestamp="1578674148254" />
+    <state x="405" y="213" width="670" height="676" key="search.everywhere.popup" timestamp="1578691458474">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="405" y="213" width="670" height="676" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1578691458474" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Proxy$ip.coverage" NAME="ip Coverage Results" MODIFIED="1577915154658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/db" />
+    <SUITE FILE_PATH="coverage/Proxy$proxy_file_io.coverage" NAME="proxy_file_io Coverage Results" MODIFIED="1578692484519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/proxy_io" />
+    <SUITE FILE_PATH="coverage/Proxy$n89ip.coverage" NAME="n89ip Coverage Results" MODIFIED="1578685166827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/website/n89ip" />
+    <SUITE FILE_PATH="coverage/Proxy$ip.coverage" NAME="ip Coverage Results" MODIFIED="1578675408954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
+    <SUITE FILE_PATH="coverage/Proxy$config.coverage" NAME="config Coverage Results" MODIFIED="1578680186121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/config" />
     <SUITE FILE_PATH="coverage/Proxy$session.coverage" NAME="session Coverage Results" MODIFIED="1577917532282" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/spider_headers" />
-    <SUITE FILE_PATH="coverage/Proxy$crawl_kuaidaili_proxies.coverage" NAME="crawl_kuaidaili_proxies Coverage Results" MODIFIED="1577922055921" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/website/kuaidaili" />
+    <SUITE FILE_PATH="coverage/Proxy$proxy_redis_io.coverage" NAME="proxy_redis_io Coverage Results" MODIFIED="1578678384239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/proxy_io" />
+    <SUITE FILE_PATH="coverage/Proxy$crawl_kuaidaili_proxies.coverage" NAME="crawl_kuaidaili_proxies Coverage Results" MODIFIED="1578691834911" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/website/kuaidaili" />
   </component>
 </project>
