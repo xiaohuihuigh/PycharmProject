@@ -1,0 +1,12 @@
+CREATE TABLE `user_info` (
+  `email` varchar(20) NOT NULL COMMENT '电子邮件',
+  `telphone` bigint(11) NOT NULL COMMENT '手机号码',
+  `password` varchar(20) NOT NULL COMMENT '密码',
+  `order_num` bigint(25) NOT NULL COMMENT '订单号',
+  `fetch_num` int(8) NOT NULL COMMENT '使用个数',
+  `total_num` int(8) NOT NULL COMMENT '总个数',
+  `each_time_fetch_num` int(8) DEFAULT 20 COMMENT '每次获取的个数',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`email`),
+  KEY `fetch_num` (`fetch_num`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

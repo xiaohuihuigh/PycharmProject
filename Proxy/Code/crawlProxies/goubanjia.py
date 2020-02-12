@@ -4,7 +4,7 @@ from lxml import etree
 from Code import etc,proxy_io
 loginfo = etc.loginfo
 def get_html_to_tree(url):
-    response = session.Session().get(url)
+    response = Session().get(url)
     root = etree.HTML(response.text)
     return root
 
@@ -35,11 +35,13 @@ def get_proxies_info(root):
     return proxies_info_list
 def crawl_proxies():
     loginfo.info('crawl proxies in goubanjia')
+    print ('crawl proxies in goubanjia')
     root = get_html_to_tree(etc.goubanjia_url)
     proxies_list = get_proxies_info(root)
     proxy_db = proxy_io.ProxiesIO(db = etc.crawl_db)
     for proxy in proxies_list:
         # verify_proxy_validity.verify_proxy(proxy)
         proxy_db.insert_proxy(proxy)
+
 if __name__ == "__main__":
     crawl_proxies()
